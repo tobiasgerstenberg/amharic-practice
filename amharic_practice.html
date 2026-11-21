@@ -149,6 +149,10 @@
   .say-mini:hover { opacity: 1; }
   .vt td.ro { font-family: ui-monospace, Menlo, monospace; font-size: .88rem; }
   .vt .end { font-weight: 700; }
+  .pron-cell { white-space: nowrap; }
+  .pron-cell + .pron-cell { margin-top: 6px; }
+  .pron-am { font-size: 1.3rem; }
+  .pron-cell .ro { font-family: ui-monospace, Menlo, monospace; font-size: .85rem; }
   .vt tr.he td { background: #f6f3ee; }
   .rule-list li { margin: 6px 0; }
   .sound-row { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 6px 0; flex-wrap: wrap; }
@@ -2032,9 +2036,14 @@ $("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
     return { am: chars.join("") + g + end, html: `${chars.join("")}<span class="h${h}c">${g}</span><b class="end">${end}</b>` };
   };
   const say = am => `<button class="say-mini" data-say="${am}" title="play sound">🔊</button>`;
+  // the pronoun for each row: [Amharic, sounds]; the polite forms share the "they" ending
+  const PRON = [["እኔ", "inē"], ["አንተ", "ānite"], ["አንቺ", "ānichī"], ["እሱ", "isu"], ["እሷ", "iswa"], ["እኛ", "inya"], ["እናንተ", "inanite"], ["እነሱ", "inesu"]];
+  const POLITE = [["እርስዎ", "irisiwo", "you (polite)"], ["እሳቸው", "isachewi", "he / she (polite)"]];
+  const pronHTML = ([am, ro], en) => `<div class="pron-cell"><span class="eth pron-am">${am}</span>${say(am)}<br><span class="ro">${ro}</span> <span class="muted small">${en}</span></div>`;
+  const whoCell = i => `<td>${pronHTML(PRON[i], i === 7 ? "they" : P[i])}${i === 7 ? POLITE.map(x => pronHTML(x, x[2])).join("") : ""}</td>`;
   const table = (id, roots, rules, note) => {
     $(id).innerHTML = `<tr><th>who</th>${roots.map(r => `<th>${r[2]}</th>`).join("")}<th>what happens</th></tr>` +
-      rules.map((rule, i) => `<tr class="${i === 3 ? "he" : ""}"><td>${P[i]}</td>${roots.map(([am, stem]) => {
+      rules.map((rule, i) => `<tr class="${i === 3 ? "he" : ""}">${whoCell(i)}${roots.map(([am, stem]) => {
         const f = form(am, rule);
         return `<td><span class="eth" style="font-size:1.45rem">${f.html}</span>${say(f.am)}<br><span class="ro">${stem}<b>${rule[2]}</b></span></td>`;
       }).join("")}<td class="small">${note(rule, i)}</td></tr>`).join("");
@@ -2045,7 +2054,7 @@ $("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
   table("vt-b", [["በላ", "bel", "ate"], ["ገዛ", "gez", "bought"]], B,
     ([h, end], i) => i === 3 ? "the starting form (4th house)" : h ? `last character → ${hn(h)}` : `stays 4th house + <span class="eth">${end}</span>` + (i < 2 ? " (k → h after ‑a)" : ""));
   $("vt-sum").innerHTML = `<tr><th>who</th><th>pronoun</th><th>type 1 (ሰበረ)</th><th>type 2 (በላ)</th></tr>` +
-    P.map((p, i) => `<tr class="${i === 3 ? "he" : ""}"><td>${p}</td><td class="am">${["እኔ", "አንተ", "አንቺ", "እሱ", "እሷ", "እኛ", "እናንተ", "እነሱ"][i]}</td>` +
+    P.map((p, i) => `<tr class="${i === 3 ? "he" : ""}"><td>${p}</td>${whoCell(i)}` +
       `<td>‑${A[i][2]}</td><td>‑${B[i][2]}</td></tr>`).join("");
   const S = [["(እኔ) ዳቦ በላሁ።", "I ate bread."], ["እሷ ቡና ገዛች።", "She bought coffee."], ["(እኛ) ደብዳቤ ጻፍን።", "We wrote a letter."],
     ["ልጆች ዳቦ በሉ።", "(The) children ate bread."], ["(አንቺ) ምን ገዛሽ?", "What did you (f.) buy?"]];
