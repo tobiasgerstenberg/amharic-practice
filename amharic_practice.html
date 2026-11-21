@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amharic Practice — What I've Learned So Far</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f4; --card: #ffffff; --ink: #222; --muted: #6b6b6b; --line: #e4dfd6;
+    --accent: #1f7a5a; --accent-soft: #e3f2ec; --bad: #c0392b; --bad-soft: #fbe9e7; --good: #1f7a5a;
+    --h1: #8e8e8e; --h2: #3b82c4; --h3: #2e9e6b; --h4: #d98b1c; --h5: #c2477c; --h6: #7b5cc4; --h7: #c4552e;
+    --eth: "Noto Sans Ethiopic", "Kefa", "Abyssinica SIL", "Nyala", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+  header { background: var(--accent); color: #fff; padding: 22px 28px 0; }
+  header h1 { margin: 0 0 4px; font-size: 1.6rem; }
+  header p { margin: 0 0 14px; opacity: .85; }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav button { background: transparent; border: 0; color: #fff; padding: 10px 16px; font-size: .95rem; cursor: pointer; border-radius: 8px 8px 0 0; opacity: .8; }
+  nav button.active { background: var(--bg); color: var(--accent); opacity: 1; font-weight: 600; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  section.tab { display: none; }
+  section.tab.active { display: block; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
+  .card h2 { margin-top: 0; font-size: 1.2rem; }
+  .card h3 { font-size: 1.02rem; margin-bottom: 6px; }
+  .eth { font-family: var(--eth); }
+  .muted { color: var(--muted); }
+  .small { font-size: .88rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+  table { border-collapse: collapse; }
+  .pill { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: .78rem; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .pill.new { background: #fff1d6; color: #9a6400; }
+  .pill.preview { background: #eee; color: #777; }
+  .unk { border-bottom: 2px dotted #c9a24a; }
+  .callout { background: #fff8e6; border-left: 4px solid #e0b040; padding: 10px 14px; border-radius: 6px; margin: 12px 0; }
+
+  /* House colors */
+  .h1c { color: var(--h1); } .h2c { color: var(--h2); } .h3c { color: var(--h3); } .h4c { color: var(--h4); }
+  .h5c { color: var(--h5); } .h6c { color: var(--h6); } .h7c { color: var(--h7); }
+
+  /* Fidel chart */
+  .fidel { width: 100%; }
+  .fidel th, .fidel td { border: 1px solid var(--line); text-align: center; padding: 4px 6px; }
+  .fidel thead th { font-size: .82rem; background: #f6f3ee; }
+  .fidel thead th .hs { display: block; font-size: 1rem; font-weight: 700; }
+  .fidel td.ch { font-family: var(--eth); font-size: 1.9rem; line-height: 1.2; cursor: default; position: relative; }
+  .fidel td.ch:hover { background: #f3f9f6; }
+  .fidel td.ch .tip { display: block; font-family: -apple-system, sans-serif; font-size: .68rem; color: var(--muted); }
+  .fidel th.row { text-align: left; white-space: nowrap; font-size: .9rem; }
+  .fidel th.row .mn { display: block; font-weight: 400; color: var(--muted); font-size: .75rem; }
+  .fidel td.ch.irr { box-shadow: inset 0 0 0 2px #e8a0a0; border-radius: 50%; }
+  .fidel tr.grp td { background: #f1ede5; text-align: left; font-weight: 600; font-size: .85rem; padding: 6px 10px; }
+  .chart-controls { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+
+  /* Lineup */
+  .lineup { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lineup .tile { width: 78px; text-align: center; border: 1px solid var(--line); border-radius: 10px; padding: 6px 4px; background: #fff; }
+  .lineup .tile .g { font-family: var(--eth); font-size: 2.2rem; line-height: 1.2; }
+  .lineup .tile .s { font-weight: 700; }
+  .lineup .tile .m { font-size: .68rem; color: var(--muted); line-height: 1.2; min-height: 2.4em; }
+
+  /* House cards */
+  .houses { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  @media (max-width: 900px) { .houses { grid-template-columns: repeat(4, 1fr); } }
+  .house { border-radius: 10px; padding: 10px 8px; text-align: center; border: 2px solid; background: #fff; }
+  .house .num { font-weight: 700; }
+  .house .snd { font-size: 1.15rem; font-weight: 700; }
+  .house .ex { font-family: var(--eth); font-size: 1.8rem; letter-spacing: 4px; }
+  .house .rule { font-size: .74rem; color: var(--muted); line-height: 1.25; }
+
+  .families { display: flex; flex-wrap: wrap; gap: 10px; }
+  .family { border: 2px solid #b8e0c8; border-radius: 30px; padding: 4px 16px; font-family: var(--eth); font-size: 1.8rem; background: #f4fbf7; }
+
+  /* Word list */
+  .wordtable { width: 100%; }
+  .wordtable td, .wordtable th { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: middle; }
+  .wordtable td.am { font-family: var(--eth); font-size: 1.5rem; white-space: nowrap; }
+  .wordtable td.code { font-family: ui-monospace, Menlo, monospace; font-size: .85rem; color: #444; }
+  .wordtable td.tally { font-family: ui-monospace, Menlo, monospace; letter-spacing: 3px; color: var(--muted); }
+
+  /* Pronoun table */
+  .pron { width: 100%; }
+  .pron th, .pron td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+  .pron th { background: #f6f3ee; }
+  .pron .am { font-family: var(--eth); font-size: 1.35rem; }
+
+  /* SOV diagram */
+  .sov { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; margin: 10px 0; }
+  .sov .blk { border-radius: 10px; padding: 8px 14px; text-align: center; min-width: 110px; }
+  .sov .blk .am { font-family: var(--eth); font-size: 1.6rem; }
+  .sov .S { background: #e3eefa; } .sov .O { background: #fdf0dc; } .sov .V { background: #f9e1ea; }
+  .sov .lbl { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #555; }
+
+  /* Practice */
+  .controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 8px; }
+  .controls label { font-size: .9rem; max-width: 100%; }
+  .controls label select { display: block; width: 100%; margin-top: 4px; }
+  select, input[type=text] { font-size: 1rem; padding: 6px 8px; border: 1px solid #ccc; border-radius: 8px; background: #fff; }
+  .btn { background: var(--accent); color: #fff; border: 0; padding: 9px 16px; border-radius: 8px; font-size: .95rem; cursor: pointer; }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+  .btn.small { padding: 5px 10px; font-size: .85rem; }
+  .subtabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .subtabs button { border: 1px solid var(--accent); background: #fff; color: var(--accent); padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: .92rem; }
+  .subtabs button.active { background: var(--accent); color: #fff; }
+  .quiz { text-align: center; }
+  .prompt-big { font-family: var(--eth); font-size: 4rem; line-height: 1.25; margin: 10px 0 4px; }
+  .prompt-ro { font-size: 2rem; font-weight: 700; margin: 10px 0 0; }
+  .prompt-en { font-size: 1.1rem; color: var(--muted); margin-bottom: 8px; }
+  .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 640px; margin: 16px auto; }
+  .options.fidels { grid-template-columns: repeat(6, minmax(0, 1fr)); max-width: 560px; }
+  .opt { border: 2px solid var(--line); background: #fff; border-radius: 10px; padding: 12px; font-size: 1.05rem; cursor: pointer; font-family: ui-monospace, Menlo, monospace; }
+  .opt.eth { font-family: var(--eth); font-size: 2.2rem; padding: 6px; }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt.right { border-color: var(--good); background: var(--accent-soft); }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+  .feedback { min-height: 1.5em; font-weight: 600; margin: 8px 0; }
+  .feedback.ok { color: var(--good); } .feedback.no { color: var(--bad); }
+  .breakdown { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin: 8px 0; }
+  .breakdown .syl { border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; min-width: 64px; background: #fff; }
+  .breakdown .syl .g { font-family: var(--eth); font-size: 1.8rem; }
+  .breakdown .syl .c { font-family: ui-monospace, Menlo, monospace; font-size: .8rem; }
+  .breakdown .syl .v { font-size: .75rem; }
+  .breakdown .gap { width: 14px; }
+  .score { font-size: .9rem; color: var(--muted); }
+  .answer-box { font-family: var(--eth); font-size: 2.2rem; width: 100%; max-width: 520px; text-align: center; padding: 8px; border: 2px solid var(--line); border-radius: 10px; }
+  .diff span { font-family: var(--eth); font-size: 2.2rem; padding: 0 2px; border-radius: 4px; }
+  .diff .ok { background: var(--accent-soft); } .diff .no { background: var(--bad-soft); color: var(--bad); }
+  .kbd { margin: 14px auto 0; border-collapse: separate; border-spacing: 3px; }
+  .kbd th { font-size: .75rem; color: var(--muted); font-weight: 600; padding: 0 4px; }
+  .kbd button { font-family: var(--eth); font-size: 1.45rem; width: 46px; height: 44px; border: 1px solid var(--line); border-radius: 7px; background: #fff; cursor: pointer; }
+  .kbd button:hover { background: var(--accent-soft); border-color: var(--accent); }
+  .kbd-extra { margin-top: 8px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .hintline { font-family: ui-monospace, Menlo, monospace; margin: 4px 0; }
+  .vocab-bar { display: flex; gap: 4px; justify-content: center; margin: 6px auto 2px; max-width: 420px; }
+  .vocab-bar div { flex: 1; text-align: center; font-size: .72rem; padding: 3px 0; border-radius: 6px; background: #f1ede5; color: #555; }
+  .vocab-bar div b { display: block; font-size: .95rem; }
+  .vocab-bar .b3, .vocab-bar .b4 { background: var(--accent-soft); color: var(--accent); }
+  .opt.en { font-family: inherit; }
+  .flash-answer { margin: 10px 0; }
+  .say-mini { border: 0; background: transparent; cursor: pointer; font-size: .95rem; padding: 2px 4px; opacity: .55; }
+  .say-mini:hover { opacity: 1; }
+  .vt td.ro { font-family: ui-monospace, Menlo, monospace; font-size: .88rem; }
+  .vt .end { font-weight: 700; }
+  .vt tr.he td { background: #f6f3ee; }
+  .rule-list li { margin: 6px 0; }
+  .sound-row { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+  .cstats { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
+  .cgrid { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 760px; margin: 8px auto; }
+  .cgrid span { font-family: var(--eth); font-size: 1.15rem; width: 30px; height: 30px; line-height: 30px; border-radius: 5px; text-align: center; background: #f1ede5; color: #aaa; }
+  .cgrid span.s0 { background: #f6c9c3; color: #7a1f14; } .cgrid span.s1 { background: #fbe0b8; color: #7a4a00; }
+  .cgrid span.s2 { background: #f3efb0; color: #5d5800; } .cgrid span.s3 { background: #cfeedd; color: #155a3e; }
+  .cgrid span.s4 { background: #9fd9bd; color: #0d4a31; }
+  .cgrid span.cur { outline: 2px solid var(--ink); }
+  .decks { display: flex; gap: 12px; flex-wrap: wrap; font-size: .9rem; }
+
+  /* Pyramid */
+  .pyr text { font-size: 13px; }
+
+  /* Worksheet */
+  #worksheet { display: none; }
+  #worksheet.show { display: block; }
+  .ws-item { display: flex; gap: 14px; align-items: flex-end; margin: 16px 0; break-inside: avoid; }
+  .ws-item .n { width: 26px; color: var(--muted); }
+  .ws-item .q { min-width: 180px; }
+  .ws-item .q.am { font-family: var(--eth); font-size: 1.9rem; }
+  .ws-line { flex: 1; border-bottom: 1px solid #999; height: 2.2rem; }
+  .ws-item.sent { flex-wrap: wrap; row-gap: 4px; }
+  .ws-item.sent .q.am { font-size: 1.6rem; }
+  .ws-item.sent .ws-line { flex-basis: 100%; margin-left: 40px; }
+  .ws-key { break-before: page; }
+  .ws-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
+  .ws-copy .ws-item { margin: 8px 0; }
+  .ws-copy .q.am { min-width: 44px; }
+  /* Sync */
+  header { position: relative; }
+  .sync-pill { position: absolute; top: 14px; right: 16px; background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 4px 12px; font-size: .8rem; cursor: pointer; }
+  .sync-pill.ok { background: rgba(255,255,255,.25); }
+  .sync-pill.err { background: #b3412e; border-color: #b3412e; }
+  .sync-form { display: grid; gap: 10px; max-width: 640px; }
+  .sync-form label { display: grid; gap: 4px; font-size: .9rem; }
+  .sync-form input { width: 100%; font-family: ui-monospace, Menlo, monospace; font-size: .9rem; }
+  .sync-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* Phones */
+  select { max-width: 100%; }
+  .kbd-wrap { overflow-x: auto; max-width: 100%; }
+  .grid2 > * { min-width: 0; }
+  .card, main > section { min-width: 0; }
+  @media (max-width: 640px) {
+    header { padding: 14px 14px 0; }
+    header h1 { font-size: 1.3rem; padding-right: 92px; }
+    .sync-pill { top: 12px; right: 12px; }
+    header p { font-size: .85rem; }
+    nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 -14px; padding: 0 14px; }
+    nav button { white-space: nowrap; padding: 9px 12px; font-size: .9rem; }
+    main { padding: 14px 10px 50px; }
+    .card { padding: 14px 12px; border-radius: 10px; }
+    .wordtable, .pron, .vt { display: block; overflow-x: auto; }
+    .houses { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .wordtable td.am { font-size: 1.3rem; }
+    .prompt-big { font-size: 3rem; }
+    .prompt-ro { font-size: 1.6rem; }
+    .options.fidels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .kbd { border-spacing: 2px; }
+    .kbd button { width: 38px; height: 40px; font-size: 1.25rem; }
+    .kbd th { padding: 0 2px; }
+    .subtabs button { padding: 7px 11px; font-size: .86rem; }
+    .ws-item .q { min-width: 110px; }
+    .ws-copy { grid-template-columns: 1fr; }
+    .sov .blk { min-width: 90px; }
+    .answer-box { font-size: 1.8rem; }
+  }
+  @media print {
+    header, nav, .noprint, section.tab:not(#tab-worksheet) { display: none !important; }
+    #tab-worksheet { display: block !important; }
+    body { background: #fff; }
+    .card { border: 0; padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Amharic Practice <span class="eth">— አማርኛ</span></h1>
+  <p>Stanford Beginning Amharic · summary of class notes (9/23 – 10/5/2026) + writing & reading exercises</p>
+  <button class="sync-pill" id="sync-pill" title="Sync progress between devices">☁ sync: off</button>
+  <nav id="nav">
+    <button data-tab="summary" class="active">1 · Summary</button>
+    <button data-tab="chart">2 · Fidel chart</button>
+    <button data-tab="words">3 · Words & grammar</button>
+    <button data-tab="grammar">4 · Grammar: verb endings</button>
+    <button data-tab="practice">5 · Practice</button>
+    <button data-tab="worksheet">6 · Printable worksheet</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ======================= SUMMARY ======================= -->
+<section class="tab active" id="tab-summary">
+  <div class="card">
+    <h2>The big ideas so far</h2>
+    <div class="grid2">
+      <div>
+        <ul>
+          <li><b>Consonants and vowels go together.</b> Each character (<i>fidel</i>) is a whole syllable: one consonant + one vowel.</li>
+          <li>Each consonant has <b>7 forms, called “houses”</b> (orders). The 1st house is the <i>Ge'ez</i> (base) form, and the other six change it in a regular way.</li>
+          <li>The alphabet has about <b>200+ characters</b>. Your class groups them by their <b>“legs”</b> (see the pyramid).</li>
+          <li><b>There is no upper or lower case.</b></li>
+          <li><b>“If you can't hear the vowel, it's the 6th house.”</b> In your notes: <code>|</code> = a syllable with a vowel you hear, <code>\</code> = 6th house (little or no vowel).</li>
+          <li>Word order is <b>Subject – Object – Verb</b> (SOV), so the verb comes last.</li>
+          <li>Sentences end with <span class="eth" style="font-size:1.3rem">።</span> (four dots, a full stop). Questions use <span class="eth" style="font-size:1.3rem">?</span> (also written <span class="eth" style="font-size:1.3rem">፧</span>) and a rising voice.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>How the alphabet is grouped (from 9/23)</h3>
+        <svg class="pyr" viewBox="0 0 420 250" width="100%" style="max-width:420px">
+          <polygon points="10,10 410,10 210,240" fill="#e3f2ec" stroke="#1f7a5a" stroke-width="2"/>
+          <g id="pyr-rows"></g>
+        </svg>
+        <p class="small muted">The 2-legged family is the biggest, so the class starts there. As of 10/5 you've done <b>all the 2-legged</b> and <b>all the 1-legged</b> families.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Characters you know (1st house / base form)</h2>
+    <h3>Two-legged <span class="pill">9/23 – 9/30</span></h3>
+    <p class="small muted">Your memory sentence for the first seven: <i>“<b>B</b>ald <b>V</b>eil <b>S</b>ky <b>Sh</b>ield <b>C</b>urled <b>L</b>ike <b>A</b>mazing”</i></p>
+    <div class="lineup" id="lineup-two"></div>
+    <h3>One-legged <span class="pill">9/30 – 10/5</span></h3>
+    <p class="small muted">Memory words from your notes: <i><b>n</b>ose · <b>gn</b>occhi · lower-case <b>t</b> · dancing <b>ch</b>aracter · <b>g</b>un · <b>p</b>opsicle / teleport · <b>y</b>o-yo · <b>Q</b>ebele</i></p>
+    <div class="lineup" id="lineup-one"></div>
+    <h3>New letters <span class="pill new">10/8</span></h3>
+    <p class="small muted">Memory words: <i><b>h</b>alf pipe</i> (from you) · <i><b>r</b>amp</i> and <i><b>m</b>oustache</i> (suggested: <span class="eth">ረ</span> slants like a ramp, and <span class="eth">መ</span> has two curls on top like a moustache).</p>
+    <div class="lineup" id="lineup-more"></div>
+    <div class="callout small">
+      <b>Watch out:</b> <span class="eth">ሀ</span> (1st) and <span class="eth">ሃ</span> (4th) both sound like “ha”, just like <span class="eth">አ</span> and <span class="eth">ኣ</span>.
+      In these rows the 2nd house puts the mark at the <b>bottom</b> instead of the hip: <span class="eth" style="font-size:1.3rem">ሁ ሩ ሙ</span>.
+      The 6th and 7th houses change shape too: <span class="eth" style="font-size:1.3rem">ህ ሆ · ር ሮ · ም ሞ</span>.
+    </div>
+    <h3>The rest of the alphabet <span class="pill preview">not in class yet</span></h3>
+    <p class="small muted">These complete the alphabet sheet. The memory hooks are suggestions, not from class.</p>
+    <div class="lineup" id="lineup-rest"></div>
+    <div class="callout small">
+      <b>Same sound, different letter:</b> in modern Amharic
+      <span class="eth" style="font-size:1.3rem">ሀ ሐ ኀ</span> all sound like “h”,
+      <span class="eth" style="font-size:1.3rem">ሰ ሠ</span> both sound like “s”,
+      <span class="eth" style="font-size:1.3rem">አ ዐ</span> both sound like “a”, and
+      <span class="eth" style="font-size:1.3rem">ጸ ፀ</span> both sound like “ts'”.
+      Some words are always spelled with one of them (e.g. <span class="eth">ሐሙስ</span>, <span class="eth">ዓመት</span>), and others can be spelled either way.
+      The writing exercise accepts either letter.
+      <br><b>Popped sounds:</b> <span class="eth" style="font-size:1.3rem">ጠ</span> (t') and <span class="eth" style="font-size:1.3rem">ጨ</span> (ch') are the popped versions of <span class="eth" style="font-size:1.3rem">ተ</span> and <span class="eth" style="font-size:1.3rem">ቸ</span>.
+      <br><b>Shapes to watch:</b> the 6th houses <span class="eth" style="font-size:1.3rem">ው ፍ ዕ</span> and the 4th house <span class="eth" style="font-size:1.3rem">ፋ</span> look different from their 1st house.
+    </div>
+    <h3>Rare letters <span class="pill preview">not used in Amharic</span></h3>
+    <p class="small muted">These are on your alphabet sheet, but they are used for Tigrinya, Oromo and other languages. You don't need them for Amharic.</p>
+    <div class="lineup" id="lineup-rare"></div>
+  </div>
+
+  <div class="card">
+    <h2>One-legged rules and exceptions <span class="pill new">10/5</span></h2>
+    <div class="grid2">
+      <div>
+        <ul>
+          <li><b>4th house (a):</b> the left side gets shorter, as with the two-legged ones: <span class="eth" style="font-size:1.4rem">ታ ቻ ቃ ያ ጋ</span>.<br>
+            <b>Exceptions:</b> <span class="eth" style="font-size:1.4rem">ና</span> (na) and <span class="eth" style="font-size:1.4rem">ኛ</span> (nya) change shape instead.</li>
+          <li><b>3rd house (ī):</b> the y row is the exception: <span class="eth" style="font-size:1.4rem">ዪ</span> (yī).</li>
+          <li><b>5th house (ē):</b> the y row is the exception again: <span class="eth" style="font-size:1.4rem">ዬ</span> (yē).</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Forms you circled in your notes, plus the exceptions</h3>
+        <p class="eth" style="font-size:1.7rem; margin:4px 0" id="irr-list"></p>
+        <p class="small muted">These don't follow the usual pattern, so learn them on their own. They have a pink ring in the chart. You can drill only these with <b>“Tricky one-legged forms”</b> on the Practice tab.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The 7 houses: how the shape changes with the vowel</h2>
+    <p class="small muted">The examples are the <span class="eth">በ</span> (b), <span class="eth">ሰ</span> (s) and <span class="eth">ለ</span> (l) rows. Each color is used for the same house everywhere on this page.</p>
+    <div class="houses" id="houses"></div>
+    <div class="callout small">
+      <b>Watch out:</b> <span class="eth">አ</span> (1st) and <span class="eth">ኣ</span> (4th) sound the <b>same</b> (“a”); Google Translate writes them ā and a. The 1st-house vowel (written e) sounds like a short “uh”, and the 6th house (written i) is often silent or a short “ih”.
+    </div>
+    <h3>6th-house families <span class="muted small">(groups from your 9/30 notes that change the same way)</span></h3>
+    <div class="families" id="families"></div>
+    <p class="small muted">The 6th house is the irregular one, so learn it family by family. For the one-legged irregular forms, see the rules card above.</p>
+  </div>
+
+  <div class="card">
+    <h2>Ge'ez numbers <span class="pill new">10/30</span></h2>
+    <p class="small muted">These are on the short assessment (week 7), both written and spoken. Each symbol has a fixed value. There is <b>no zero</b> and no place value, so you add the symbols together. The bars above and below are part of each symbol.</p>
+    <h3>Ones</h3>
+    <div class="lineup" id="num-ones"></div>
+    <h3>Tens</h3>
+    <div class="lineup" id="num-tens"></div>
+    <h3>Hundred and ten thousand</h3>
+    <div class="lineup" id="num-big"></div>
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <h3>How to build a number</h3>
+        <ul class="small">
+          <li><b>Tens, then ones:</b> 47 = <span class="eth">፵</span> + <span class="eth">፯</span> = <span class="eth">፵፯</span>.</li>
+          <li><b>Hundreds:</b> put the count in front of <span class="eth">፻</span>: 300 = <span class="eth">፫፻</span>, 365 = <span class="eth">፫፻፷፭</span>. 100 alone is just <span class="eth">፻</span>, without <span class="eth">፩</span>.</li>
+          <li><b>Thousands are counted in hundreds:</b> 1,000 = <span class="eth">፲፻</span> (10 × 100), and 2,500 = <span class="eth">፳፭፻</span> (25 × 100).</li>
+          <li><b>Ten thousand</b> has its own symbol <span class="eth">፼</span>, and it works like <span class="eth">፻</span>: 20,000 = <span class="eth">፪፼</span>.</li>
+          <li>Ethiopians use these symbols mostly for <b>dates, years, and chapter or page numbers</b>. Prices and phone numbers use 1 2 3.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Examples</h3>
+        <table class="wordtable" id="num-examples"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CHART ======================= -->
+<section class="tab" id="tab-chart">
+  <div class="card">
+    <h2>Fidel chart: every character you've learned</h2>
+    <div class="chart-controls noprint">
+      <label><input type="checkbox" id="chart-show-sound" checked> show sounds under characters</label>
+      <label><input type="checkbox" id="chart-show-irr" checked> ring the irregular forms</label>
+    </div>
+    <div style="overflow-x:auto"><table class="fidel" id="fidel"></table></div>
+    <p class="small muted">The sound labels are e · u · ī · a · ē · i · o, the way Google Translate writes them (in your notes: uh · oo · ee · aa · ay · eh · oh). The 1st house of አ, ዐ, ሀ, ሐ and ኀ is written ā. Hover over a character to highlight it.</p>
+  </div>
+</section>
+
+<!-- ======================= WORDS & GRAMMAR ======================= -->
+<section class="tab" id="tab-words">
+  <div class="card">
+    <h2>Words from class</h2>
+    <p class="small muted">The <b>code</b> column uses your notes' notation: consonant + house number (e.g. <code>K7 K4 K7 L4</code> = coca cola). The <b>tally</b> column shows <code>|</code> for a heard vowel and <code>\</code> for the 6th house.
+      A <span class="unk">dotted underline</span> marks a character that isn't in the chart, like the combined forms <span class="eth">ሷ</span> or <span class="eth">ጓ</span>.</p>
+    <div style="overflow-x:auto"><table class="wordtable" id="words-class"></table></div>
+  </div>
+
+  <div class="card">
+    <h2>Sentences from class</h2>
+    <div class="sov">
+      <div class="blk S"><div class="lbl">Subject</div><div class="am">እሱ</div><div>esu · he</div></div>
+      <div class="blk O"><div class="lbl">Object</div><div class="am">ዳቦ</div><div>dabo · bread</div></div>
+      <div class="blk V"><div class="lbl">Verb</div><div class="am">በላ።</div><div>bella · ate</div></div>
+    </div>
+    <p class="small muted">English is S-V-O (“He ate bread”). Amharic is S-O-V (“He bread ate”).</p>
+    <div style="overflow-x:auto"><table class="wordtable" id="sent-class"></table></div>
+  </div>
+
+  <div class="card">
+    <h2>Pronouns and “to be”</h2>
+    <p class="small muted">Amharic verbs and pronouns mark <b>person</b> (1st = speaking, 2nd = listening, 3rd = “gossiping”), <b>number</b> and <b>gender</b>, and in the 2nd and 3rd person also <b>formality</b>. Grey rows weren't written out in class yet.</p>
+    <table class="pron" id="pron"></table>
+  </div>
+
+  <div class="card">
+    <h2>Mini-grammar</h2>
+    <div class="grid2">
+      <div>
+        <h3>Past-tense endings <span class="pill new">10/5</span></h3>
+        <p class="small muted">The verb root is the “he, past tense” form. To change the person, add an ending or change the last character's house.</p>
+        <table class="wordtable" id="verb-eat"></table>
+        <p class="small">All the endings, with the house changes explained: see <a href="#" onclick="document.querySelector('#nav [data-tab=grammar]').click(); return false;">4 · Grammar: verb endings</a>.</p>
+        <p class="small muted">Match the ending to the pronoun. For example, <span class="eth">አንቺ</span> … <span class="eth">ገዛ<b>ሽ</b></span> (you f. bought) and <span class="eth">እኛ</span> … <span class="eth">ገዛ<b>ን</b></span> (we bought).</p>
+      </div>
+      <div>
+        <h3>“my …”: change the 6th house to the 5th</h3>
+        <p class="small muted">From your notes: <i>any noun that ends in the 6th house, change it to the 5th house to make it “mine”.</i></p>
+        <table class="wordtable" id="poss"></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Dialogue: “Are you a student?”</h2>
+    <p class="small muted">From your class notes. With the whole alphabet you can now read all of it, including <span class="eth">ዎ</span> (the 7th house of <span class="eth">ወ</span>) in <span class="eth">አዎ</span>.</p>
+    <table class="wordtable" id="dialogue"></table>
+  </div>
+
+  <div class="card">
+    <h2>Extra practice words <span class="pill new">not from class</span></h2>
+    <p class="small muted">These are common words that use <b>only characters in the chart</b>. They're good for reading practice.</p>
+    <div style="overflow-x:auto"><table class="wordtable" id="words-new"></table></div>
+  </div>
+</section>
+
+<!-- ======================= GRAMMAR ======================= -->
+<section class="tab" id="tab-grammar">
+  <div class="card">
+    <h2>How past-tense verb endings work</h2>
+    <p>Amharic past-tense verbs follow one pattern: <b>start from the “he” form, then change the ending to show who did it.</b>
+      Because the ending already says who, you can usually leave out the pronoun. <span class="eth">በላ</span> on its own means “he ate”, and <span class="eth">በላን</span> on its own means “we ate”.</p>
+    <div class="callout">
+      <b>The starting point is “he ___ed”.</b> The dictionary form of a verb is the “he did it” past form:
+      <span class="eth">በላ</span> he ate, <span class="eth">ገዛ</span> he bought, <span class="eth">ሰበረ</span> he broke, <span class="eth">ጻፈ</span> he wrote.
+      To make other people the subject, you <b>change the house of the last character</b>, and for most persons you also <b>add an ending</b>.
+    </div>
+    <p class="small muted">In the tables, the last character of the verb is colored by its house: <span class="h1c">■ 1st</span> <span class="h2c">■ 2nd</span> <span class="h4c">■ 4th</span> <span class="h6c">■ 6th</span>. The added ending is <b>bold</b>. Press 🔊 to hear a form.</p>
+  </div>
+
+  <div class="card">
+    <h2>Type 1: verbs that end in the 1st house (‑e), like <span class="eth">ሰበረ</span></h2>
+    <div style="overflow-x:auto"><table class="wordtable vt" id="vt-a"></table></div>
+    <h3>Which house does the last character go into?</h3>
+    <ul class="rule-list">
+      <li>An ending that starts with a consonant (<b>‑ku, ‑k, ‑sh, ‑n</b>) puts it in the <span class="h6c"><b>6th house</b></span> (no vowel). Then you add the ending: <span class="eth">ሰበ<span class="h6c">ር</span><b>ኩ</b></span>.</li>
+      <li><b>‑u</b> (“they”) is the <span class="h2c"><b>2nd house</b></span>, and nothing is added: <span class="eth">ሰበ<span class="h2c">ሩ</span></span>.</li>
+      <li><b>‑achihu</b> (“you all”) starts with the <span class="h4c"><b>4th house</b></span>: <span class="eth">ሰበ<span class="h4c">ራ</span><b>ችሁ</b></span>.</li>
+      <li>“He” and “she” keep the 1st house. “She” just adds <b class="eth">ች</b>: <span class="eth">ሰበረ<b>ች</b></span>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Type 2: verbs that end in the 4th house (‑a), like <span class="eth">በላ</span></h2>
+    <p>Many common verbs end in ‑a (<span class="eth">በላ, ገዛ, መጣ, ገባ, ሰማ, ተኛ</span>). They use the same endings, with one change:
+      <b>after the ‑a, the “k” of “I” and “you (m.)” turns into “h”</b> (‑hu, ‑h).</p>
+    <div style="overflow-x:auto"><table class="wordtable vt" id="vt-b"></table></div>
+    <p class="small muted">The last character already ends in a vowel, so you just add the ending. The exception is “they”, where ‑a becomes ‑u
+      (<span class="eth">ላ → ሉ</span>, <span class="eth">ዛ → ዙ</span>).</p>
+  </div>
+
+  <div class="card">
+    <h2>All the endings at a glance</h2>
+    <div style="overflow-x:auto"><table class="wordtable" id="vt-sum"></table></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Memory tricks</h2>
+      <ul class="rule-list">
+        <li><b>I = ‑ku / ‑hu, you = ‑k / ‑h, you (f.) = ‑sh.</b> These are the same sounds as in <span class="eth">አንቺ</span> / <span class="eth">‑ሽ</span>, and the “you” ending matches <span class="eth">እባክ<b>ህ</b></span> / <span class="eth">እባክ<b>ሽ</b></span> (“please” to a man / woman).</li>
+        <li><b>We = ‑n</b>, just like <span class="eth">እኛ ነ<b>ን</b></span> (“we are”).</li>
+        <li><b>She = ‑ch.</b> It's the only person that adds an ending but keeps the 1st house.</li>
+        <li><b>They = ‑u</b>, and the same form is used to talk politely about or to someone. That's why the flashcards say “they / he, she (polite) ate” for <span class="eth">በሉ</span>.</li>
+        <li><b>You (all) = ‑achihu</b>, which sounds like <span class="eth">እናንተ … ናችሁ</span> (“you all are”).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>In a sentence</h2>
+      <p class="small muted">The verb comes last (Subject – Object – Verb). The pronoun in brackets can be left out.</p>
+      <table class="wordtable" id="vt-sent"></table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Two things the script doesn't show</h2>
+    <ul class="rule-list">
+      <li><b>Doubled consonants aren't written.</b> <span class="eth">በላ</span> is said <i>bella</i>, with a long l, but it's written with a single <span class="eth">ላ</span>. That's why the word list shows “bela” and the sentence diagram shows “bella”.</li>
+      <li><b>This covers only the simple past tense.</b> The present / future form (for example <span class="eth">ይበላል</span>, “he eats / will eat”) puts <b>prefixes</b> in front of the verb as well. It follows a separate pattern, which is a good next step once these endings feel natural.</li>
+    </ul>
+    <p class="small">To practise: on <b>5 · Practice</b>, turn on the <b>verb endings</b> deck (and untick the others to drill only verbs).</p>
+  </div>
+</section>
+
+<!-- ======================= PRACTICE ======================= -->
+<section class="tab" id="tab-practice">
+  <div class="card">
+    <div class="controls">
+      <label>Characters to use:
+        <select id="level">
+          <option value="all" selected>All Amharic letters</option>
+          <option value="class">Only letters from class so far (two-legged + one-legged + ሀ ረ መ)</option>
+          <option value="rest">Focus on the rest of the alphabet (ሐ ሠ ኀ ኸ ወ ዐ ጠ ጨ ፀ ፈ)</option>
+          <option value="more">Focus on ሀ ረ መ</option>
+          <option value="one">Focus on one-legged (ነ ኘ ተ ቸ ገ ፐ የ ቀ)</option>
+          <option value="irr">Tricky one-legged forms (exceptions)</option>
+          <option value="two">Two-legged only</option>
+          <option value="rare">Focus on the rare letters (ቐ ዸ ጘ, character drill only)</option>
+        </select>
+      </label>
+      <span class="score" id="score">Score: 0 / 0</span>
+      <button class="btn ghost small" id="reset-score">reset score</button>
+    </div>
+    <div class="decks" id="decks">
+      <b>Decks:</b>
+      <label><input type="checkbox" value="class" checked> words from class</label>
+      <label><input type="checkbox" value="new" checked> extra words</label>
+      <label><input type="checkbox" value="verb" checked> verb endings</label>
+      <label><input type="checkbox" value="sent"> sentences</label>
+      <label><input type="checkbox" value="poss"> “my …” (6th → 5th house)</label>
+    </div>
+    <div class="decks vsize-row">
+      <b>Vocabulary size:</b>
+      <label>the <input type="number" id="vsize" min="5" step="5" style="width:4.5em"> most useful words</label>
+      <input type="range" id="vsize-range" min="5" step="5" style="flex:1;min-width:140px;max-width:320px">
+      <button class="btn ghost small" id="vsize-more">+25 more</button>
+      <button class="btn ghost small" id="vsize-all">all</button>
+    </div>
+    <p class="small muted" id="vsize-info"></p>
+    <p class="small muted">In the “focus” settings, the character drill uses only those characters, and the word decks only show words that contain at least one of them.</p>
+    <p class="small muted" id="deck-count"></p>
+  </div>
+
+  <div class="card" id="sync-card" hidden>
+    <h2>Sync progress between laptop and phone</h2>
+    <p class="small muted">Your vocabulary, character progress and vocabulary size are saved in your own Google Sheet, so every device sees the same progress.
+      Set up the sheet once (see <b>SYNC_SETUP.md</b> in the repository), then enter its web-app address and your secret word here, on each device.</p>
+    <div class="sync-form">
+      <label>Web-app address <input type="text" id="sync-url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+      <label>Secret word <input type="text" id="sync-token" placeholder="the TOKEN from the script" autocomplete="off"></label>
+    </div>
+    <p class="sync-actions">
+      <button class="btn" id="sync-save">Save and sync now</button>
+      <button class="btn ghost" id="sync-link">Copy setup link for my phone</button>
+      <button class="btn ghost" id="sync-off">Turn sync off on this device</button>
+    </p>
+    <p class="small" id="sync-msg"></p>
+    <p class="small muted">The setup link contains your secret word. Send it only to yourself (for example by AirDrop or a note), and open it once on your phone.</p>
+  </div>
+
+  <div class="subtabs" id="ptabs">
+    <button data-p="char" class="active">A · Character drill</button>
+    <button data-p="read">B · Read: Amharic → sounds</button>
+    <button data-p="write">C · Write: sounds → Amharic</button>
+    <button data-p="vocab">D · Vocabulary</button>
+    <button data-p="num">E · Ge'ez numbers</button>
+  </div>
+
+  <div class="card quiz" id="p-char"></div>
+  <div class="card quiz" id="p-read" style="display:none"></div>
+  <div class="card quiz" id="p-write" style="display:none"></div>
+  <div class="card quiz" id="p-vocab" style="display:none"></div>
+  <div class="card quiz" id="p-num" style="display:none"></div>
+</section>
+
+<!-- ======================= WORKSHEET ======================= -->
+<section class="tab" id="tab-worksheet">
+  <div class="card noprint">
+    <h2>Handwriting worksheet</h2>
+    <p>This builds a worksheet from the current practice settings (characters and decks). In the “focus” mode it picks words and sentences that use the characters you miss in the character drill or haven't drilled much. Part 1 asks you to read Amharic and write the sounds and meaning. Part 2 asks you to write the Amharic by hand. The answer key prints on a separate page.</p>
+    <p>
+      <label>Words: <select id="ws-mode">
+        <option value="weak" selected>focus on characters I miss or haven't practiced much</option>
+        <option value="random">random</option>
+      </select></label>
+      <label>Items per part: <select id="ws-n"><option>8</option><option selected>10</option><option>15</option><option>20</option></select></label>
+      <label><input type="checkbox" id="ws-sent" checked> include short sentences (about a third of each part)</label>
+    </p>
+    <p id="ws-weak-opts">
+      <label><input type="checkbox" id="ws-unseen" checked> also count characters I haven't drilled yet</label>
+      <label><input type="checkbox" id="ws-copy" checked> start with a row to copy each focus character</label>
+    </p>
+    <p class="small muted" id="ws-info"></p>
+    <button class="btn" id="ws-gen">Generate worksheet</button>
+    <button class="btn ghost" id="ws-print">Print</button>
+  </div>
+  <div class="card" id="worksheet"></div>
+</section>
+
+</main>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+// Ethiopic Unicode is regular: base code point + 0..6 = houses 1..7
+const CONS = [
+  // two-legged
+  { k: "b",   base: 0x1260, grp: "two", mn: "bald" },
+  { k: "v",   base: 0x1268, grp: "two", mn: "veil" },
+  { k: "s",   base: 0x1230, grp: "two", mn: "sky" },
+  { k: "sh",  base: 0x1238, grp: "two", mn: "shield" },
+  { k: "k",   base: 0x12A8, grp: "two", mn: "curled" },
+  { k: "l",   base: 0x1208, grp: "two", mn: "lice" },
+  { k: "a",   base: 0x12A0, grp: "two", mn: "amazing" },
+  { k: "z",   base: 0x12D8, grp: "two", mn: "zoo cage" },
+  { k: "zh",  base: 0x12E0, grp: "two", mn: "zhou cage" },
+  { k: "d",   base: 0x12F0, grp: "two", mn: "dude behind the desk" },
+  { k: "j",   base: 0x1300, grp: "two", mn: "Jack (dude with a hat)" },
+  { k: "ts'", base: 0x1338, grp: "two", mn: "tse-tse fly (popped ts)" },
+  { k: "p'",  base: 0x1330, grp: "two", mn: "pop to fly (popped p)" },
+  // one-legged
+  { k: "n",   base: 0x1290, grp: "one", mn: "nose" },
+  { k: "gn",  base: 0x1298, grp: "one", mn: "gnose (ñ)" },
+  { k: "t",   base: 0x1270, grp: "one", mn: "lower-case t" },
+  { k: "ch",  base: 0x1278, grp: "one", mn: "chinese character" },
+  { k: "g",   base: 0x1308, grp: "one", mn: "gun" },
+  { k: "p",   base: 0x1350, grp: "one", mn: "pogo stick" },
+  { k: "y",   base: 0x12E8, grp: "one", mn: "yo-yo" },
+  { k: "q",   base: 0x1240, grp: "one", mn: "Qebele (popped “ke”)" },
+  // added 10/8
+  { k: "h",   base: 0x1200, grp: "more", mn: "half pipe" },
+  { k: "r",   base: 0x1228, grp: "more", mn: "ramp" },
+  { k: "m",   base: 0x1218, grp: "more", mn: "moustache" },
+  // the rest of the alphabet (from the alphabet sheet, not covered in class yet)
+  // snd = how it is pronounced in Amharic; same = the row it sounds identical to
+  { k: "ḥ",   base: 0x1210, grp: "rest", snd: "h", same: "h", mn: "three-legged h (sounds like ሀ)" },
+  { k: "ś",   base: 0x1220, grp: "rest", snd: "s", same: "s", mn: "seesaw (sounds like ሰ)" },
+  { k: "ḫ",   base: 0x1280, grp: "rest", snd: "h", same: "h", mn: "ነ without its top bar (sounds like ሀ)" },
+  { k: "kh",  base: 0x12B8, grp: "rest", mn: "ከ with a hat (h / kh)" },
+  { k: "w",   base: 0x12C8, grp: "rest", mn: "wide face (w)" },
+  { k: "o",   base: 0x12D0, grp: "rest", snd: "", same: "a", mn: "an O (sounds like አ)" },
+  { k: "t'",  base: 0x1320, grp: "rest", mn: "table (ጠረጴዛ), popped t" },
+  { k: "ch'", base: 0x1328, grp: "rest", mn: "ጠ with chairs, popped ch" },
+  { k: "ṣ'",  base: 0x1340, grp: "rest", snd: "ts'", same: "ts'", mn: "round ts' (sounds like ጸ)" },
+  { k: "f",   base: 0x1348, grp: "rest", mn: "feather (f)" },
+  // on the alphabet sheet, but not used in standard Amharic (Tigrinya, Oromo and other languages)
+  { k: "qh",  base: 0x1250, grp: "rare", mn: "ቀ with a second bar (Tigrinya)" },
+  { k: "ḍ",   base: 0x12F8, grp: "rare", snd: "dd", mn: "ደ with a second bar" },
+  { k: "ŋ",   base: 0x1318, grp: "rare", snd: "ng", mn: "ገ with a second bar" },
+];
+
+// one-legged forms that break the pattern (circled in the 9/30 + 10/5 notes)
+// const IRREGULAR = new Set([..."ናንኖኛግጎፕፖዪዬይዮቅቆ"]);
+const IRREGULAR = new Set([...""]);
+
+const HOUSES = [
+  { n: 1, say: "e", ipa: "ä", rule: "Ge'ez: the base form" },
+  { n: 2, say: "u", ipa: "u", rule: "a dash comes out of the hip (right side, middle)" },
+  { n: 3, say: "ī", ipa: "i", rule: "a foot on the right leg, pointing east" },
+  { n: 4, say: "a", ipa: "a", rule: "left leg shortened / lifted" },
+  { n: 5, say: "ā", ipa: "e", rule: "an egg on the right leg" },
+  { n: 6, say: "i", ipa: "ə / –", rule: "varies by family; often no vowel" },
+  { n: 7, say: "o", ipa: "o", rule: "right leg shortened (mirror of the 4th)" },
+];
+
+// src: class | new | sent | poss ; date = class date
+const WORDS = [
+  // ---- from class ----
+  { am: "ሲሶ",    ro: "sīso",      en: "one third (“see-saw”)", src: "class" },
+  { am: "ኬክ",    ro: "kēki",       en: "cake", src: "class" },
+  { am: "ኮካ ኮላ", ro: "koka kola", en: "Coca-Cola", src: "class" },
+  { am: "ሌባ",    ro: "lēba",      en: "thief", src: "class" },
+  { am: "ሌላ",    ro: "lēla",      en: "other", src: "class" },
+  { am: "ኮክ",    ro: "koki",       en: "peach", src: "class" },
+  { am: "አዛዥ",   ro: "āzazhi",     en: "commander", src: "class" },
+  { am: "ደጅ",    ro: "deji",       en: "outside", src: "class" },
+  { am: "ዘብ",    ro: "zebi",       en: "guard", src: "class" },
+  { am: "ሸሸ",    ro: "sheshe",    en: "he ran away", src: "class" },
+  { am: "አዲስ",   ro: "ādīsi",     en: "new", src: "class" },
+  { am: "አበበ",   ro: "ābebe",     en: "Abebe (a name)", src: "class" },
+  { am: "አለ",    ro: "āle",      en: "he is present / there is", src: "class" },
+  { am: "አዲስ አበባ", ro: "ādīsi ābeba", en: "Addis Ababa (“new flower”)", src: "class" },
+  { am: "ጳጳስ",   ro: "p'ap'asi",   en: "pope / bishop", src: "class" },
+  { am: "በላ",    ro: "bela",     en: "he ate", src: "class" },
+  { am: "በሉ",    ro: "belu",     en: "they / he, she (polite) ate", src: "class" },
+  { am: "በላሽ",   ro: "belashi",   en: "you (f.) ate", src: "class" },
+  { am: "አሰላ",   ro: "āsela",     en: "Asella (a town)", src: "class" },
+  { am: "ዳቦ",    ro: "dabo",      en: "bread", src: "class" },
+  { am: "ባዶ",    ro: "bado",      en: "empty / nothing", src: "class" },
+  { am: "ልብ",    ro: "libi",       en: "heart", src: "class" },
+  { am: "እሱ",    ro: "isu",       en: "he", src: "class" },
+  { am: "እኔ",    ro: "inē",       en: "I", src: "class" },
+  { am: "እኛ",    ro: "inya",      en: "we", src: "class" },
+  { am: "አንተ",   ro: "ānite",      en: "you (m.)", src: "class" },
+  { am: "አንቺ",   ro: "ānichī",     en: "you (f.)", src: "class" },
+  { am: "እናንተ",  ro: "inanite",    en: "you (all)", src: "class" },
+  { am: "እነሱ",   ro: "inesu",     en: "they", src: "class" },
+  { am: "ነኝ",    ro: "nenyi",      en: "(I) am", src: "class" },
+  { am: "ነን",    ro: "neni",       en: "(we) are", src: "class" },
+  { am: "ቶቢ",    ro: "tobī",      en: "Tobi", src: "class" },
+  // 10/5
+  { am: "ፔፕሲ",   ro: "pēpisī",     en: "Pepsi", src: "class" },
+  { am: "ፖሊስ",   ro: "polīsi",     en: "police", src: "class" },
+  { am: "ገበያ",   ro: "gebeya",    en: "market", src: "class" },
+  { am: "በግ",    ro: "begi",       en: "lamb / sheep", src: "class" },
+  { am: "ቤት",    ro: "bēti",       en: "house", src: "class" },
+
+  // ---- extra words (only known characters) ----
+  { am: "ቡና",    ro: "buna",      en: "coffee", src: "new" },
+  { am: "ሻይ",    ro: "shayi",      en: "tea", src: "new" },
+  { am: "ልጅ",    ro: "liji",       en: "child", src: "new" },
+  { am: "ልጆች",   ro: "lijochi",    en: "children", src: "new" },
+  { am: "ሲኒ",    ro: "sīnī",      en: "small coffee cup", src: "new" },
+  { am: "ጀበና",   ro: "jebena",    en: "clay coffee pot", src: "new" },
+  { am: "ዳቦ ቤት", ro: "dabo bēti",  en: "bakery", src: "new" },
+  { am: "ቡና ቤት", ro: "buna bēti",  en: "café / bar", src: "new" },
+  { am: "ቤተሰብ",  ro: "bētesebi",   en: "family", src: "new" },
+  { am: "አባት",   ro: "ābati",      en: "father", src: "new" },
+  { am: "እናት",   ro: "inati",      en: "mother", src: "new" },
+  { am: "ልብስ",   ro: "libisi",      en: "clothes", src: "new" },
+  { am: "ስልክ",   ro: "siliki",      en: "telephone", src: "new" },
+  { am: "ብዙ",    ro: "bizu",      en: "many / a lot", src: "new" },
+  { am: "ትንሽ",   ro: "tinishi",    en: "small / a little", src: "new" },
+  { am: "ትናንት",  ro: "tinaniti",    en: "yesterday", src: "new" },
+  { am: "አንድ",   ro: "ānidi",       en: "one", src: "new" },
+  { am: "ሶስት",   ro: "sositi",      en: "three", src: "new" },
+  { am: "ስድስት",  ro: "sidisiti",    en: "six", src: "new" },
+  { am: "ሰባት",   ro: "sebati",     en: "seven", src: "new" },
+  { am: "ሺ",     ro: "shī",       en: "thousand", src: "new" },
+  { am: "ካናዳ",   ro: "kanada",    en: "Canada", src: "new" },
+  { am: "ቻይና",   ro: "chayina",    en: "China", src: "new" },
+  { am: "ኬንያ",   ro: "kēniya",     en: "Kenya", src: "new" },
+  { am: "ጃፓን",   ro: "japani",     en: "Japan", src: "new" },
+  { am: "ኢትዮጵያ", ro: "ītiyop'iya", en: "Ethiopia", src: "new" },
+  { am: "ታክሲ",   ro: "takisī",     en: "taxi", src: "new" },
+  { am: "ፓስታ",   ro: "pasita",     en: "pasta", src: "new" },
+  { am: "ቸኮሌት",  ro: "chekolēti",  en: "chocolate", src: "new" },
+  { am: "ቴሌቪዥን", ro: "tēlēvīzhini", en: "television", src: "new" },
+  { am: "ጸሎት",   ro: "ts'eloti",   en: "prayer", src: "new" },
+  { am: "ደብዳቤ",  ro: "debidabē",   en: "letter (mail)", src: "new" },
+  { am: "ቆንጆ",   ro: "k'onijo",     en: "beautiful", src: "new" },
+  { am: "ገና",    ro: "gena",      en: "still / yet; Christmas", src: "new" },
+  { am: "ነገ",    ro: "nege",      en: "tomorrow", src: "new" },
+  { am: "ቀን",    ro: "k'eni",       en: "day", src: "new" },
+  { am: "ቀይ",    ro: "k'eyi",       en: "red", src: "new" },
+  { am: "ስጋ",    ro: "siga",      en: "meat", src: "new" },
+  { am: "ቦታ",    ro: "bota",      en: "place", src: "new" },
+  { am: "ገንዘብ",  ro: "genizebi",    en: "money", src: "new" },
+  // added after 10/5: they use the full g / p / y / q rows and the exceptions
+  { am: "ጊዜ",    ro: "gīzē",      en: "time", src: "new" },
+  { am: "ጉዞ",    ro: "guzo",      en: "trip / journey", src: "new" },
+  { am: "ጎበዝ",   ro: "gobezi",     en: "clever; “well done!”", src: "new" },
+  { am: "ጎጆ",    ro: "gojo",      en: "hut", src: "new" },
+  { am: "ጎን",    ro: "goni",       en: "side", src: "new" },
+  { am: "ጎዳና",   ro: "godana",    en: "street", src: "new" },
+  { am: "ገደል",   ro: "gedeli",     en: "cliff", src: "new" },
+  { am: "ገጽ",    ro: "gets'i",     en: "page", src: "new" },
+  { am: "ጋና",    ro: "gana",      en: "Ghana", src: "new" },
+  { am: "ግብጽ",   ro: "gibits'i",    en: "Egypt", src: "new" },
+  { am: "ጉልበት",  ro: "gulibeti",    en: "knee; strength", src: "new" },
+  { am: "ደግ",    ro: "degi",       en: "kind", src: "new" },
+  { am: "ጀግና",   ro: "jegina",     en: "hero", src: "new" },
+  { am: "ዳኛ",    ro: "danya",     en: "judge", src: "new" },
+  { am: "ነጋዴ",   ro: "negadē",    en: "merchant", src: "new" },
+  { am: "ፒዛ",    ro: "pīza",      en: "pizza", src: "new" },
+  { am: "ፒያኖ",   ro: "pīyano",    en: "piano", src: "new" },
+  { am: "ፓፓያ",   ro: "papaya",    en: "papaya", src: "new" },
+  { am: "ፖስታ",   ro: "posita",     en: "envelope / mail", src: "new" },
+  { am: "ፖስታ ቤት", ro: "posita bēti", en: "post office", src: "new" },
+  { am: "ስፔን",   ro: "sipēni",      en: "Spain", src: "new" },
+  { am: "ቪዛ",    ro: "vīza",      en: "visa", src: "new" },
+  { am: "ቲኬት",   ro: "tīkēti",     en: "ticket", src: "new" },
+  { am: "ቲቪ",    ro: "tīvī",      en: "TV", src: "new" },
+  { am: "ቤንዚን",  ro: "bēnizīni",    en: "gasoline", src: "new" },
+  { am: "ዘይት",   ro: "zeyiti",      en: "oil", src: "new" },
+  { am: "አይ",    ro: "āyi",        en: "no (informal)", src: "new" },
+  { am: "ቆይ",    ro: "k'oyi",       en: "wait! (to a man)", src: "new" },
+  { am: "ቀበሌ",   ro: "k'ebelē",    en: "kebele (neighborhood)", src: "new" },
+  { am: "ቀላል",   ro: "k'elali",     en: "easy / light", src: "new" },
+  { am: "ቀዝቃዛ",  ro: "k'ezik'aza",   en: "cold", src: "new" },
+  { am: "ቃል",    ro: "k'ali",       en: "word", src: "new" },
+  { am: "ቅቤ",    ro: "k'ibē",      en: "butter", src: "new" },
+  { am: "ትልቅ",   ro: "tilik'i",    en: "big", src: "new" },
+  { am: "ደቂቃ",   ro: "dek'īk'a",    en: "minute", src: "new" },
+  { am: "በቂ",    ro: "bek'ī",      en: "enough", src: "new" },
+  { am: "ብቻ",    ro: "bicha",     en: "only / alone", src: "new" },
+  { am: "ትኩስ",   ro: "tikusi",     en: "fresh / hot", src: "new" },
+  { am: "ድንች",   ro: "dinichi",    en: "potato", src: "new" },
+  { am: "ቡኒ",    ro: "bunī",      en: "brown", src: "new" },
+  { am: "ኪስ",    ro: "kīsi",       en: "pocket", src: "new" },
+  { am: "ቡድን",   ro: "budini",     en: "team / group", src: "new" },
+  { am: "ሴት",    ro: "sēti",       en: "woman", src: "new" },
+  { am: "ሴቶች",   ro: "sētochi",    en: "women", src: "new" },
+  { am: "አጎት",   ro: "āgoti",      en: "uncle", src: "new" },
+  { am: "አክስት",  ro: "ākisiti",     en: "aunt", src: "new" },
+  { am: "ሌሊት",   ro: "lēlīti",     en: "night", src: "new" },
+  { am: "ዝናብ",   ro: "zinabi",     en: "rain", src: "new" },
+  { am: "ኮከብ",   ro: "kokebi",     en: "star", src: "new" },
+  { am: "ደሴት",   ro: "desēti",     en: "island", src: "new" },
+  { am: "እሺ",    ro: "ishī",      en: "OK", src: "new" },
+  // added 10/8: words with ሀ ረ መ
+  // greetings & phrases
+  { am: "ሰላም",   ro: "selami",     en: "hello; peace", src: "new" },
+  { am: "አመሰግናለሁ", ro: "āmeseginalehu", en: "thank you", src: "new" },
+  { am: "ይቅርታ",  ro: "yik'irita",   en: "sorry / excuse me", src: "new" },
+  { am: "እባክህ",  ro: "ibakihi",    en: "please (to a man)", src: "new" },
+  { am: "እባክሽ",  ro: "ibakishi",   en: "please (to a woman)", src: "new" },
+  { am: "ምንም አይደል", ro: "minimi āyideli", en: "no problem / it's nothing", src: "new" },
+  { am: "ደህና",   ro: "dehina",     en: "fine / well", src: "new" },
+  { am: "ደህና ሁን", ro: "dehina huni", en: "goodbye (to a man)", src: "new" },
+  { am: "ደህና ሁኚ", ro: "dehina hunyī", en: "goodbye (to a woman)", src: "new" },
+  // question words
+  { am: "ማን",    ro: "mani",       en: "who?", src: "new" },
+  { am: "ምን",    ro: "mini",       en: "what?", src: "new" },
+  { am: "የት",    ro: "yeti",       en: "where?", src: "new" },
+  { am: "መቼ",    ro: "mechē",     en: "when?", src: "new" },
+  { am: "ስንት",   ro: "siniti",      en: "how many? / how much?", src: "new" },
+  { am: "እንዴት",  ro: "inidēti",     en: "how?", src: "new" },
+  { am: "ለምን",   ro: "lemini",     en: "why?", src: "new" },
+  // numbers
+  { am: "ሁለት",   ro: "huleti",     en: "two", src: "new" },
+  { am: "አራት",   ro: "ārati",      en: "four", src: "new" },
+  { am: "አምስት",  ro: "āmisiti",     en: "five", src: "new" },
+  { am: "ስምንት",  ro: "siminiti",    en: "eight", src: "new" },
+  { am: "አስር",   ro: "āsiri",      en: "ten", src: "new" },
+  { am: "ሃያ",    ro: "haya",      en: "twenty", src: "new" },
+  { am: "መቶ",    ro: "meto",      en: "hundred", src: "new" },
+  // time
+  { am: "ዛሬ",    ro: "zarē",      en: "today", src: "new" },
+  { am: "አሁን",   ro: "āhuni",      en: "now", src: "new" },
+  { am: "ማታ",    ro: "mata",      en: "evening", src: "new" },
+  { am: "ሳምንት",  ro: "saminiti",    en: "week", src: "new" },
+  { am: "ሰኞ",    ro: "senyo",     en: "Monday", src: "new" },
+  { am: "ማክሰኞ",  ro: "makisenyo",  en: "Tuesday", src: "new" },
+  { am: "ቅዳሜ",   ro: "k'idamē",    en: "Saturday", src: "new" },
+  { am: "እሁድ",   ro: "ihudi",      en: "Sunday", src: "new" },
+  // people
+  { am: "ስም",    ro: "simi",       en: "name", src: "new" },
+  { am: "ተማሪ",   ro: "temarī",    en: "student", src: "new" },
+  { am: "መምህር",  ro: "memihiri",    en: "teacher", src: "new" },
+  { am: "ሀኪም",   ro: "hākīmi",     en: "doctor", src: "new" },
+  { am: "ገበሬ",   ro: "geberē",    en: "farmer", src: "new" },
+  { am: "ሚስት",   ro: "mīsiti",      en: "wife", src: "new" },
+  { am: "ባል",    ro: "bali",       en: "husband", src: "new" },
+  { am: "እህት",   ro: "ihiti",      en: "sister", src: "new" },
+  { am: "አያት",   ro: "āyati",      en: "grandparent", src: "new" },
+  // food & drink
+  { am: "ምግብ",   ro: "migibi",     en: "food", src: "new" },
+  { am: "እንጀራ",  ro: "inijera",    en: "injera", src: "new" },
+  { am: "ሽሮ",    ro: "shiro",     en: "shiro (chickpea stew)", src: "new" },
+  { am: "ዶሮ",    ro: "doro",      en: "chicken", src: "new" },
+  { am: "እንቁላል", ro: "inik'ulali",   en: "egg", src: "new" },
+  { am: "ሩዝ",    ro: "ruzi",       en: "rice", src: "new" },
+  { am: "ማር",    ro: "mari",       en: "honey", src: "new" },
+  { am: "ሙዝ",    ro: "muzi",       en: "banana", src: "new" },
+  { am: "ሎሚ",    ro: "lomī",      en: "lemon", src: "new" },
+  { am: "ብርቱካን", ro: "biritukani",  en: "orange", src: "new" },
+  { am: "ቲማቲም",  ro: "tīmatīmi",   en: "tomato", src: "new" },
+  { am: "ሽንኩርት", ro: "shinikuriti",  en: "onion", src: "new" },
+  { am: "ቃሪያ",   ro: "k'arīya",    en: "green chili pepper", src: "new" },
+  { am: "ቢራ",    ro: "bīra",      en: "beer", src: "new" },
+  { am: "ማንኪያ",  ro: "manikīya",   en: "spoon", src: "new" },
+  { am: "ሳህን",   ro: "sahini",     en: "plate", src: "new" },
+  // places & things
+  { am: "ሀገር",   ro: "hāgeri",     en: "country", src: "new" },
+  { am: "ከተማ",   ro: "ketema",    en: "city / town", src: "new" },
+  { am: "መንገድ",  ro: "menigedi",    en: "road / way", src: "new" },
+  { am: "መኪና",   ro: "mekīna",    en: "car", src: "new" },
+  { am: "ባቡር",   ro: "baburi",     en: "train", src: "new" },
+  { am: "ሆቴል",   ro: "hotēli",     en: "hotel", src: "new" },
+  { am: "ሆስፒታል", ro: "hosipītali",  en: "hospital", src: "new" },
+  { am: "ሱቅ",    ro: "suk'i",       en: "shop", src: "new" },
+  { am: "ባንክ",   ro: "baniki",      en: "bank", src: "new" },
+  { am: "ሬስቶራንት", ro: "rēsitoraniti", en: "restaurant", src: "new" },
+  { am: "ትምህርት ቤት", ro: "timihiriti bēti", en: "school", src: "new" },
+  { am: "ቤተ ክርስቲያን", ro: "bēte kirisitīyani", en: "church", src: "new" },
+  { am: "በር",    ro: "beri",       en: "door", src: "new" },
+  { am: "መስኮት",  ro: "mesikoti",    en: "window", src: "new" },
+  { am: "ሞባይል",  ro: "mobayili",    en: "mobile phone", src: "new" },
+  { am: "ኮምፒዩተር", ro: "komipīyuteri", en: "computer", src: "new" },
+  { am: "ሬዲዮ",   ro: "rēdīyo",    en: "radio", src: "new" },
+  { am: "ሲኒማ",   ro: "sīnīma",    en: "cinema", src: "new" },
+  { am: "ሙዚቃ",   ro: "muzīk'a",    en: "music", src: "new" },
+  { am: "አሜሪካ",  ro: "āmērīka",   en: "America", src: "new" },
+  { am: "ሮም",    ro: "romi",       en: "Rome", src: "new" },
+  { am: "ሀረር",   ro: "hāreri",     en: "Harar (a city)", src: "new" },
+  { am: "ጎንደር",  ro: "gonideri",    en: "Gondar (a city)", src: "new" },
+  // describing words
+  { am: "ሩቅ",    ro: "ruk'i",       en: "far", src: "new" },
+  { am: "ቅርብ",   ro: "k'iribi",     en: "near", src: "new" },
+  { am: "ቀኝ",    ro: "k'enyi",      en: "right (side)", src: "new" },
+  { am: "ግራ",    ro: "gira",       en: "left (side)", src: "new" },
+  { am: "ሁሉ",    ro: "hulu",      en: "all / everything", src: "new" },
+  { am: "ሙቅ",    ro: "muk'i",       en: "hot (water, food)", src: "new" },
+
+  // added 10/9: more words with only known characters
+  // body
+  { am: "ራስ",    ro: "rasi",       en: "head", src: "new" },
+  { am: "አይን",   ro: "āyini",      en: "eye", src: "new" },
+  { am: "ጆሮ",    ro: "joro",      en: "ear", src: "new" },
+  { am: "እጅ",    ro: "iji",        en: "hand", src: "new" },
+  { am: "እግር",   ro: "igiri",      en: "leg / foot", src: "new" },
+  { am: "ጸጉር",   ro: "ts'eguri",   en: "hair", src: "new" },
+  { am: "ሆድ",    ro: "hodi",       en: "stomach", src: "new" },
+  { am: "ደም",    ro: "demi",       en: "blood", src: "new" },
+  { am: "ጀርባ",   ro: "jeriba",     en: "back", src: "new" },
+  { am: "አንገት",  ro: "ānigeti",     en: "neck", src: "new" },
+  { am: "ምላስ",   ro: "milasi",     en: "tongue", src: "new" },
+  // animals
+  { am: "ድመት",   ro: "dimeti",     en: "cat", src: "new" },
+  { am: "ላም",    ro: "lami",       en: "cow", src: "new" },
+  { am: "በሬ",    ro: "berē",      en: "ox", src: "new" },
+  { am: "አህያ",   ro: "āhiya",     en: "donkey", src: "new" },
+  { am: "ግመል",   ro: "gimeli",     en: "camel", src: "new" },
+  { am: "አንበሳ",  ro: "ānibesa",    en: "lion", src: "new" },
+  { am: "ዝሆን",   ro: "zihoni",     en: "elephant", src: "new" },
+  { am: "ነብር",   ro: "nebiri",     en: "leopard", src: "new" },
+  { am: "ጅብ",    ro: "jibi",       en: "hyena", src: "new" },
+  { am: "ዝንጀሮ",  ro: "zinijero",   en: "monkey", src: "new" },
+  { am: "አሳ",    ro: "āsa",       en: "fish", src: "new" },
+  { am: "ንብ",    ro: "nibi",       en: "bee", src: "new" },
+  { am: "እባብ",   ro: "ibabi",      en: "snake", src: "new" },
+  // nature
+  { am: "ሰማይ",   ro: "semayi",     en: "sky", src: "new" },
+  { am: "ተራራ",   ro: "terara",    en: "mountain", src: "new" },
+  { am: "ባህር",   ro: "bahiri",     en: "sea", src: "new" },
+  { am: "ሀይቅ",   ro: "hāyik'i",      en: "lake", src: "new" },
+  { am: "ድንጋይ",  ro: "dinigayi",    en: "stone", src: "new" },
+  { am: "አበባ",   ro: "ābeba",     en: "flower", src: "new" },
+  { am: "ሳር",    ro: "sari",       en: "grass", src: "new" },
+  { am: "ደመና",   ro: "demena",    en: "cloud", src: "new" },
+  { am: "በረዶ",   ro: "beredo",    en: "ice / hail", src: "new" },
+  { am: "እሳት",   ro: "isati",      en: "fire", src: "new" },
+  { am: "መሬት",   ro: "merēti",     en: "earth / land", src: "new" },
+  // clothes & things at home
+  { am: "ቀሚስ",   ro: "k'emīsi",     en: "dress", src: "new" },
+  { am: "ሸሚዝ",   ro: "shemīzi",    en: "shirt", src: "new" },
+  { am: "ካልሲ",   ro: "kalisī",     en: "socks", src: "new" },
+  { am: "ቦርሳ",   ro: "borisa",     en: "bag", src: "new" },
+  { am: "ደብተር",  ro: "debiteri",    en: "notebook", src: "new" },
+  { am: "እርሳስ",  ro: "irisasi",     en: "pencil", src: "new" },
+  { am: "አልጋ",   ro: "āliga",      en: "bed", src: "new" },
+  { am: "ሳሎን",   ro: "saloni",     en: "living room", src: "new" },
+  { am: "ኩሽና",   ro: "kushina",   en: "kitchen", src: "new" },
+  { am: "መኝታ ቤት", ro: "menyita bēti", en: "bedroom", src: "new" },
+  { am: "ሽንት ቤት", ro: "shiniti bēti", en: "toilet", src: "new" },
+  { am: "ሻማ",    ro: "shama",     en: "candle", src: "new" },
+  { am: "መብራት",  ro: "mebirati",    en: "light / electricity", src: "new" },
+  // food
+  { am: "በርበሬ",  ro: "beriberē",   en: "berbere (spice mix)", src: "new" },
+  { am: "ጎመን",   ro: "gomeni",     en: "collard greens", src: "new" },
+  { am: "ምስር",   ro: "misiri",     en: "lentils", src: "new" },
+  { am: "ቅመም",   ro: "k'imemi",     en: "spice", src: "new" },
+  { am: "ካሮት",   ro: "karoti",     en: "carrot", src: "new" },
+  { am: "ማንጎ",   ro: "manigo",     en: "mango", src: "new" },
+  { am: "አናናስ",  ro: "ānanasi",    en: "pineapple", src: "new" },
+  { am: "ጁስ",    ro: "jusi",       en: "juice", src: "new" },
+  { am: "ቆሎ",    ro: "k'olo",      en: "roasted grain (snack)", src: "new" },
+  // describing words
+  { am: "ረጅም",   ro: "rejimi",     en: "tall / long", src: "new" },
+  { am: "አሮጌ",   ro: "ārogē",     en: "old (things)", src: "new" },
+  { am: "ደስተኛ",  ro: "desitenya", en: "happy", src: "new" },
+  { am: "ሀብታም",  ro: "hābitami",    en: "rich", src: "new" },
+  { am: "ደሀ",    ro: "dehā",      en: "poor", src: "new" },
+  { am: "ከባድ",   ro: "kebadi",     en: "heavy / difficult", src: "new" },
+  { am: "ሞቃት",   ro: "mok'ati",     en: "warm", src: "new" },
+  { am: "ብርድ",   ro: "biridi",      en: "cold (weather)", src: "new" },
+  { am: "ንጹህ",   ro: "nits'uhi",   en: "clean", src: "new" },
+  { am: "ቆሻሻ",   ro: "k'oshasha",  en: "dirty", src: "new" },
+  { am: "ደረቅ",   ro: "derek'i",     en: "dry", src: "new" },
+  { am: "ርካሽ",   ro: "rikashi",    en: "cheap", src: "new" },
+  { am: "ሙሉ",    ro: "mulu",      en: "full / whole", src: "new" },
+  // people
+  { am: "ንጉስ",   ro: "nigusi",     en: "king", src: "new" },
+  { am: "ንግስት",  ro: "nigisiti",    en: "queen", src: "new" },
+  { am: "ዶክተር",  ro: "dokiteri",    en: "doctor", src: "new" },
+  { am: "ነርስ",   ro: "nerisi",      en: "nurse", src: "new" },
+  { am: "አስተማሪ", ro: "āsitemarī",  en: "teacher", src: "new" },
+  { am: "ሰራተኛ",  ro: "seratenya", en: "worker", src: "new" },
+  { am: "ጎረቤት",  ro: "gorebēti",   en: "neighbor", src: "new" },
+  { am: "እንግዳ",  ro: "inigida",    en: "guest", src: "new" },
+  { am: "ዘመድ",   ro: "zemedi",     en: "relative", src: "new" },
+  { am: "ሽማግሌ",  ro: "shimagilē",  en: "elder / old man", src: "new" },
+  // places
+  { am: "ቢሮ",    ro: "bīro",      en: "office", src: "new" },
+  { am: "ዩኒቨርሲቲ", ro: "yunīverisītī", en: "university", src: "new" },
+  { am: "ሜዳ",    ro: "mēda",      en: "field", src: "new" },
+  { am: "ኤርፖርት", ro: "ēriporiti",    en: "airport", src: "new" },
+  { am: "ፓርክ",   ro: "pariki",      en: "park", src: "new" },
+  { am: "መንደር",  ro: "menideri",    en: "village", src: "new" },
+  { am: "ቤተ መንግስት", ro: "bēte menigisiti", en: "palace", src: "new" },
+  { am: "አማርኛ",  ro: "āmarinya",  en: "Amharic (language)", src: "new" },
+  { am: "እንግሊዝኛ", ro: "inigilīzinya", en: "English (language)", src: "new" },
+  { am: "ባህር ዳር", ro: "bahiri dari", en: "Bahir Dar (a city)", src: "new" },
+  { am: "ላሊበላ",  ro: "lalībela",  en: "Lalibela (a town)", src: "new" },
+  { am: "አክሱም",  ro: "ākisumi",     en: "Aksum (a city)", src: "new" },
+  { am: "ደሴ",    ro: "desē",      en: "Dessie (a city)", src: "new" },
+  { am: "ጅማ",    ro: "jima",     en: "Jimma (a city)", src: "new" },
+  { am: "ጀርመን",  ro: "jerimeni",    en: "Germany", src: "new" },
+  { am: "እንግሊዝ", ro: "inigilīzi",    en: "England", src: "new" },
+  { am: "ህንድ",   ro: "hinidi",      en: "India", src: "new" },
+  { am: "ሱዳን",   ro: "sudani",     en: "Sudan", src: "new" },
+  { am: "ሶማሊያ",  ro: "somalīya",  en: "Somalia", src: "new" },
+  { am: "ኤርትራ",  ro: "ēritira",     en: "Eritrea", src: "new" },
+  { am: "ጅቡቲ",   ro: "jibutī",    en: "Djibouti", src: "new" },
+  { am: "ብራዚል",  ro: "birazīli",    en: "Brazil", src: "new" },
+  // numbers
+  { am: "ሰላሳ",   ro: "selasa",    en: "thirty", src: "new" },
+  { am: "አርባ",   ro: "āriba",      en: "forty", src: "new" },
+  { am: "ሀምሳ",   ro: "hāmisa",     en: "fifty", src: "new" },
+  { am: "ስልሳ",   ro: "silisa",     en: "sixty", src: "new" },
+  { am: "ሰባ",    ro: "seba",      en: "seventy", src: "new" },
+  { am: "ሰማንያ",  ro: "semaniya",   en: "eighty", src: "new" },
+  { am: "ሚሊዮን",  ro: "mīlīyoni",   en: "million", src: "new" },
+  // Ethiopian months
+  { am: "መስከረም", ro: "mesikeremi",  en: "Meskerem (1st month, Sep–Oct)", src: "new" },
+  { am: "ህዳር",   ro: "hidari",     en: "Hidar (3rd month, Nov–Dec)", src: "new" },
+  { am: "ታህሳስ",  ro: "tahisasi",    en: "Tahsas (4th month, Dec–Jan)", src: "new" },
+  { am: "የካቲት",  ro: "yekatīti",   en: "Yekatit (6th month, Feb–Mar)", src: "new" },
+  { am: "መጋቢት",  ro: "megabīti",   en: "Megabit (7th month, Mar–Apr)", src: "new" },
+  { am: "ሚያዝያ",  ro: "mīyaziya",   en: "Miyazya (8th month, Apr–May)", src: "new" },
+  { am: "ግንቦት",  ro: "giniboti",    en: "Ginbot (9th month, May–Jun)", src: "new" },
+  { am: "ሰኔ",    ro: "senē",      en: "Sene (10th month, Jun–Jul)", src: "new" },
+  { am: "ጳጉሜ",   ro: "p'agumē",   en: "Pagume (13th month, 5–6 days)", src: "new" },
+  { am: "ቀትር",   ro: "k'etiri",     en: "noon", src: "new" },
+  { am: "ቀስ በቀስ", ro: "k'esi bek'esi", en: "slowly / little by little", src: "new" },
+  // added 10/9: words with the rest of the alphabet (ሐ ሠ ኀ ወ ዐ ጠ ጨ ፀ ፈ)
+  // greetings & everyday words
+  { am: "ጤና ይስጥልኝ", ro: "t'ēna yisit'ilinyi", en: "hello (formal; “may He give you health”)", src: "new" },
+  { am: "ጤና",    ro: "t'ēna",     en: "health", src: "new" },
+  { am: "አዎ",    ro: "āwo",       en: "yes", src: "new" },
+  { am: "ጥሩ",    ro: "t'iru",     en: "good", src: "new" },
+  { am: "መጥፎ",   ro: "met'ifo",    en: "bad", src: "new" },
+  { am: "ፍቅር",   ro: "fik'iri",     en: "love", src: "new" },
+  { am: "ሐሳብ",   ro: "hāsabi",     en: "idea / thought", src: "new" },
+  { am: "ሥራ",    ro: "sira",      en: "work / job", src: "new" },
+  { am: "ኃይል",   ro: "hayili",      en: "power / strength", src: "new" },
+  { am: "ሐበሻ",   ro: "hābesha",   en: "Habesha (Ethiopian / Eritrean)", src: "new" },
+  { am: "ወደ",    ro: "wede",      en: "to / toward", src: "new" },
+  // time
+  { am: "ጠዋት",   ro: "t'ewati",    en: "morning", src: "new" },
+  { am: "ዓመት",   ro: "‘ameti",      en: "year", src: "new" },
+  { am: "ወር",    ro: "weri",       en: "month", src: "new" },
+  { am: "ሰዓት",   ro: "se‘ati",     en: "hour / clock / watch", src: "new" },
+  { am: "ረቡዕ",   ro: "rebui",     en: "Wednesday", src: "new" },
+  { am: "ሐሙስ",   ro: "hāmusi",     en: "Thursday", src: "new" },
+  { am: "ዓርብ",   ro: "‘aribi",       en: "Friday", src: "new" },
+  { am: "ጥቅምት",  ro: "t'ik'imiti",   en: "Tiqimt (2nd month, Oct–Nov)", src: "new" },
+  { am: "ጥር",    ro: "t'iri",      en: "Tir (5th month, Jan–Feb)", src: "new" },
+  { am: "ሐምሌ",   ro: "hāmilē",     en: "Hamle (11th month, Jul–Aug)", src: "new" },
+  { am: "ነሐሴ",   ro: "nehāsē",    en: "Nehase (12th month, Aug–Sep)", src: "new" },
+  // numbers
+  { am: "ዘጠኝ",   ro: "zet'enyi",   en: "nine", src: "new" },
+  { am: "ዘጠና",   ro: "zet'ena",   en: "ninety", src: "new" },
+  // people & body
+  { am: "ወንድ",   ro: "wenidi",      en: "man / male", src: "new" },
+  { am: "ወንድም",  ro: "wenidimi",    en: "brother", src: "new" },
+  { am: "ጭንቅላት", ro: "ch'inik'ilati", en: "head", src: "new" },
+  { am: "ጥርስ",   ro: "t'irisi",     en: "tooth", src: "new" },
+  { am: "አፍ",    ro: "āfi",        en: "mouth", src: "new" },
+  { am: "ጣት",    ro: "t'ati",      en: "finger", src: "new" },
+  // animals & nature
+  { am: "ውሻ",    ro: "wisha",     en: "dog", src: "new" },
+  { am: "ፈረስ",   ro: "feresi",     en: "horse", src: "new" },
+  { am: "ፍየል",   ro: "fiyeli",     en: "goat", src: "new" },
+  { am: "ውሃ",    ro: "wiha",      en: "water", src: "new" },
+  { am: "ወንዝ",   ro: "wenizi",      en: "river", src: "new" },
+  { am: "ዛፍ",    ro: "zafi",       en: "tree", src: "new" },
+  { am: "ፀሐይ",   ro: "ts'ehāyi",   en: "sun", src: "new" },
+  { am: "ጨረቃ",   ro: "ch'erek'a",  en: "moon", src: "new" },
+  // colors & describing words
+  { am: "ነጭ",    ro: "nech'i",     en: "white", src: "new" },
+  { am: "ጥቁር",   ro: "t'ik'uri",    en: "black", src: "new" },
+  { am: "ቢጫ",    ro: "bīch'a",    en: "yellow", src: "new" },
+  { am: "ሰማያዊ",  ro: "semayawī",  en: "blue", src: "new" },
+  { am: "ጣፋጭ",   ro: "t'afach'i",  en: "sweet", src: "new" },
+  { am: "ፈጣን",   ro: "fet'ani",    en: "fast", src: "new" },
+  { am: "ውድ",    ro: "widi",       en: "expensive; dear", src: "new" },
+  { am: "አጭር",   ro: "āch'iri",     en: "short", src: "new" },
+  // food & drink
+  { am: "ወተት",   ro: "weteti",     en: "milk", src: "new" },
+  { am: "ጨው",    ro: "ch'ewi",     en: "salt", src: "new" },
+  { am: "ጠጅ",    ro: "t'eji",      en: "t'ej (honey wine)", src: "new" },
+  { am: "ጥብስ",   ro: "t'ibisi",     en: "tibs (fried meat)", src: "new" },
+  { am: "ክትፎ",   ro: "kitifo",     en: "kitfo (minced raw beef)", src: "new" },
+  { am: "ፍርፍር",  ro: "firifiri",    en: "firfir (shredded injera)", src: "new" },
+  { am: "ፍራፍሬ",  ro: "firafirē",    en: "fruit", src: "new" },
+  // things & places
+  { am: "ጫማ",    ro: "ch'ama",    en: "shoes", src: "new" },
+  { am: "ወንበር",  ro: "weniberi",    en: "chair", src: "new" },
+  { am: "ጠረጴዛ",  ro: "t'erep'ēza", en: "table", src: "new" },
+  { am: "መጽሐፍ",  ro: "mets'ihāfi",  en: "book", src: "new" },
+  { am: "ቤተ መጻሕፍት", ro: "bēte mets'ahifiti", en: "library", src: "new" },
+  { am: "ጋዜጣ",   ro: "gazēt'a",   en: "newspaper", src: "new" },
+  { am: "ፊደል",   ro: "fīdeli",     en: "alphabet / letter", src: "new" },
+  { am: "ፊልም",   ro: "fīlimi",      en: "film / movie", src: "new" },
+  { am: "ዋጋ",    ro: "waga",      en: "price", src: "new" },
+  { am: "ሠርግ",   ro: "serigi",      en: "wedding", src: "new" },
+  { am: "ፈረንሳይ", ro: "ferenisayi",  en: "France", src: "new" },
+  { am: "ሀዋሳ",   ro: "hāwasa",    en: "Hawassa (a city)", src: "new" },
+  // added 10/11: more words for the worksheet (they fill in characters that were rare)
+  // food & drink
+  { am: "ወጥ", ro: "wet'i", en: "stew (wot)", src: "new" },
+  { am: "ዶሮ ወጥ", ro: "doro wet'i", en: "doro wot (chicken stew)", src: "new" },
+  { am: "ሾርባ", ro: "shoriba", en: "soup", src: "new" },
+  { am: "ነጭ ሽንኩርት", ro: "nech'i shinikuriti", en: "garlic", src: "new" },
+  { am: "ዱባ", ro: "duba", en: "pumpkin", src: "new" },
+  { am: "ዱቄት", ro: "duk'ēti", en: "flour", src: "new" },
+  { am: "ጤፍ", ro: "t'ēfi", en: "teff", src: "new" },
+  { am: "ቂጣ", ro: "k'īt'a", en: "flatbread", src: "new" },
+  { am: "ቁርስ", ro: "k'urisi", en: "breakfast", src: "new" },
+  { am: "ምሳ", ro: "misa", en: "lunch", src: "new" },
+  { am: "እራት", ro: "irati", en: "dinner", src: "new" },
+  { am: "ከረሜላ", ro: "keremēla", en: "candy", src: "new" },
+  { am: "ኩባያ", ro: "kubaya", en: "cup", src: "new" },
+  { am: "ሹካ", ro: "shuka", en: "fork", src: "new" },
+  { am: "ቢላዋ", ro: "bīlawa", en: "knife", src: "new" },
+  // body
+  { am: "አፍንጫ", ro: "āfinich'a", en: "nose", src: "new" },
+  { am: "ፀጉር", ro: "ts'eguri", en: "hair", src: "new" },
+  { am: "ጺም", ro: "ts'īmi", en: "beard", src: "new" },
+  // people
+  { am: "ጌታ", ro: "gēta", en: "lord / master", src: "new" },
+  { am: "ቄስ", ro: "k'ēsi", en: "priest", src: "new" },
+  { am: "ጸሐፊ", ro: "ts'ehāfī", en: "secretary / writer", src: "new" },
+  { am: "ሾፌር", ro: "shofēri", en: "driver", src: "new" },
+  { am: "ቱሪስት", ro: "turīsiti", en: "tourist", src: "new" },
+  { am: "ኃላፊ", ro: "halafī", en: "person in charge / manager", src: "new" },
+  { am: "ሕዝብ", ro: "hizibi", en: "people / the public", src: "new" },
+  // places & nature
+  { am: "ገጠር", ro: "get'eri", en: "countryside", src: "new" },
+  { am: "ፋብሪካ", ro: "fabirīka", en: "factory", src: "new" },
+  { am: "ኤምባሲ", ro: "ēmibasī", en: "embassy", src: "new" },
+  { am: "ሐይቅ", ro: "hāyik'i", en: "lake", src: "new" },
+  { am: "ጫካ", ro: "ch'aka", en: "forest", src: "new" },
+  { am: "ነፋስ", ro: "nefasi", en: "wind", src: "new" },
+  { am: "ወፍ", ro: "wefi", en: "bird", src: "new" },
+  { am: "ሐረር", ro: "hāreri", en: "Harar (a city)", src: "new" },
+  { am: "ኡጋንዳ", ro: "uganida", en: "Uganda", src: "new" },
+  { am: "ኦሮሚያ", ro: "oromīya", en: "Oromia (a region)", src: "new" },
+  { am: "ቬትናም", ro: "vētinami", en: "Vietnam", src: "new" },
+  // things
+  { am: "ቁልፍ", ro: "k'ulifi", en: "key", src: "new" },
+  { am: "ቁጥር", ro: "k'ut'iri", en: "number", src: "new" },
+  { am: "ሣጥን", ro: "sat'ini", en: "box", src: "new" },
+  { am: "ዣንጥላ", ro: "zhanit'ila", en: "umbrella", src: "new" },
+  { am: "ጃኬት", ro: "jakēti", en: "jacket", src: "new" },
+  { am: "ጂንስ", ro: "jīnisi", en: "jeans", src: "new" },
+  { am: "ሹራብ", ro: "shurabi", en: "sweater", src: "new" },
+  { am: "ፎቶ", ro: "foto", en: "photo", src: "new" },
+  { am: "ፎቅ", ro: "fok'i", en: "floor / storey", src: "new" },
+  { am: "ሶፋ", ro: "sofa", en: "sofa", src: "new" },
+  { am: "ፓስፖርት", ro: "pasiporiti", en: "passport", src: "new" },
+  { am: "ሂሳብ", ro: "hīsabi", en: "bill / math", src: "new" },
+  { am: "ዜና", ro: "zēna", en: "news", src: "new" },
+  { am: "ዜማ", ro: "zēma", en: "melody", src: "new" },
+  { am: "ሥዕል", ro: "siili", en: "picture / painting", src: "new" },
+  { am: "ዕቃ", ro: "ik'a", en: "thing / item", src: "new" },
+  { am: "ዕድል", ro: "idili", en: "luck / chance", src: "new" },
+  { am: "ዕድሜ", ro: "idimē", en: "age", src: "new" },
+  { am: "ዓለም", ro: "‘alemi", en: "world", src: "new" },
+  { am: "ሕግ", ro: "higi", en: "law", src: "new" },
+  { am: "ጾም", ro: "ts'omi", en: "fast (no eating)", src: "new" },
+  { am: "ጦርነት", ro: "t'orineti", en: "war", src: "new" },
+  { am: "ኑሮ", ro: "nuro", en: "life / living", src: "new" },
+  // numbers
+  { am: "ሦስት", ro: "sositi", en: "three", src: "new" },
+  // describing words
+  { am: "ቶሎ", ro: "tolo", en: "quickly", src: "new" },
+  // verbs (he …)
+  { am: "ሰጠ", ro: "set'e", en: "he gave", src: "new" },
+  { am: "ሮጠ", ro: "rot'e", en: "he ran", src: "new" },
+  { am: "ዘፈነ", ro: "zefene", en: "he sang", src: "new" },
+  { am: "ጨፈረ", ro: "ch'efere", en: "he danced", src: "new" },
+  { am: "ዋኘ", ro: "wanye", en: "he swam", src: "new" },
+  { am: "ተጫወተ", ro: "tech'awete", en: "he played", src: "new" },
+  { am: "ጠየቀ", ro: "t'eyek'e", en: "he asked", src: "new" },
+  { am: "መለሰ", ro: "melese", en: "he answered / returned", src: "new" },
+  { am: "ተቀመጠ", ro: "tek'emet'e", en: "he sat down", src: "new" },
+  { am: "ጻፈ", ro: "ts'afe", en: "he wrote", src: "new" },
+  { am: "አነበበ", ro: "ānebebe", en: "he read", src: "new" },
+  { am: "ኖረ", ro: "nore", en: "he lived", src: "new" },
+  { am: "ሞተ", ro: "mote", en: "he died", src: "new" },
+  { am: "ዞረ", ro: "zore", en: "he turned", src: "new" },
+  { am: "ቸኮለ", ro: "chekole", en: "he hurried", src: "new" },
+  { am: "ጮኸ", ro: "ch'ohe", en: "he shouted", src: "new" },
+  { am: "ፈራ", ro: "fera", en: "he was afraid", src: "new" },
+  // more food & things
+  { am: "ኦቾሎኒ", ro: "ocholonī", en: "peanut", src: "new" },
+  { am: "ሸንኮራ", ro: "shenikora", en: "sugarcane", src: "new" },
+  { am: "ፍሬ", ro: "firē", en: "fruit / seed", src: "new" },
+  { am: "ቫይረስ", ro: "vayiresi", en: "virus", src: "new" },
+  { am: "ቮድካ", ro: "vodika", en: "vodka", src: "new" },
+  { am: "ዊስኪ", ro: "wīsikī", en: "whisky", src: "new" },
+  { am: "ቪላ", ro: "vīla", en: "villa", src: "new" },
+  { am: "ቱቦ", ro: "tubo", en: "pipe / tube", src: "new" },
+  { am: "ኖራ", ro: "nora", en: "chalk", src: "new" },
+  { am: "ጌጥ", ro: "gēt'i", en: "jewelry", src: "new" },
+  { am: "ፌስታል", ro: "fēsitali", en: "plastic bag", src: "new" },
+  { am: "ጽሑፍ", ro: "ts'ihufi", en: "text / writing", src: "new" },
+  { am: "ጾታ", ro: "ts'ota", en: "gender", src: "new" },
+  { am: "ጨዋታ", ro: "ch'ewata", en: "game / chat", src: "new" },
+  { am: "ጩኸት", ro: "ch'uheti", en: "shout / noise", src: "new" },
+  { am: "ፉጨት", ro: "fuch'eti", en: "whistling", src: "new" },
+  { am: "ጢስ", ro: "t'īsi", en: "smoke", src: "new" },
+  { am: "ጦር", ro: "t'ori", en: "spear / army", src: "new" },
+  { am: "ጡረታ", ro: "t'ureta", en: "pension", src: "new" },
+  { am: "ዑደት", ro: "udeti", en: "cycle", src: "new" },
+  { am: "ሐዘን", ro: "hāzeni", en: "grief", src: "new" },
+  { am: "ሕፃን", ro: "hits'ani", en: "baby", src: "new" },
+  { am: "ኃጢአት", ro: "hat'īāti", en: "sin", src: "new" },
+  { am: "ሹም", ro: "shumi", en: "official", src: "new" },
+  { am: "ጄኔራል", ro: "jēnērali", en: "general (army)", src: "new" },
+  { am: "ጳውሎስ", ro: "p'awilosi", en: "Paul", src: "new" },
+  { am: "ጴጥሮስ", ro: "p'ēt'irosi", en: "Peter", src: "new" },
+  { am: "ፊት", ro: "fīti", en: "face", src: "new" },
+  // more animals
+  { am: "ጦጣ", ro: "t'ot'a", en: "monkey", src: "new" },
+  { am: "ቀጭኔ", ro: "k'ech'inē", en: "giraffe", src: "new" },
+  { am: "ጉማሬ", ro: "gumarē", en: "hippo", src: "new" },
+  { am: "አዞ", ro: "āzo", en: "crocodile", src: "new" },
+  { am: "ጉንዳን", ro: "gunidani", en: "ant", src: "new" },
+  { am: "ኤሊ", ro: "ēlī", en: "turtle", src: "new" },
+  { am: "ሸረሪት", ro: "shererīti", en: "spider", src: "new" },
+  { am: "ቢራቢሮ", ro: "bīrabīro", en: "butterfly", src: "new" },
+  // more countries
+  { am: "ጣሊያን", ro: "t'alīyani", en: "Italy", src: "new" },
+  { am: "ግብፅ", ro: "gibits'i", en: "Egypt", src: "new" },
+  { am: "ናይጄሪያ", ro: "nayijērīya", en: "Nigeria", src: "new" },
+  { am: "ሜክሲኮ", ro: "mēkisīko", en: "Mexico", src: "new" },
+  // more verbs (he …)
+  { am: "መጣ", ro: "met'a", en: "he came", src: "new" },
+  { am: "ወጣ", ro: "wet'a", en: "he went out", src: "new" },
+  { am: "ወረደ", ro: "werede", en: "he went down", src: "new" },
+  { am: "ተነሳ", ro: "tenesa", en: "he got up", src: "new" },
+  { am: "ሳመ", ro: "same", en: "he kissed", src: "new" },
+  { am: "አለቀሰ", ro: "ālek'ese", en: "he cried", src: "new" },
+  { am: "ጠራ", ro: "t'era", en: "he called", src: "new" },
+  { am: "ሸጠ", ro: "shet'e", en: "he sold", src: "new" },
+  { am: "ከፈለ", ro: "kefele", en: "he paid", src: "new" },
+  { am: "ከፈተ", ro: "kefete", en: "he opened", src: "new" },
+  { am: "አጠበ", ro: "āt'ebe", en: "he washed", src: "new" },
+  { am: "ጠበሰ", ro: "t'ebese", en: "he roasted / fried", src: "new" },
+  { am: "ቆረጠ", ro: "k'oret'e", en: "he cut", src: "new" },
+  { am: "ሰረቀ", ro: "serek'e", en: "he stole", src: "new" },
+  { am: "ደወለ", ro: "dewele", en: "he phoned / rang", src: "new" },
+  { am: "ጎበኘ", ro: "gobenye", en: "he visited", src: "new" },
+  // added 10/13: even more words for the worksheet
+  // home & everyday things
+  { am: "ብርድ ልብስ", ro: "biridi libisi", en: "blanket", src: "new" },
+  { am: "ትራስ", ro: "tirasi", en: "pillow", src: "new" },
+  { am: "ግድግዳ", ro: "gidigida", en: "wall", src: "new" },
+  { am: "ጣሪያ", ro: "t'arīya", en: "roof / ceiling", src: "new" },
+  { am: "ደረጃ", ro: "dereja", en: "stairs / level", src: "new" },
+  { am: "ኮምፒውተር", ro: "komipīwiteri", en: "computer", src: "new" },
+  { am: "ሰሀን", ro: "sehāni", en: "plate", src: "new" },
+  { am: "ብርጭቆ", ro: "birich'ik'o", en: "glass (for drinking)", src: "new" },
+  { am: "ድስት", ro: "disiti", en: "pot", src: "new" },
+  { am: "ምድጃ", ro: "midija", en: "stove", src: "new" },
+  { am: "ሳሙና", ro: "samuna", en: "soap", src: "new" },
+  { am: "ፎጣ", ro: "fot'a", en: "towel", src: "new" },
+  { am: "መስታወት", ro: "mesitaweti", en: "mirror / glass", src: "new" },
+  { am: "መቀስ", ro: "mek'esi", en: "scissors", src: "new" },
+  { am: "እስክሪብቶ", ro: "isikirībito", en: "pen", src: "new" },
+  { am: "ወረቀት", ro: "werek'eti", en: "paper", src: "new" },
+  { am: "መጽሔት", ro: "mets'ihēti", en: "magazine", src: "new" },
+  { am: "ብር", ro: "biri", en: "birr / silver", src: "new" },
+  // food
+  { am: "አይብ", ro: "āyibi", en: "cheese", src: "new" },
+  { am: "ባቄላ", ro: "bak'ēla", en: "beans / fava beans", src: "new" },
+  { am: "ሽምብራ", ro: "shimibira", en: "chickpeas", src: "new" },
+  { am: "በቆሎ", ro: "bek'olo", en: "corn", src: "new" },
+  { am: "ገብስ", ro: "gebisi", en: "barley", src: "new" },
+  { am: "ስንዴ", ro: "sinidē", en: "wheat", src: "new" },
+  { am: "አቮካዶ", ro: "āvokado", en: "avocado", src: "new" },
+  { am: "ወይን", ro: "weyini", en: "grape / wine", src: "new" },
+  { am: "ጠላ", ro: "t'ela", en: "tella (home-brewed beer); also “he hated”", src: "new" },
+  // people & family
+  { am: "ባለቤት", ro: "balebēti", en: "owner / spouse", src: "new" },
+  { am: "ልጃገረድ", ro: "lijageredi", en: "girl", src: "new" },
+  { am: "ወጣት", ro: "wet'ati", en: "young person", src: "new" },
+  { am: "ፖለቲከኛ", ro: "poletīkenya", en: "politician", src: "new" },
+  { am: "ሐኪም", ro: "hākīmi", en: "doctor", src: "new" },
+  // places
+  { am: "መስጊድ", ro: "mesigīdi", en: "mosque", src: "new" },
+  { am: "ሲኒማ ቤት", ro: "sīnīma bēti", en: "cinema", src: "new" },
+  { am: "ጣቢያ", ro: "t'abīya", en: "station", src: "new" },
+  { am: "አውቶቡስ", ro: "āwitobusi", en: "bus", src: "new" },
+  { am: "አውሮፕላን", ro: "āwiropilani", en: "airplane", src: "new" },
+  { am: "ብስክሌት", ro: "bisikilēti", en: "bicycle", src: "new" },
+  { am: "ድልድይ", ro: "dilidiyi", en: "bridge", src: "new" },
+  { am: "መናፈሻ", ro: "menafesha", en: "park", src: "new" },
+  { am: "በረሃ", ro: "bereha", en: "desert", src: "new" },
+  // describing words
+  { am: "ደስ የሚል", ro: "desi yemīli", en: "pleasant / nice", src: "new" },
+  { am: "ድሀ", ro: "dihā", en: "poor", src: "new" },
+  { am: "ደካማ", ro: "dekama", en: "weak / tired", src: "new" },
+  { am: "ጠንካራ", ro: "t'enikara", en: "strong", src: "new" },
+  { am: "ወፍራም", ro: "wefirami", en: "fat / thick", src: "new" },
+  { am: "ቀጭን", ro: "k'ech'ini", en: "thin", src: "new" },
+  { am: "ሰፊ", ro: "sefī", en: "wide", src: "new" },
+  { am: "ጠባብ", ro: "t'ebabi", en: "narrow", src: "new" },
+  { am: "ጥልቅ", ro: "t'ilik'i", en: "deep", src: "new" },
+  // time & days
+  { am: "ከሰዓት", ro: "kese‘ati", en: "afternoon", src: "new" },
+  { am: "ምሽት", ro: "mishiti", en: "evening", src: "new" },
+  // verbs (he …)
+  { am: "ነቃ", ro: "nek'a", en: "he woke up", src: "new" },
+  { am: "አስተማረ", ro: "āsitemare", en: "he taught", src: "new" },
+  { am: "አየ", ro: "āye", en: "he saw", src: "new" },
+  { am: "አወቀ", ro: "āwek'e", en: "he knew", src: "new" },
+  { am: "አሰበ", ro: "āsebe", en: "he thought", src: "new" },
+  { am: "ወደደ", ro: "wedede", en: "he loved / liked", src: "new" },
+  { am: "አበሰለ", ro: "ābesele", en: "he cooked", src: "new" },
+  { am: "ጠረገ", ro: "t'erege", en: "he swept", src: "new" },
+  { am: "አጸዳ", ro: "āts'eda", en: "he cleaned", src: "new" },
+  { am: "ቆየ", ro: "k'oye", en: "he stayed / waited", src: "new" },
+  { am: "ጠበቀ", ro: "t'ebek'e", en: "he waited for / guarded", src: "new" },
+  { am: "ረዳ", ro: "reda", en: "he helped", src: "new" },
+  { am: "ጎዳ", ro: "goda", en: "he hurt", src: "new" },
+  { am: "ተሳሳተ", ro: "tesasate", en: "he made a mistake", src: "new" },
+  { am: "ወሰነ", ro: "wesene", en: "he decided", src: "new" },
+  { am: "ጨረሰ", ro: "ch'erese", en: "he finished", src: "new" },
+  { am: "ቀጠለ", ro: "k'et'ele", en: "he continued", src: "new" },
+  { am: "ሞከረ", ro: "mokere", en: "he tried", src: "new" },
+  { am: "ፈቀደ", ro: "fek'ede", en: "he allowed", src: "new" },
+  { am: "ከለከለ", ro: "kelekele", en: "he forbade", src: "new" },
+  { am: "ጣለ", ro: "t'ale", en: "he threw / dropped", src: "new" },
+  { am: "ያዘ", ro: "yaze", en: "he held / caught", src: "new" },
+  { am: "ለበሰ", ro: "lebese", en: "he wore / got dressed", src: "new" },
+  { am: "አወለቀ", ro: "āwelek'e", en: "he took off (clothes)", src: "new" },
+  { am: "ታጠበ", ro: "tat'ebe", en: "he washed himself", src: "new" },
+  { am: "ጸለየ", ro: "ts'eleye", en: "he prayed", src: "new" },
+  { am: "ዘለለ", ro: "zelele", en: "he jumped", src: "new" },
+  { am: "ወደቀ", ro: "wedek'e", en: "he fell", src: "new" },
+  { am: "ሳለ", ro: "sale", en: "he drew / coughed", src: "new" },
+  { am: "ቀባ", ro: "k'eba", en: "he painted", src: "new" },
+  { am: "ሰፋ", ro: "sefa", en: "he sewed", src: "new" },
+  { am: "ተከለ", ro: "tekele", en: "he planted", src: "new" },
+  { am: "አረሰ", ro: "ārese", en: "he ploughed", src: "new" },
+  { am: "አጨደ", ro: "āch'ede", en: "he harvested", src: "new" },
+  { am: "ጋለበ", ro: "galebe", en: "he rode (a horse)", src: "new" },
+  // added 10/30: more words
+  // colors
+  { am: "ግራጫ", ro: "girach'a", en: "gray", src: "new" },
+  // weather & sky
+  { am: "ሙቀት", ro: "muk'eti", en: "heat", src: "new" },
+  { am: "ጭጋግ", ro: "ch'igagi", en: "fog", src: "new" },
+  { am: "መብረቅ", ro: "mebirek'i", en: "lightning", src: "new" },
+  { am: "ቀስተ ደመና", ro: "k'esite demena", en: "rainbow", src: "new" },
+  // feelings
+  { am: "ፍርሃት", ro: "firihati", en: "fear", src: "new" },
+  { am: "ቁጣ", ro: "k'ut'a", en: "anger", src: "new" },
+  { am: "ደስታ", ro: "desita", en: "joy", src: "new" },
+  { am: "ተስፋ", ro: "tesifa", en: "hope", src: "new" },
+  { am: "ኩራት", ro: "kurati", en: "pride", src: "new" },
+  // school & reading
+  { am: "ትምህርት", ro: "timihiriti", en: "lesson / education", src: "new" },
+  { am: "ፈተና", ro: "fetena", en: "exam / test", src: "new" },
+  { am: "ጥያቄ", ro: "t'iyak'ē", en: "question", src: "new" },
+  { am: "መልስ", ro: "melisi", en: "answer", src: "new" },
+  { am: "ክፍል", ro: "kifili", en: "room / class / part", src: "new" },
+  { am: "ታሪክ", ro: "tarīki", en: "history / story", src: "new" },
+  { am: "ካርታ", ro: "karita", en: "map", src: "new" },
+  // body
+  { am: "ትከሻ", ro: "tikesha", en: "shoulder", src: "new" },
+  { am: "ጉሮሮ", ro: "guroro", en: "throat", src: "new" },
+  { am: "ከንፈር", ro: "keniferi", en: "lip", src: "new" },
+  { am: "ጉንጭ", ro: "gunich'i", en: "cheek", src: "new" },
+  { am: "ቆዳ", ro: "k'oda", en: "skin / leather", src: "new" },
+  { am: "አጥንት", ro: "āt'initi", en: "bone", src: "new" },
+  // animals
+  { am: "አይጥ", ro: "āyit'i", en: "mouse", src: "new" },
+  { am: "ዝንብ", ro: "zinibi", en: "fly (insect)", src: "new" },
+  { am: "ንስር", ro: "nisiri", en: "eagle", src: "new" },
+  // food & kitchen
+  { am: "ጠርሙስ", ro: "t'erimusi", en: "bottle", src: "new" },
+  { am: "ዝንጅብል", ro: "zinijibili", en: "ginger", src: "new" },
+  // clothes
+  { am: "ኮፍያ", ro: "kofiya", en: "hat", src: "new" },
+  { am: "ሱሪ", ro: "surī", en: "trousers", src: "new" },
+  { am: "ቀለበት", ro: "k'elebeti", en: "ring", src: "new" },
+  { am: "መነጽር", ro: "menets'iri", en: "glasses", src: "new" },
+  { am: "ቀበቶ", ro: "k'ebeto", en: "belt", src: "new" },
+  { am: "ነጠላ", ro: "net'ela", en: "netela (white cotton shawl)", src: "new" },
+  // travel
+  { am: "ጀልባ", ro: "jeliba", en: "boat", src: "new" },
+  { am: "መርከብ", ro: "merikebi", en: "ship", src: "new" },
+  { am: "ሻንጣ", ro: "shanit'a", en: "suitcase", src: "new" },
+  // people & jobs
+  { am: "አናጺ", ro: "ānats'ī", en: "carpenter", src: "new" },
+  { am: "ዘፋኝ", ro: "zefanyi", en: "singer", src: "new" },
+  { am: "ሰዓሊ", ro: "se‘alī", en: "painter (artist)", src: "new" },
+  { am: "ወታደር", ro: "wetaderi", en: "soldier", src: "new" },
+  { am: "አብራሪ", ro: "ābirarī", en: "pilot", src: "new" },
+  { am: "ተዋናይ", ro: "tewanayi", en: "actor", src: "new" },
+  // fun & free time
+  { am: "ሩጫ", ro: "ruch'a", en: "running / race", src: "new" },
+  { am: "ዋና", ro: "wana", en: "swimming; main", src: "new" },
+  { am: "ዳንስ", ro: "danisi", en: "dance", src: "new" },
+  // little words
+  { am: "እና", ro: "ina", en: "and", src: "new" },
+  { am: "ግን", ro: "gini", en: "but", src: "new" },
+  { am: "ወይም", ro: "weyimi", en: "or", src: "new" },
+  { am: "በጣም", ro: "bet'ami", en: "very", src: "new" },
+  { am: "ደግሞ", ro: "degimo", en: "also / again", src: "new" },
+  { am: "ሁልጊዜ", ro: "huligīzē", en: "always", src: "new" },
+  { am: "አንዳንድ ጊዜ", ro: "ānidanidi gīzē", en: "sometimes", src: "new" },
+  { am: "እዚህ", ro: "izīhi", en: "here", src: "new" },
+  { am: "እዚያ", ro: "izīya", en: "there", src: "new" },
+  { am: "በቃ", ro: "bek'a", en: "enough! / that's it", src: "new" },
+  { am: "ምናልባት", ro: "minalibati", en: "maybe", src: "new" },
+  // verbs (he …)
+  { am: "በረረ", ro: "berere", en: "he flew", src: "new" },
+  { am: "ተናገረ", ro: "tenagere", en: "he spoke", src: "new" },
+  { am: "ተወለደ", ro: "tewelede", en: "he was born", src: "new" },
+  { am: "አመጣ", ro: "āmet'a", en: "he brought", src: "new" },
+  { am: "አገኘ", ro: "āgenye", en: "he found", src: "new" },
+  { am: "ታመመ", ro: "tameme", en: "he got sick", src: "new" },
+  { am: "ዳነ", ro: "dane", en: "he recovered", src: "new" },
+  // things & nature
+  { am: "ገመድ", ro: "gemedi", en: "rope", src: "new" },
+  { am: "ሰሌዳ", ro: "selēda", en: "board / blackboard", src: "new" },
+  { am: "መጥረጊያ", ro: "met'iregīya", en: "broom", src: "new" },
+  { am: "ባልዲ", ro: "balidī", en: "bucket", src: "new" },
+  { am: "ስጦታ", ro: "sit'ota", en: "gift", src: "new" },
+  { am: "ዘፈን", ro: "zefeni", en: "song", src: "new" },
+  { am: "ሕልም", ro: "hilimi", en: "dream", src: "new" },
+  { am: "ቤተ ሙከራ", ro: "bēte mukera", en: "laboratory", src: "new" },
+  { am: "ልደት", ro: "lideti", en: "birth / birthday", src: "new" },
+  { am: "በዓል", ro: "be‘ali", en: "holiday / festival", src: "new" },
+  { am: "እንጨት", ro: "inich'eti", en: "wood", src: "new" },
+  { am: "ብረት", ro: "bireti", en: "iron / metal", src: "new" },
+  { am: "ወርቅ", ro: "werik'i", en: "gold", src: "new" },
+  { am: "ጨርቅ", ro: "ch'erik'i", en: "cloth", src: "new" },
+  { am: "ጥላ", ro: "t'ila", en: "shade / shadow", src: "new" },
+  { am: "ቅጠል", ro: "k'it'eli", en: "leaf", src: "new" },
+  { am: "ዘር", ro: "zeri", en: "seed / race", src: "new" },
+  { am: "ኮረብታ", ro: "korebita", en: "hill", src: "new" },
+  { am: "ምንጭ", ro: "minich'i", en: "spring (water) / source", src: "new" },
+  // people
+  { am: "አለቃ", ro: "ālek'a", en: "boss", src: "new" },
+  { am: "ሌባ ጣት", ro: "lēba t'ati", en: "index finger", src: "new" },
+  // describing
+  { am: "መራራ", ro: "merara", en: "bitter", src: "new" },
+  { am: "ጨዋማ", ro: "ch'ewama", en: "salty", src: "new" },
+  { am: "ጎምዛዛ", ro: "gomizaza", en: "sour", src: "new" },
+  { am: "ዝግ", ro: "zigi", en: "closed", src: "new" },
+  { am: "ክፍት", ro: "kifiti", en: "open", src: "new" },
+  { am: "ሞኝ", ro: "monyi", en: "foolish", src: "new" },
+  { am: "ብልህ", ro: "bilihi", en: "smart", src: "new" },
+  { am: "ሰነፍ", ro: "senefi", en: "lazy", src: "new" },
+  { am: "ታታሪ", ro: "tatarī", en: "hard-working", src: "new" },
+  { am: "ጸጥ ያለ", ro: "ts'et'i yale", en: "quiet", src: "new" },
+  // more verbs (he …)
+  { am: "ተቆጣ", ro: "tek'ot'a", en: "he got angry", src: "new" },
+  { am: "ደከመ", ro: "dekeme", en: "he got tired", src: "new" },
+  { am: "ገነባ", ro: "geneba", en: "he built", src: "new" },
+  { am: "ሰበረ", ro: "sebere", en: "he broke", src: "new" },
+  { am: "ቆጠረ", ro: "k'ot'ere", en: "he counted", src: "new" },
+  { am: "ላከ", ro: "lake", en: "he sent", src: "new" },
+  { am: "ተቀበለ", ro: "tek'ebele", en: "he received", src: "new" },
+  { am: "አጠና", ro: "āt'ena", en: "he studied", src: "new" },
+  { am: "ሸተተ", ro: "shetete", en: "it smelled", src: "new" },
+  // added 11/18: words that use rare characters and other spellings
+  { am: "ሰው", ro: "sewi", en: "person", src: "new" },
+  { am: "ሰዎች", ro: "sewochi", en: "people", src: "new" },
+  { am: "ሼፍ", ro: "shēfi", en: "chef", src: "new" },
+  { am: "ሼህ", ro: "shēhi", en: "sheikh", src: "new" },
+  { am: "ሹፌር", ro: "shufēri", en: "driver", src: "new" },
+  { am: "ሾላ", ro: "shola", en: "fig (sycamore fig)", src: "new" },
+  { am: "ጰንጠቆስጤ", ro: "p'enit'ek'osit'ē", en: "Pentecost", src: "new" },
+  { am: "ጲላጦስ", ro: "p'īlat'osi", en: "Pilate", src: "new" },
+  { am: "ሒሳብ", ro: "hīsabi", en: "math / bill (also spelled ሂሳብ)", src: "new" },
+  { am: "ኃይለ ሥላሴ", ro: "hayile silasē", en: "Haile Selassie", src: "new" },
+  { am: "ሠንጠረዥ", ro: "senit'erezhi", en: "chart / table (of figures)", src: "new" },
+  { am: "ኅብረት", ro: "hibireti", en: "union", src: "new" },
+  { am: "ኅዳር", ro: "hidari", en: "Hidar (3rd month; also spelled ህዳር)", src: "new" },
+  { am: "ኖርዌይ", ro: "noriwēyi", en: "Norway", src: "new" },
+  { am: "ዚምባብዌ", ro: "zīmibabiwē", en: "Zimbabwe", src: "new" },
+  { am: "ስዊድን", ro: "siwīdini", en: "Sweden", src: "new" },
+  { am: "ዐረብ", ro: "‘arebi", en: "Arab", src: "new" },
+  { am: "ዓፄ", ro: "‘ats'ē", en: "emperor (title, “Atse”)", src: "new" },
+  { am: "ንፁህ", ro: "nits'uhi", en: "clean (also spelled ንጹህ)", src: "new" },
+  { am: "ፆም", ro: "ts'omi", en: "fast (also spelled ጾም)", src: "new" },
+  { am: "ፂም", ro: "ts'īmi", en: "beard (also spelled ጺም)", src: "new" },
+  { am: "ኢሜይል", ro: "īmēyili", en: "email", src: "new" },
+  { am: "ኢየሱስ", ro: "īyesusi", en: "Jesus", src: "new" },
+  { am: "ኦሮሞ", ro: "oromo", en: "Oromo", src: "new" },
+  { am: "ቼክ", ro: "chēki", en: "cheque / check", src: "new" },
+  { am: "ቻለ", ro: "chale", en: "he was able", src: "new" },
+  { am: "ዮሐንስ", ro: "yohānisi", en: "Yohannes (John)", src: "new" },
+  { am: "ዮርዳኖስ", ro: "yoridanosi", en: "Jordan (river)", src: "new" },
+  { am: "ሂድ", ro: "hīdi", en: "go! (to a man)", src: "new" },
+  { am: "ሂጂ", ro: "hījī", en: "go! (to a woman)", src: "new" },
+  { am: "ሃይማኖት", ro: "hayimanoti", en: "religion", src: "new" },
+  { am: "ሆነ", ro: "hone", en: "he became", src: "new" },
+  { am: "ሔዋን", ro: "hēwani", en: "Eve", src: "new" },
+  { am: "ዙሪያ", ro: "zurīya", en: "around", src: "new" },
+  { am: "ዙፋን", ro: "zufani", en: "throne", src: "new" },
+  { am: "ዲያቆን", ro: "dīyak'oni", en: "deacon", src: "new" },
+  { am: "ዱር", ro: "duri", en: "wilderness / wild", src: "new" },
+  { am: "ኩባንያ", ro: "kubaniya", en: "company", src: "new" },
+  { am: "ሉቃስ", ro: "luk'asi", en: "Luke", src: "new" },
+  { am: "ኑ", ro: "nu", en: "come! (to several people)", src: "new" },
+  { am: "ና", ro: "na", en: "come! (to a man)", src: "new" },
+  { am: "ሞገድ", ro: "mogedi", en: "wave", src: "new" },
+  { am: "ጤናማ", ro: "t'ēnama", en: "healthy", src: "new" },
+  { am: "ጩቤ", ro: "ch'ubē", en: "dagger", src: "new" },
+  { am: "ጮማ", ro: "ch'oma", en: "fatty meat", src: "new" },
+  { am: "ፉርኖ", ro: "furino", en: "wheat flour", src: "new" },
+  { am: "ፋሲካ", ro: "fasīka", en: "Easter", src: "new" },
+  { am: "ጥምቀት", ro: "t'imik'eti", en: "Timkat (Epiphany)", src: "new" },
+  { am: "መስቀል", ro: "mesik'eli", en: "cross; Meskel (festival)", src: "new" },
+  { am: "ቪዲዮ", ro: "vīdīyo", en: "video", src: "new" },
+  { am: "ኬላ", ro: "kēla", en: "checkpoint", src: "new" },
+  { am: "ኪሎ", ro: "kīlo", en: "kilo", src: "new" },
+  { am: "ኮሌጅ", ro: "kolēji", en: "college", src: "new" },
+  { am: "ጊታር", ro: "gītari", en: "guitar", src: "new" },
+  { am: "ፒያሳ", ro: "pīyasa", en: "Piassa (part of Addis Ababa)", src: "new" },
+  { am: "ፓርላማ", ro: "parilama", en: "parliament", src: "new" },
+  { am: "ፕሮፌሰር", ro: "pirofēseri", en: "professor", src: "new" },
+  { am: "ቱርክ", ro: "turiki", en: "Turkey", src: "new" },
+  { am: "ቲያትር", ro: "tīyatiri", en: "theater", src: "new" },
+  { am: "ቁም ሳጥን", ro: "k'umi sat'ini", en: "wardrobe / cupboard", src: "new" },
+  { am: "ዳቦ ቆሎ", ro: "dabo k'olo", en: "dabo kolo (crunchy snack)", src: "new" },
+  { am: "ጨለማ", ro: "ch'elema", en: "darkness", src: "new" },
+  { am: "ብርሃን", ro: "birihani", en: "light", src: "new" },
+  { am: "ሕይወት", ro: "hiyiweti", en: "life", src: "new" },
+  // ---- verb endings (past tense) ----
+  // class 10/5: በላ and ገዛ; the rest follow the same pattern
+  { am: "በላች",   ro: "belachi",   en: "she ate", src: "verb", cls: true },
+  { am: "በላን",   ro: "belani",    en: "we ate", src: "verb", cls: true },
+  { am: "ገዛ",    ro: "geza",      en: "he bought", src: "verb", cls: true },
+  { am: "ገዛች",   ro: "gezachi",    en: "she bought", src: "verb", cls: true },
+  { am: "ገዙ",    ro: "gezu",      en: "they / he, she (polite) bought", src: "verb", cls: true },
+  { am: "ገዛን",   ro: "gezani",     en: "we bought", src: "verb", cls: true },
+  { am: "ገዛሽ",   ro: "gezashi",    en: "you (f.) bought", src: "verb", cls: true },
+  { am: "ገባ",    ro: "geba",      en: "he entered", src: "verb", cls: true },
+  { am: "ገባች",   ro: "gebachi",    en: "she entered", src: "verb" },
+  { am: "ገቡ",    ro: "gebu",      en: "they entered", src: "verb" },
+  { am: "ገባን",   ro: "gebani",     en: "we entered", src: "verb" },
+  { am: "ገባሽ",   ro: "gebashi",    en: "you (f.) entered", src: "verb" },
+  { am: "ተኛ",    ro: "tenya",     en: "he slept / lay down", src: "verb" },
+  { am: "ተኛች",   ro: "tenyachi",   en: "she slept", src: "verb" },
+  { am: "ተኙ",    ro: "tenyu",     en: "they slept", src: "verb" },
+  { am: "ተኛን",   ro: "tenyani",    en: "we slept", src: "verb" },
+  { am: "ነዳ",    ro: "neda",      en: "he drove", src: "verb" },
+  { am: "ነዳች",   ro: "nedachi",    en: "she drove", src: "verb" },
+  { am: "ነዱ",    ro: "nedu",      en: "they drove", src: "verb" },
+  { am: "ነዳን",   ro: "nedani",     en: "we drove", src: "verb" },
+  { am: "ሰማ",    ro: "sema",     en: "he heard", src: "verb" },
+  { am: "ሰማች",   ro: "semachi",   en: "she heard", src: "verb" },
+  { am: "ሰሙ",    ro: "semu",     en: "they heard", src: "verb" },
+  { am: "ሰማን",   ro: "semani",    en: "we heard", src: "verb" },
+  { am: "ሰማሽ",   ro: "semashi",   en: "you (f.) heard", src: "verb" },
+  { am: "ሞላ",    ro: "mola",     en: "it filled up", src: "verb" },
+
+  // added 10/9: more verbs with the same endings
+  { am: "ሄደ",    ro: "hēde",      en: "he went", src: "verb" },
+  { am: "ሄደች",   ro: "hēdechi",    en: "she went", src: "verb" },
+  { am: "ሄዱ",    ro: "hēdu",      en: "they went", src: "verb" },
+  { am: "ሰራ",    ro: "sera",     en: "he worked / made", src: "verb" },
+  { am: "ሰራች",   ro: "serachi",   en: "she worked", src: "verb" },
+  { am: "ሰሩ",    ro: "seru",     en: "they worked", src: "verb" },
+  { am: "ሰራን",   ro: "serani",    en: "we worked", src: "verb" },
+  { am: "ሰራሽ",   ro: "serashi",   en: "you (f.) worked", src: "verb" },
+  { am: "ረሳ",    ro: "resa",     en: "he forgot", src: "verb" },
+  { am: "ረሳች",   ro: "resachi",   en: "she forgot", src: "verb" },
+  { am: "ረሱ",    ro: "resu",     en: "they forgot", src: "verb" },
+  { am: "ረሳን",   ro: "resani",    en: "we forgot", src: "verb" },
+  { am: "ረሳሽ",   ro: "resashi",   en: "you (f.) forgot", src: "verb" },
+  { am: "ዘጋ",    ro: "zega",      en: "he closed", src: "verb" },
+  { am: "ዘጋች",   ro: "zegachi",    en: "she closed", src: "verb" },
+  { am: "ዘጉ",    ro: "zegu",      en: "they closed", src: "verb" },
+  { am: "ዘጋን",   ro: "zegani",     en: "we closed", src: "verb" },
+  { am: "ሳቀ",    ro: "sak'e",      en: "he laughed", src: "verb" },
+  { am: "ሳቀች",   ro: "sak'echi",    en: "she laughed", src: "verb" },
+  { am: "ሳቁ",    ro: "sak'u",      en: "they laughed", src: "verb" },
+  { am: "ደረሰ",   ro: "derese",    en: "he arrived", src: "verb" },
+  { am: "ደረሰች",  ro: "deresechi",  en: "she arrived", src: "verb" },
+  { am: "ደረሱ",   ro: "deresu",    en: "they arrived", src: "verb" },
+  { am: "ጀመረ",   ro: "jemere",    en: "he began", src: "verb" },
+  { am: "ጀመረች",  ro: "jemerechi",  en: "she began", src: "verb" },
+  { am: "ጀመሩ",   ro: "jemeru",    en: "they began", src: "verb" },
+  { am: "ተማረ",   ro: "temare",    en: "he learned", src: "verb" },
+  { am: "ተማረች",  ro: "temarechi",  en: "she learned", src: "verb" },
+  { am: "ተማሩ",   ro: "temaru",    en: "they learned", src: "verb" },
+  { am: "ቆመ",    ro: "k'ome",      en: "he stood", src: "verb" },
+  { am: "ቆመች",   ro: "k'omechi",    en: "she stood", src: "verb" },
+  { am: "ቆሙ",    ro: "k'omu",      en: "they stood", src: "verb" },
+  // added 10/9: verbs with the rest of the alphabet
+  { am: "ጠጣ",    ro: "t'et'a",  en: "he drank", src: "verb" },
+  { am: "ጠጣች",   ro: "t'et'achi", en: "she drank", src: "verb" },
+  { am: "ጠጡ",    ro: "t'et'u",  en: "they drank", src: "verb" },
+  { am: "ጠጣን",   ro: "t'et'ani", en: "we drank", src: "verb" },
+  { am: "ጠጣሽ",   ro: "t'et'ashi", en: "you (f.) drank", src: "verb" },
+  { am: "ፈለገ",   ro: "felege",   en: "he wanted / looked for", src: "verb" },
+  { am: "ፈለገች",  ro: "felegechi", en: "she wanted", src: "verb" },
+  { am: "ፈለጉ",   ro: "felegu",   en: "they wanted", src: "verb" },
+  { am: "ወሰደ",   ro: "wesede",    en: "he took", src: "verb" },
+  { am: "ወሰደች",  ro: "wesedechi",  en: "she took", src: "verb" },
+  { am: "ወሰዱ",   ro: "wesedu",    en: "they took", src: "verb" },
+  // ---- sentences ----
+  { am: "እሱ ደጅ አለ።",   ro: "isu deji āle.",    en: "He is outside.", src: "sent", cls: true },
+  { am: "እሱ ዳቦ በላ።",   ro: "isu dabo bela.",  en: "He ate bread.", src: "sent", cls: true },
+  { am: "እኔ ቶቢ ነኝ።",   ro: "inē tobī nenyi.",   en: "I am Tobi.", src: "sent", cls: true },
+  { am: "እነሱ ዳቦ በሉ።",  ro: "inesu dabo belu.", en: "They ate bread.", src: "sent" },
+  { am: "አንቺ ኬክ በላሽ።", ro: "ānichī kēki belashi.", en: "You (f.) ate cake.", src: "sent" },
+  { am: "አበበ ደጅ አለ።",  ro: "ābebe deji āle.",  en: "Abebe is outside.", src: "sent" },
+  { am: "እሱ ቤት አለ።",   ro: "isu bēti āle.",    en: "He is at home.", src: "sent" },
+  { am: "እኔ ልጅ ነኝ።",   ro: "inē liji nenyi.",    en: "I am a child.", src: "sent" },
+  { am: "እኛ ልጆች ነን።",  ro: "inya lijochi neni.", en: "We are children.", src: "sent" },
+  { am: "እሱ ኮክ በላ።",   ro: "isu koki bela.",   en: "He ate a peach.", src: "sent" },
+  { am: "እነሱ ስጋ በሉ።",  ro: "inesu siga belu.", en: "They ate meat.", src: "sent" },
+  // 10/5
+  { am: "እሱ ፔፕሲ ገዛ።",   ro: "isu pēpisī geza.",   en: "He bought Pepsi.", src: "sent", cls: true },
+  { am: "እኛ ፔፕሲ ገዛን።",  ro: "inya pēpisī gezani.", en: "We bought Pepsi.", src: "sent", cls: true },
+  { am: "አንቺ ፔፕሲ ገዛሽ።", ro: "ānichī pēpisī gezashi.", en: "You (f.) bought Pepsi.", src: "sent", cls: true },
+  { am: "በግ ቤት ገባ።",    ro: "begi bēti geba.",     en: "The lamb went into the house.", src: "sent", cls: true },
+  { am: "አበበ ዳቦ ገዛ።",   ro: "ābebe dabo geza.",  en: "Abebe bought bread.", src: "sent" },
+  { am: "እኛ ቡና ገዛን።",   ro: "inya buna gezani.",  en: "We bought coffee.", src: "sent" },
+  { am: "አንቺ ቅቤ ገዛሽ።",  ro: "ānichī k'ibē gezashi.", en: "You (f.) bought butter.", src: "sent" },
+  { am: "ሳራ ፒዛ በላች።",   ro: "sara pīza belachi.", en: "Sara ate pizza.", src: "sent" },
+  { am: "እኛ ኬክ በላን።",   ro: "inya kēki belani.",  en: "We ate cake.", src: "sent" },
+  { am: "ቢኒያም ዳቦ ቤት ገባ።", ro: "bīniyami dabo bēti geba.", en: "Biniyam went into the bakery.", src: "sent" },
+  { am: "እነሱ ገበያ ገቡ።",  ro: "inesu gebeya gebu.", en: "They went into the market.", src: "sent" },
+  { am: "ልጆች ቤት ገቡ።",   ro: "lijochi bēti gebu.",  en: "The children came into the house.", src: "sent" },
+  { am: "ፖሊስ ደጅ አለ።",   ro: "polīsi deji āle.",   en: "A police officer is outside.", src: "sent" },
+  { am: "እኔ ፖሊስ ነኝ።",   ro: "inē polīsi nenyi.",   en: "I am a police officer.", src: "sent" },
+  { am: "እነሱ ሌሊት ተኙ።",  ro: "inesu lēlīti tenyu.", en: "They slept at night.", src: "sent" },
+  { am: "ቢኒያም ታክሲ ነዳ።",   ro: "bīniyami takisī neda.",  en: "Biniyam drove a taxi.", src: "sent" },
+  // with ሀ ረ መ
+  { am: "ሰላም! እኔ ቶቢ ነኝ።", ro: "selami! inē tobī nenyi.", en: "Hello! I am Tobi.", src: "sent" },
+  { am: "አንተ ተማሪ ነህ?",  ro: "ānite temarī nehi?",  en: "Are you a student? (to a man)", src: "sent", cls: true },
+  { am: "አንቺ ተማሪ ነሽ?",  ro: "ānichī temarī neshi?", en: "Are you a student? (to a woman)", src: "sent", cls: true },
+  { am: "እኔ ተማሪ ነኝ።",   ro: "inē temarī nenyi.",  en: "I am a student.", src: "sent", cls: true },
+  { am: "እኔ ሀኪም ነኝ።",   ro: "inē hākīmi nenyi.",   en: "I am a doctor.", src: "sent" },
+  { am: "አንተ ደህና ነህ?",  ro: "ānite dehina nehi?",   en: "Are you well? (to a man)", src: "sent" },
+  { am: "እኔ ደህና ነኝ።",   ro: "inē dehina nenyi.",   en: "I am fine.", src: "sent" },
+  { am: "እሱ ሙዝ በላ።",    ro: "isu muzi bela.",    en: "He ate a banana.", src: "sent" },
+  { am: "እኛ ሩዝ በላን።",   ro: "inya ruzi belani.",  en: "We ate rice.", src: "sent" },
+  { am: "አበበ መኪና ገዛ።",  ro: "ābebe mekīna geza.", en: "Abebe bought a car.", src: "sent" },
+  { am: "ሳራ ማር ገዛች።",   ro: "sara mari gezachi.",  en: "Sara bought honey.", src: "sent" },
+  { am: "እነሱ ዶሮ ገዙ።",   ro: "inesu doro gezu.",  en: "They bought a chicken.", src: "sent" },
+  { am: "ቢኒያም ሆቴል ገባ።",   ro: "bīniyami hotēli geba.",  en: "Biniyam went into the hotel.", src: "sent" },
+  { am: "ልጆች ትምህርት ቤት ገቡ።", ro: "lijochi timihiriti bēti gebu.", en: "The children went into school.", src: "sent" },
+  { am: "አንቺ ሙዚቃ ሰማሽ።", ro: "ānichī muzīk'a semashi.", en: "You (f.) listened to music.", src: "sent" },
+  { am: "እኛ ዛሬ ሬዲዮ ሰማን።", ro: "inya zarē rēdīyo semani.", en: "We listened to the radio today.", src: "sent" },
+  { am: "መምህር ደጅ አለ።",  ro: "memihiri deji āle.",  en: "A teacher is outside.", src: "sent" },
+
+  // added 10/9
+  { am: "እሱ ቤት ሄደ።",    ro: "isu bēti hēde.",     en: "He went home.", src: "sent" },
+  { am: "እነሱ ባህር ዳር ሄዱ።", ro: "inesu bahiri dari hēdu.", en: "They went to Bahir Dar.", src: "sent" },
+  { am: "ሳራ ቀሚስ ገዛች።",   ro: "sara k'emīsi gezachi.", en: "Sara bought a dress.", src: "sent" },
+  { am: "አበበ ሸሚዝ ገዛ።",   ro: "ābebe shemīzi geza.", en: "Abebe bought a shirt.", src: "sent" },
+  { am: "እኛ ትናንት ሰራን።",  ro: "inya tinaniti serani.", en: "We worked yesterday.", src: "sent" },
+  { am: "ቢኒያም በር ዘጋ።",     ro: "bīniyami beri zega.",    en: "Biniyam closed the door.", src: "sent" },
+  { am: "ልጆች ደጅ ሳቁ።",    ro: "lijochi deji sak'u.",  en: "The children laughed outside.", src: "sent" },
+  { am: "አበበ ዛሬ ደረሰ።",   ro: "ābebe zarē derese.", en: "Abebe arrived today.", src: "sent" },
+  { am: "እነሱ አማርኛ ተማሩ።", ro: "inesu āmarinya temaru.", en: "They learned Amharic.", src: "sent" },
+  { am: "ድመት ቤት ገባ።",    ro: "dimeti bēti geba.",   en: "A cat came into the house.", src: "sent" },
+  { am: "እኔ ደስተኛ ነኝ።",   ro: "inē desitenya nenyi.", en: "I am happy.", src: "sent" },
+  { am: "እኛ ጎረቤት ነን።",   ro: "inya gorebēti neni.", en: "We are neighbors.", src: "sent" },
+  { am: "አንተ ዶክተር ነህ?",  ro: "ānite dokiteri nehi?",  en: "Are you a doctor? (to a man)", src: "sent" },
+  { am: "አንቺ ነርስ ነሽ?",   ro: "ānichī nerisi neshi?",  en: "Are you a nurse? (to a woman)", src: "sent" },
+  { am: "እኛ ጎመን በላን።",   ro: "inya gomeni belani.", en: "We ate collard greens.", src: "sent" },
+  { am: "ሳራ ማንጎ በላች።",   ro: "sara manigo belachi.", en: "Sara ate a mango.", src: "sent" },
+  { am: "አንቺ ደብተር ረሳሽ።", ro: "ānichī debiteri resashi.", en: "You (f.) forgot a notebook.", src: "sent" },
+  { am: "እነሱ ዩኒቨርሲቲ ገቡ።", ro: "inesu yunīverisītī gebu.", en: "They entered university.", src: "sent" },
+  // added 10/9: with the rest of the alphabet (ነው = “is”)
+  { am: "ቡና ጥሩ ነው።",    ro: "buna t'iru newi.",   en: "Coffee is good.", src: "sent" },
+  { am: "ይህ ውሃ ነው።",    ro: "yihi wiha newi.",     en: "This is water.", src: "sent" },
+  { am: "ስሜ ቶቢ ነው።",    ro: "simē tobī newi.",    en: "My name is Tobi.", src: "sent" },
+  { am: "አዎ፣ እኔ ተማሪ ነኝ።", ro: "āwo, inē temarī nenyi.", en: "Yes, I am a student.", src: "sent", cls: true },
+  { am: "እሱ ወተት ጠጣ።",   ro: "isu weteti t'et'a.", en: "He drank milk.", src: "sent" },
+  { am: "እኛ ቡና ጠጣን።",   ro: "inya buna t'et'ani.", en: "We drank coffee.", src: "sent" },
+  { am: "ሳራ ውሃ ጠጣች።",   ro: "sara wiha t'et'achi.", en: "Sara drank water.", src: "sent" },
+  { am: "አበበ ጫማ ገዛ።",   ro: "ābebe ch'ama geza.", en: "Abebe bought shoes.", src: "sent" },
+  { am: "ቢኒያም መጽሐፍ ወሰደ።", ro: "bīniyami mets'ihāfi wesede.", en: "Biniyam took a book.", src: "sent" },
+  { am: "እነሱ ፈረስ ፈለጉ።",  ro: "inesu feresi felegu.", en: "They wanted a horse.", src: "sent" },
+  { am: "ውሻ ቤት ገባ።",     ro: "wisha bēti geba.",   en: "A dog came into the house.", src: "sent" },
+  { am: "ሐሙስ ሠርግ አለ።",   ro: "hāmusi serigi āle.",  en: "There is a wedding on Thursday.", src: "sent" },
+  // added 11/18: more short sentences (“the …” = -u / -w at the end; ነው / ናት = is)
+  { am: "ቤቱ ትልቅ ነው።", ro: "bētu tilik'i newi.", en: "The house is big.", src: "sent" },
+  { am: "ውሃው ቀዝቃዛ ነው።", ro: "wihawi k'ezik'aza newi.", en: "The water is cold.", src: "sent" },
+  { am: "ቡናው ትኩስ ነው።", ro: "bunawi tikusi newi.", en: "The coffee is hot.", src: "sent" },
+  { am: "ሻዩ ጣፋጭ ነው።", ro: "shayu t'afach'i newi.", en: "The tea is sweet.", src: "sent" },
+  { am: "መኪናው ቀይ ነው።", ro: "mekīnawi k'eyi newi.", en: "The car is red.", src: "sent" },
+  { am: "ሆቴሉ ሩቅ ነው?", ro: "hotēlu ruk'i newi?", en: "Is the hotel far?", src: "sent" },
+  { am: "ባንኩ ቅርብ ነው።", ro: "baniku k'iribi newi.", en: "The bank is near.", src: "sent" },
+  { am: "ልጆቹ ደስተኛ ናቸው።", ro: "lijochu desitenya nachewi.", en: "The children are happy.", src: "sent" },
+  { am: "ኢትዮጵያ ቆንጆ ሀገር ናት።", ro: "ītiyop'iya k'onijo hāgeri nati.", en: "Ethiopia is a beautiful country.", src: "sent" },
+  { am: "አዲስ አበባ ትልቅ ከተማ ነው።", ro: "ādīsi ābeba tilik'i ketema newi.", en: "Addis Ababa is a big city.", src: "sent" },
+  { am: "አባቴ ሀኪም ነው።", ro: "ābatē hākīmi newi.", en: "My father is a doctor.", src: "sent" },
+  { am: "እናቴ አስተማሪ ናት።", ro: "inatē āsitemarī nati.", en: "My mother is a teacher.", src: "sent" },
+  { am: "ወንድሜ ተማሪ ነው።", ro: "wenidimē temarī newi.", en: "My brother is a student.", src: "sent" },
+  { am: "እህቴ ነርስ ናት።", ro: "ihitē nerisi nati.", en: "My sister is a nurse.", src: "sent" },
+  { am: "ስምህ ማን ነው?", ro: "simihi mani newi?", en: "What is your name? (to a man)", src: "sent" },
+  { am: "ስምሽ ማን ነው?", ro: "simishi mani newi?", en: "What is your name? (to a woman)", src: "sent" },
+  { am: "ከየት ነህ?", ro: "keyeti nehi?", en: "Where are you from? (to a man)", src: "sent" },
+  { am: "ከየት ነሽ?", ro: "keyeti neshi?", en: "Where are you from? (to a woman)", src: "sent" },
+  { am: "እኔ ከአሜሪካ ነኝ።", ro: "inē keāmērīka nenyi.", en: "I am from America.", src: "sent" },
+  { am: "ስልኬ የት ነው?", ro: "silikē yeti newi?", en: "Where is my phone?", src: "sent" },
+  { am: "ሽንት ቤት የት ነው?", ro: "shiniti bēti yeti newi?", en: "Where is the toilet?", src: "sent" },
+  { am: "ይህ ስንት ነው?", ro: "yihi siniti newi?", en: "How much is this?", src: "sent" },
+  { am: "ዋጋው ስንት ነው?", ro: "wagawi siniti newi?", en: "What is the price?", src: "sent" },
+  { am: "ሰዓቱ ስንት ነው?", ro: "se‘atu siniti newi?", en: "What time is it?", src: "sent" },
+  { am: "ዛሬ ሰኞ ነው።", ro: "zarē senyo newi.", en: "Today is Monday.", src: "sent" },
+  { am: "ነገ ቅዳሜ ነው።", ro: "nege k'idamē newi.", en: "Tomorrow is Saturday.", src: "sent" },
+  { am: "ትናንት ብርድ ነበር።", ro: "tinaniti biridi neberi.", en: "It was cold yesterday.", src: "sent" },
+  { am: "ዛሬ ዝናብ ዘነበ።", ro: "zarē zinabi zenebe.", en: "It rained today.", src: "sent" },
+  { am: "ፀሐይ ወጣች።", ro: "ts'ehāyi wet'achi.", en: "The sun came out.", src: "sent" },
+  { am: "እኔ ቡና እወዳለሁ።", ro: "inē buna iwedalehu.", en: "I like coffee.", src: "sent" },
+  { am: "እኔ ሻይ አልወድም።", ro: "inē shayi āliwedimi.", en: "I don't like tea.", src: "sent" },
+  { am: "ውሃ እፈልጋለሁ።", ro: "wiha ifeligalehu.", en: "I want water.", src: "sent" },
+  { am: "አልገባኝም።", ro: "āligebanyimi.", en: "I don't understand.", src: "sent" },
+  { am: "ቀስ ብለህ ተናገር።", ro: "k'esi bilehi tenageri.", en: "Speak slowly. (to a man)", src: "sent" },
+  { am: "በሩን ዝጋ።", ro: "beruni ziga.", en: "Close the door. (to a man)", src: "sent" },
+  { am: "መልካም ልደት!", ro: "melikami lideti!", en: "Happy birthday!", src: "sent" },
+  { am: "መልካም ገና!", ro: "melikami gena!", en: "Merry Christmas!", src: "sent" },
+  { am: "ቁርስ በላህ?", ro: "k'urisi belahi?", en: "Did you eat breakfast? (to a man)", src: "sent" },
+  { am: "አዎ፣ ቁርስ በላሁ።", ro: "āwo, k'urisi belahu.", en: "Yes, I ate breakfast.", src: "sent" },
+  { am: "ውሻው ደጅ ተኛ።", ro: "wishawi deji tenya.", en: "The dog slept outside.", src: "sent" },
+  { am: "ድመቱ ወተት ጠጣ።", ro: "dimetu weteti t'et'a.", en: "The cat drank milk.", src: "sent" },
+  { am: "አበበ ጋዜጣ አነበበ።", ro: "ābebe gazēt'a ānebebe.", en: "Abebe read a newspaper.", src: "sent" },
+  { am: "ሳራ ደብዳቤ ጻፈች።", ro: "sara debidabē ts'afechi.", en: "Sara wrote a letter.", src: "sent" },
+  { am: "ቢኒያም ፈተና ጨረሰ።", ro: "bīniyami fetena ch'erese.", en: "Biniyam finished the exam.", src: "sent" },
+  { am: "እኛ ወደ ገበያ ሄድን።", ro: "inya wede gebeya hēdini.", en: "We went to the market.", src: "sent" },
+  { am: "እነሱ ወደ አዲስ አበባ ሄዱ።", ro: "inesu wede ādīsi ābeba hēdu.", en: "They went to Addis Ababa.", src: "sent" },
+  { am: "ልጁ በፍጥነት ሮጠ።", ro: "liju befit'ineti rot'e.", en: "The child ran fast.", src: "sent" },
+  { am: "ወፉ በረረ።", ro: "wefu berere.", en: "The bird flew.", src: "sent" },
+  { am: "ሳራ ቆንጆ ቀሚስ ለበሰች።", ro: "sara k'onijo k'emīsi lebesechi.", en: "Sara wore a beautiful dress.", src: "sent" },
+  { am: "ዮሐንስ ወደ ቤተ ክርስቲያን ሄደ።", ro: "yohānisi wede bēte kirisitīyani hēde.", en: "Yohannes went to church.", src: "sent" },
+  { am: "ሼፉ ዶሮ ወጥ ሰራ።", ro: "shēfu doro wet'i sera.", en: "The chef made doro wot.", src: "sent" },
+  { am: "ሹፌሩ ታክሲ ነዳ።", ro: "shufēru takisī neda.", en: "The driver drove the taxi.", src: "sent" },
+  { am: "እኛ ጤፍ ገዛን።", ro: "inya t'ēfi gezani.", en: "We bought teff.", src: "sent" },
+  { am: "ብዙ ሰዎች መጡ።", ro: "bizu sewochi met'u.", en: "Many people came.", src: "sent" },
+  { am: "ፋሲካ በዓል ነው።", ro: "fasīka be‘ali newi.", en: "Easter is a holiday.", src: "sent" },
+  { am: "ሕይወት ቆንጆ ናት።", ro: "hiyiweti k'onijo nati.", en: "Life is beautiful.", src: "sent" },
+  { am: "ጨለማ ነው፣ መብራት አብራ።", ro: "ch'elema newi, mebirati ābira.", en: "It's dark; turn on the light. (to a man)", src: "sent" },
+  // ---- “my …” (6th → 5th house) ----
+  { am: "ልቤ",   ro: "libē",     en: "my heart (ልብ → ልቤ)", src: "poss", from: "ልብ" },
+  { am: "ቤቴ",   ro: "bētē",     en: "my house (ቤት → ቤቴ)", src: "poss", from: "ቤት" },
+  { am: "ልጄ",   ro: "lijē",     en: "my child (ልጅ → ልጄ)", src: "poss", from: "ልጅ" },
+  { am: "ልብሴ",  ro: "libisē",    en: "my clothes (ልብስ → ልብሴ)", src: "poss", from: "ልብስ" },
+  { am: "ስልኬ",  ro: "silikē",    en: "my phone (ስልክ → ስልኬ)", src: "poss", from: "ስልክ" },
+  { am: "በጌ",   ro: "begē",     en: "my sheep (በግ → በጌ)", src: "poss", from: "በግ" },
+  { am: "ገንዘቤ", ro: "genizebē",  en: "my money (ገንዘብ → ገንዘቤ)", src: "poss", from: "ገንዘብ" },
+  { am: "አባቴ",  ro: "ābatē",    en: "my father (አባት → አባቴ)", src: "poss", from: "አባት" },
+  { am: "እናቴ",  ro: "inatē",    en: "my mother (እናት → እናቴ)", src: "poss", from: "እናት" },
+  { am: "አጎቴ",  ro: "āgotē",    en: "my uncle (አጎት → አጎቴ)", src: "poss", from: "አጎት" },
+  { am: "አክስቴ", ro: "ākisitē",   en: "my aunt (አክስት → አክስቴ)", src: "poss", from: "አክስት" },
+  { am: "ቃሌ",   ro: "k'alē",     en: "my word (ቃል → ቃሌ)", src: "poss", from: "ቃል" },
+  { am: "ኪሴ",   ro: "kīsē",     en: "my pocket (ኪስ → ኪሴ)", src: "poss", from: "ኪስ" },
+  { am: "ቡድኔ",  ro: "budinē",   en: "my team (ቡድን → ቡድኔ)", src: "poss", from: "ቡድን" },
+  { am: "ገጼ",   ro: "gets'ē",   en: "my page (ገጽ → ገጼ)", src: "poss", from: "ገጽ" },
+  { am: "ስሜ",   ro: "simē",     en: "my name (ስም → ስሜ)", src: "poss", from: "ስም" },
+  { am: "ሀገሬ",  ro: "hāgerē",   en: "my country (ሀገር → ሀገሬ)", src: "poss", from: "ሀገር" },
+  { am: "ሚስቴ",  ro: "mīsitē",    en: "my wife (ሚስት → ሚስቴ)", src: "poss", from: "ሚስት" },
+  { am: "ባሌ",   ro: "balē",     en: "my husband (ባል → ባሌ)", src: "poss", from: "ባል" },
+  { am: "እህቴ",  ro: "ihitē",    en: "my sister (እህት → እህቴ)", src: "poss", from: "እህት" },
+  { am: "አያቴ",  ro: "āyatē",    en: "my grandparent (አያት → አያቴ)", src: "poss", from: "አያት" },
+  { am: "ምግቤ",  ro: "migibē",   en: "my food (ምግብ → ምግቤ)", src: "poss", from: "ምግብ" },
+  { am: "መንገዴ", ro: "menigedē",  en: "my way (መንገድ → መንገዴ)", src: "poss", from: "መንገድ" },
+  // added 10/9
+  { am: "አይኔ",  ro: "āyinē",    en: "my eye (አይን → አይኔ)", src: "poss", from: "አይን" },
+  { am: "እጄ",   ro: "ijē",      en: "my hand (እጅ → እጄ)", src: "poss", from: "እጅ" },
+  { am: "እግሬ",  ro: "igirē",    en: "my leg (እግር → እግሬ)", src: "poss", from: "እግር" },
+  { am: "ራሴ",   ro: "rasē",     en: "my head; myself (ራስ → ራሴ)", src: "poss", from: "ራስ" },
+  { am: "ሆዴ",   ro: "hodē",     en: "my stomach (ሆድ → ሆዴ)", src: "poss", from: "ሆድ" },
+  { am: "ጸጉሬ",  ro: "ts'egurē", en: "my hair (ጸጉር → ጸጉሬ)", src: "poss", from: "ጸጉር" },
+  { am: "ድመቴ",  ro: "dimetē",   en: "my cat (ድመት → ድመቴ)", src: "poss", from: "ድመት" },
+  { am: "ቀሚሴ",  ro: "k'emīsē",   en: "my dress (ቀሚስ → ቀሚሴ)", src: "poss", from: "ቀሚስ" },
+  { am: "ሸሚዜ",  ro: "shemīzē",  en: "my shirt (ሸሚዝ → ሸሚዜ)", src: "poss", from: "ሸሚዝ" },
+  { am: "ደብተሬ", ro: "debiterē",  en: "my notebook (ደብተር → ደብተሬ)", src: "poss", from: "ደብተር" },
+  { am: "እርሳሴ", ro: "irisasē",   en: "my pencil (እርሳስ → እርሳሴ)", src: "poss", from: "እርሳስ" },
+  { am: "ዘመዴ",  ro: "zemedē",   en: "my relative (ዘመድ → ዘመዴ)", src: "poss", from: "ዘመድ" },
+  { am: "ጎረቤቴ", ro: "gorebētē", en: "my neighbor (ጎረቤት → ጎረቤቴ)", src: "poss", from: "ጎረቤት" },
+  // added 10/9: with the rest of the alphabet
+  { am: "ወንድሜ", ro: "wenidimē",  en: "my brother (ወንድም → ወንድሜ)", src: "poss", from: "ወንድም" },
+  { am: "ፍቅሬ",  ro: "fik'irē",   en: "my love (ፍቅር → ፍቅሬ)", src: "poss", from: "ፍቅር" },
+  { am: "ወንበሬ", ro: "weniberē",  en: "my chair (ወንበር → ወንበሬ)", src: "poss", from: "ወንበር" },
+  { am: "ጥርሴ",  ro: "t'irisē",   en: "my tooth (ጥርስ → ጥርሴ)", src: "poss", from: "ጥርስ" },
+  { am: "ሐሳቤ",  ro: "hāsabē",   en: "my idea (ሐሳብ → ሐሳቤ)", src: "poss", from: "ሐሳብ" },
+  { am: "ፊልሜ",  ro: "fīlimē",    en: "my film (ፊልም → ፊልሜ)", src: "poss", from: "ፊልም" },
+];
+
+// ---- most useful words first (for the "vocabulary size" setting) ----
+// Each tier is in rough order of usefulness. Words not listed come after these,
+// with names, places and other spellings at the very end.
+const USEFUL_TIERS = [
+  { name: "essentials", words: `ሰላም, ጤና ይስጥልኝ, አመሰግናለሁ, አዎ, አይ, እሺ, ይቅርታ, እባክህ, እባክሽ, ደህና, ደህና ሁን, ደህና ሁኚ, ምንም አይደል,
+    እኔ, አንተ, አንቺ, እሱ, እኛ, እናንተ, እነሱ, ነኝ, ነን, አለ,
+    ማን, ምን, የት, መቼ, ስንት, እንዴት, ለምን,
+    አንድ, ሁለት, ሶስት, አራት, አምስት, ስድስት, ሰባት, ስምንት, ዘጠኝ, አስር,
+    እና, ግን, ወይም, በጣም, እዚህ, እዚያ, ጥሩ, መጥፎ,
+    ውሃ, ምግብ, ቡና, ሻይ, ዳቦ, እንጀራ, ቤት, ሰው, ሰዎች, ስም, ልጅ, ሴት, ወንድ, አባት, እናት, ቤተሰብ,
+    ዛሬ, ነገ, ትናንት, አሁን, ቀን, ጊዜ,
+    መጣ, በላ, ሰጠ, አየ, አወቀ, ወደደ, ተናገረ, ና, ሂድ, ሂጂ, ቆይ,
+    ብዙ, ትንሽ, ትልቅ, ገንዘብ, ዋጋ, ብር, ሥራ, ሀገር, ከተማ, ኢትዮጵያ, አማርኛ, እንግሊዝኛ` },
+  { name: "very common", words: `ሁሉ, ደግሞ, ሁልጊዜ, አንዳንድ ጊዜ, ምናልባት, በቃ, ብቻ, በቂ, ሌላ, አዲስ, ቆንጆ, ጎበዝ, ቀላል, ከባድ, ሩቅ, ቅርብ, ቀኝ, ግራ, ወደ,
+    ጠዋት, ከሰዓት, ማታ, ምሽት, ሌሊት, ሳምንት, ወር, ዓመት, ሰዓት, ደቂቃ, ሰኞ, ማክሰኞ, ረቡዕ, ሐሙስ, ዓርብ, ቅዳሜ, እሁድ,
+    ወተት, ስጋ, ዶሮ, ወጥ, ሽሮ, እንቁላል, ሩዝ, ቁርስ, ምሳ, እራት, ጨው, ቢራ, ፍራፍሬ, ሙዝ,
+    ተማሪ, መምህር, አስተማሪ, ሀኪም, ዶክተር, ወንድም, እህት, ባል, ሚስት, ልጆች, ጎረቤት, እንግዳ,
+    መንገድ, መኪና, ታክሲ, አውቶቡስ, ሱቅ, ገበያ, ሆቴል, ሆስፒታል, ባንክ, ትምህርት ቤት, ቢሮ, ቤተ ክርስቲያን, ሽንት ቤት, በር,
+    ስልክ, ሞባይል, መጽሐፍ, ልብስ, ጫማ, ወንበር, ጠረጴዛ,
+    ወጣ, ተቀመጠ, ተነሳ, ጠየቀ, መለሰ, ጻፈ, አነበበ, አገኘ, አመጣ, ከፈለ, ከፈተ, ጠበቀ, ረዳ, ኖረ, ሆነ, ቻለ, አሰበ, ጨረሰ, ሞከረ, ጠራ, ደወለ, ሸጠ, አስተማረ, አጠና,
+    ሃያ, ሰላሳ, አርባ, ሀምሳ, ስልሳ, ሰባ, ሰማንያ, ዘጠና, መቶ, ሺ, ሚሊዮን` },
+  { name: "everyday", words: `ራስ, አይን, ጆሮ, አፍ, አፍንጫ, እጅ, እግር, ፊት, ጸጉር, ጥርስ, ሆድ, ልብ, ጣት,
+    ቀይ, ነጭ, ጥቁር, ቢጫ, ሰማያዊ, ቡኒ, ግራጫ,
+    ሙቅ, ሞቃት, ቀዝቃዛ, ብርድ, ረጅም, አጭር, ፈጣን, ቶሎ, ቀስ በቀስ, ውድ, ርካሽ, ንጹህ, ቆሻሻ, ጣፋጭ, ደስተኛ, ደካማ, ጠንካራ, ባዶ, ሙሉ, ክፍት, ዝግ, ትኩስ, አሮጌ, ደግ, ጤና, ጤናማ, ደስ የሚል,
+    ፀሐይ, ዝናብ, ሰማይ, ዛፍ, አበባ, ተራራ, ወንዝ, ባህር, መሬት, እሳት, ነፋስ, ጨረቃ, ኮከብ, ሙቀት,
+    ውሻ, ድመት, ላም, በግ, ፍየል, ፈረስ, አህያ, ወፍ, አሳ,
+    አልጋ, ኩሽና, ሳሎን, መኝታ ቤት, መስኮት, መብራት, ቁልፍ, ብርጭቆ, ኩባያ, ሰሀን, ሳህን, ማንኪያ, ሹካ, ቢላዋ, ሳሙና, ወረቀት, እስክሪብቶ, እርሳስ, ደብተር, ቦርሳ, ሻንጣ,
+    ሽንኩርት, ቲማቲም, ድንች, ጎመን, ምስር, በርበሬ, ቅቤ, ማር, ሎሚ, ብርቱካን, ዘይት, ጁስ, ጤፍ, ጥብስ, ክትፎ, ሾርባ, ዶሮ ወጥ, ሲኒ, ጀበና,
+    ቦታ, አውሮፕላን, ኤርፖርት, ባቡር, ጣቢያ, ፖስታ ቤት, ሬስቶራንት, ቡና ቤት, ዳቦ ቤት, ዩኒቨርሲቲ, ፓርክ, ገጠር, መንደር, ፓስፖርት, ቪዛ, ቲኬት, ጉዞ, ጎዳና,
+    ትምህርት, ጥያቄ, መልስ, ፈተና, ክፍል, ቃል, ፊደል, ቁጥር, ገጽ, ታሪክ,
+    ሰራተኛ, ሾፌር, ፖሊስ, ዘመድ, አያት, አጎት, አክስት, ሴቶች, ልጃገረድ, ወጣት, ሕፃን, ባለቤት, ሽማግሌ, አለቃ, ቱሪስት, ሕዝብ,
+    ፍቅር, ደስታ, ፍርሃት, ተስፋ, ሐሳብ, ሕይወት, ዓለም, ዕድሜ, በዓል, ልደት, ስጦታ, ሙዚቃ, ዘፈን, ፊልም, ዜና, ቲቪ, ሐበሻ, ዕቃ,
+    ሮጠ, ተጫወተ, ዘፈነ, ጨፈረ, ዋኘ, ነቃ, አበሰለ, አጸዳ, ታጠበ, ለበሰ, ቆየ, ወሰነ, ቀጠለ, ተሳሳተ, ታመመ, ዳነ, ደከመ, ላከ, ተቀበለ, ጎበኘ, ወረደ, ገነባ, ሰበረ, ቆጠረ, ያዘ, ጣለ, ወደቀ, ፈራ, ተቆጣ, በረረ, ተወለደ, ሞተ, አለቀሰ, ሳመ, ሸሸ, ጸለየ, ፈቀደ, ከለከለ, ዞረ, ቸኮለ, ጮኸ, አጠበ, ቆረጠ, ሰረቀ` },
+].map(t => ({ name: t.name, words: t.words.split(",").map(s => s.trim()).filter(Boolean) }));
+// names, places, brands and other spellings go last
+const isNameLike = w => /also spelled|\(a (name|city|town|region)\)|month/.test(w.en) || (/^[A-Z]/.test(w.en) && !/^(OK|TV)\b/.test(w.en));
+const USEFUL_RANK = {};
+{
+  let r = 0;
+  USEFUL_TIERS.forEach((t, ti) => t.words.forEach(am => { if (!(am in USEFUL_RANK)) USEFUL_RANK[am] = { r: r++, tier: ti }; }));
+  const rest = WORDS.filter(w => (w.src === "class" || w.src === "new") && !(w.am in USEFUL_RANK));
+  [...rest.filter(w => !isNameLike(w)), ...rest.filter(isNameLike)].forEach(w => {
+    if (!(w.am in USEFUL_RANK)) USEFUL_RANK[w.am] = { r: r++, tier: isNameLike(w) ? 4 : 3 };
+  });
+}
+const TIER_NAMES = ["essentials", "very common", "everyday", "more words", "names, places & other spellings"];
+
+const PRONOUNS = [
+  { p: "1st", sg: [["እኔ", "enē", "I"], ["ነኝ", "negn", "am"]], pl: [["እኛ", "egna", "we"], ["ነን", "nen", "are"]] },
+  { p: "2nd", sg: [["አንተ", "ante", "you (m.)"], ["ነህ", "neh", "are"], ["አንቺ", "anchi", "you (f.)"], ["ነሽ", "nesh", "are"], ["እርስዎ", "erswo", "you (polite)", 1]],
+              pl: [["እናንተ", "enante", "you (all)"], ["ናችሁ", "nachihu", "are", 1]] },
+  { p: "3rd", sg: [["እሱ", "esu", "he"], ["ነው", "new", "is", 1], ["እሷ", "esswa", "she", 1], ["ናት", "nat", "is", 1], ["እሳቸው", "esachew", "he/she (polite)", 1]],
+              pl: [["እነሱ", "enesu", "they"], ["ናቸው", "nachew", "are", 1]] },
+];
+
+const DIALOGUE = [
+  ["አንተ ተማሪ ነህ?", "ante temari neh?", "Are you a student? (to a man)"],
+  ["አንቺ ተማሪ ነሽ?", "anchi temari nesh?", "Are you a student? (to a woman)"],
+  ["አዎ፣ እኔ ተማሪ ነኝ።", "awo, enē temari negn.", "Yes, I am a student."],
+  ["አንተስ? / አንቺስ?", "antes? / anchis?", "How about you? (m. / f.)"],
+  ["አዎ፣ እኔም ተማሪ ነኝ።", "awo, enēm temari negn.", "Yes, I am a student too."],
+];
+
+const FAMILIES6 = ["ብ ቭ", "ስ ሽ", "ዝ ዥ", "ድ ጅ ጽ ጵ", "ክ", "ል", "እ"];
+
+// Visually / phonetically confusable consonants (for distractors)
+const SIMILAR = { b: ["v", "p"], v: ["b"], s: ["sh"], sh: ["s"], z: ["zh"], zh: ["z"], d: ["j", "ts'"], j: ["d"],
+  "ts'": ["p'", "d"], "p'": ["ts'"], n: ["gn"], gn: ["n"], t: ["ch", "p"], ch: ["t"], k: ["a", "q"], a: ["k"],
+  l: ["k", "r"], r: ["l"], h: ["m"], m: ["h"], g: ["q", "p"], q: ["g", "k"], p: ["t", "g"], y: ["l"],
+  "ḥ": ["h", "ḫ"], "ḫ": ["n", "h"], "ś": ["s", "sh"], kh: ["k"], w: ["ʿ"], "ʿ": ["a", "w"],
+  "t'": ["ch'", "t"], "ch'": ["t'", "ch"], "ṣ'": ["ts'"], f: ["p", "t'"], qh: ["q"], "ḍ": ["d"], "ŋ": ["g"] };
+// add the reverse links so the old letters also get the new look-alikes as distractors
+Object.entries(SIMILAR).forEach(([k, v]) => v.forEach(o => { SIMILAR[o] = SIMILAR[o] || []; if (!SIMILAR[o].includes(k)) SIMILAR[o].push(k); }));
+// ============================================================
+
+const PUNCT = new Set([" ", "።", "፣", "?", "፧", "/", ",", ".", "!"]);
+const FIDEL = {};
+CONS.forEach(c => { for (let h = 1; h <= 7; h++) FIDEL[String.fromCodePoint(c.base + h - 1)] = { c, h }; });
+const consByKey = Object.fromEntries(CONS.map(c => [c.k, c]));
+const glyph = (c, h) => String.fromCodePoint(c.base + h - 1);
+// the consonant sound as pronounced (ʿ → "", ḥ → "h", …)
+const sndOf = c => c.snd !== undefined ? c.snd : c.k === "a" ? "" : c.k;
+// consonant labels shown on the page, in Google Translate spelling (the keys k stay as they are)
+const DISP = { q: "k'", gn: "ny" };
+const dispK = k => DISP[k] || k;
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const codeOf = (k, h) => cap(dispK(k)) + h;
+// Google Translate romanization of one character: houses e · u · ī · a · ē · i · o,
+// and the 1st house of አ ዐ ሀ ሐ ኀ is ā
+const RO_SND = { 0x1240: "k'", 0x1298: "ny", 0x12A0: "", 0x12D0: "", 0x12B8: "h", 0x1210: "h", 0x1220: "s", 0x1280: "h", 0x1340: "ts'", 0x12F8: "d", 0x1250: "k'" };
+const RO_V = ["e", "u", "ī", "a", "ē", "i", "o"];
+const RO_LONG = new Set([0x12A0, 0x12D0, 0x1200, 0x1210, 0x1280]);
+function romanize(ch) {
+  const f = FIDEL[ch]; if (!f) return ch;
+  const b = f.c.base, cons = RO_SND[b] !== undefined ? RO_SND[b] : sndOf(f.c);
+  return cons + (f.h === 1 && RO_LONG.has(b) ? "ā" : RO_V[f.h - 1]);
+}
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const $ = id => document.getElementById(id);
+
+// "one", "more", "rest", "rare" and "irr" are focus levels: all characters are known, but drills target a subset
+const ALL_GROUPS = ["two", "one", "more", "rest", "rare"];
+const FOCUS = ["one", "more", "rest", "rare"];
+function levelGroups(level) {
+  if (level === "two") return ["two"];
+  if (level === "class") return ["two", "one", "more"];
+  if (level === "rare") return ALL_GROUPS;
+  return ["two", "one", "more", "rest"];
+}
+function knownCons() { return CONS.filter(c => levelGroups($("level").value).includes(c.grp)); }
+function activeCons() {
+  const level = $("level").value;
+  if (FOCUS.includes(level)) return CONS.filter(c => c.grp === level);
+  if (level === "irr") return CONS.filter(c => [1, 2, 3, 4, 5, 6, 7].some(h => IRREGULAR.has(glyph(c, h))));
+  return knownCons();
+}
+// does the word contain at least one character the current focus level targets?
+function wordFocused(w, level) {
+  if (FOCUS.includes(level)) return [...w.am].some(ch => FIDEL[ch] && FIDEL[ch].c.grp === level);
+  if (level === "irr") return [...w.am].some(ch => IRREGULAR.has(ch));
+  return true;
+}
+function isKnownChar(ch, groups) { return PUNCT.has(ch) || (FIDEL[ch] && groups.includes(FIDEL[ch].c.grp)); }
+function wordKnown(w, groups) { return [...w.am].every(ch => isKnownChar(ch, groups)); }
+
+// wrap characters not learned yet in a dotted underline
+function renderAm(text, groups = ALL_GROUPS) {
+  return [...text].map(ch => isKnownChar(ch, groups) || !/[\u1200-\u137F]/.test(ch) ? ch : `<span class="unk" title="not learned yet">${ch}</span>`).join("");
+}
+// syllables: array of {k,h} or {gap:true}
+function sylls(am) {
+  const out = [];
+  for (const ch of am) {
+    if (ch === " ") { out.push({ gap: true }); continue; }
+    const f = FIDEL[ch]; if (f) out.push({ k: f.c.k, h: f.h });
+  }
+  return out;
+}
+const codeStr = ss => ss.map(s => s.gap ? "·" : codeOf(s.k, s.h)).join(" ");
+const tallyStr = ss => ss.map(s => s.gap ? "  " : (s.h === 6 ? "\\" : "|")).join("");
+
+// ============================================================
+// NAV
+// ============================================================
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll("section.tab").forEach(s => s.classList.toggle("active", s.id === "tab-" + b.dataset.tab));
+});
+
+// ============================================================
+// SUMMARY
+// ============================================================
+(function pyramid() {
+  const rows = [["14", "two-legged", true], ["9", "one-legged", true], ["5", "no legs"], ["3", "three-legged"], ["2", "“L”"]];
+  const g = $("pyr-rows"); let html = "";
+  rows.forEach((r, i) => {
+    const y = 36 + i * 36;
+    const fill = r[2] === true ? "#1f7a5a" : r[2] ? "#6bb596" : "none";
+    const halfW = 200 * (1 - (y - 10) / 230);
+    if (r[2]) html += `<rect x="${210 - halfW + 6}" y="${y - 20}" width="${2 * halfW - 12}" height="28" rx="6" fill="${fill}" opacity=".25"/>`;
+    html += `<text x="210" y="${y}" text-anchor="middle" font-weight="700">${r[0]} · ${r[1]}${r[2] === true ? " ✓" : r[2] ? " (started)" : ""}</text>`;
+  });
+  g.innerHTML = html;
+})();
+
+function lineup(id, grp) {
+  $(id).innerHTML = CONS.filter(c => c.grp === grp).map(c =>
+    `<div class="tile"><div class="g">${glyph(c, 1)}</div><div class="s">${dispK(c.k)}</div><div class="m">${c.mn}</div></div>`).join("");
+}
+lineup("lineup-two", "two"); lineup("lineup-one", "one"); lineup("lineup-more", "more"); lineup("lineup-rest", "rest"); lineup("lineup-rare", "rare");
+$("irr-list").innerHTML = CONS.filter(c => c.grp === "one").map(c => [1, 2, 3, 4, 5, 6, 7].map(h => glyph(c, h)).filter(g => IRREGULAR.has(g)).join(" ")).filter(Boolean).join(" · ");
+
+$("houses").innerHTML = HOUSES.map(h => `
+  <div class="house" style="border-color: var(--h${h.n})">
+    <div class="num h${h.n}c">${h.n}${["st","nd","rd","th","th","th","th"][h.n-1]}</div>
+    <div class="snd h${h.n}c">${h.say}</div>
+    <div class="ex">${glyph(consByKey.b, h.n)}${glyph(consByKey.s, h.n)}${glyph(consByKey.l, h.n)}</div>
+    <div class="rule">${h.rule}</div>
+  </div>`).join("");
+$("families").innerHTML = FAMILIES6.map(f => `<span class="family">${f}</span>`).join("");
+
+// ============================================================
+// CHART
+// ============================================================
+function renderChart() {
+  const showSound = $("chart-show-sound").checked, showIrr = $("chart-show-irr").checked;
+  let html = `<thead><tr><th></th>${HOUSES.map(h => `<th><span class="hs h${h.n}c">${h.n}</span><span class="h${h.n}c">${h.say}</span></th>`).join("")}</tr></thead><tbody>`;
+  const groups = [["two", "Two-legged"], ["one", "One-legged"], ["more", "New letters (10/8)"],
+    ["rest", "The rest of the alphabet (not covered in class yet)"], ["rare", "Rare: on the alphabet sheet, but not used in standard Amharic"]];
+  for (const [g, label] of groups) {
+    html += `<tr class="grp"><td colspan="8">${label}</td></tr>`;
+    for (const c of CONS.filter(c => c.grp === g)) {
+      html += `<tr><th class="row">${dispK(c.k)}<span class="mn">${c.mn}</span></th>`;
+      for (const h of HOUSES) {
+        const syl = romanize(glyph(c, h.n));
+        const irr = showIrr && IRREGULAR.has(glyph(c, h.n)) ? " irr" : "";
+        html += `<td class="ch h${h.n}c${irr}" title="${codeOf(c.k, h.n)} · ${syl}">${glyph(c, h.n)}${showSound ? `<span class="tip">${syl}</span>` : ""}</td>`;
+      }
+      html += "</tr>";
+    }
+  }
+  $("fidel").innerHTML = html + "</tbody>";
+}
+$("chart-show-sound").onchange = renderChart; $("chart-show-irr").onchange = renderChart;
+renderChart();
+
+// ============================================================
+// WORDS & GRAMMAR TABLES
+// ============================================================
+function wordRows(list, opts = {}) {
+  const head = `<tr><th>Amharic</th><th>sounds</th><th>meaning</th>${opts.noCode ? "" : "<th>code</th><th>tally</th>"}</tr>`;
+  return head + list.map(w => {
+    const ss = sylls(w.am);
+    return `<tr><td class="am">${renderAm(w.am)}</td><td><b>${w.ro}</b></td><td>${w.en}</td>${opts.noCode ? "" :
+      `<td class="code">${codeStr(ss)}</td><td class="tally">${tallyStr(ss)}</td>`}</tr>`;
+  }).join("");
+}
+$("words-class").innerHTML = wordRows(WORDS.filter(w => w.src === "class"));
+$("words-new").innerHTML = wordRows(WORDS.filter(w => w.src === "new"));
+$("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
+(function verbTable() {
+  const roots = [["በላ", "eat"], ["ገዛ", "buy"], ["ገባ", "enter"], ["ሰማ", "hear"]];
+  const forms = [["he", "", 0], ["she", "ች", 0], ["they / polite", "", 2], ["we", "ን", 0], ["you (f.)", "ሽ", 0]];
+  // the "they / polite" form moves the last character from the 4th house to the 2nd (ላ → ሉ)
+  const make = (root, [, end, house]) => {
+    if (!house) return root + end;
+    const chars = [...root], f = FIDEL[chars.at(-1)];
+    chars[chars.length - 1] = glyph(f.c, house); return chars.join("");
+  };
+  $("verb-eat").innerHTML = `<tr><th></th>${roots.map(r => `<th>${r[1]}</th>`).join("")}<th>ending</th></tr>` +
+    forms.map(f => `<tr><td>${f[0]}</td>${roots.map(r => `<td class="am">${make(r[0], f)}</td>`).join("")}<td class="small">${f[2] ? "last character → 2nd house (oo)" : f[1] ? `+ <span class="eth">${f[1]}</span>` : "root"}</td></tr>`).join("");
+})();
+// ---------- grammar tab: past-tense endings ----------
+(function grammarTables() {
+  const P = ["I", "you (m.)", "you (f.)", "he", "she", "we", "you (all)", "they / polite"];
+  // [house of the last character (0 = unchanged), Amharic ending, romanized ending]
+  const A = [[6, "ኩ", "ku"], [6, "ክ", "k"], [6, "ሽ", "sh"], [0, "", "e"], [0, "ች", "ech"], [6, "ን", "n"], [4, "ችሁ", "achihu"], [2, "", "u"]];
+  const B = [[0, "ሁ", "ahu"], [0, "ህ", "ah"], [0, "ሽ", "ash"], [0, "", "a"], [0, "ች", "ach"], [0, "ን", "an"], [0, "ችሁ", "achihu"], [2, "", "u"]];
+  const form = (root, [house, end]) => {
+    const chars = [...root], last = chars.pop(), f = FIDEL[last], h = house || f.h, g = glyph(f.c, h);
+    return { am: chars.join("") + g + end, html: `${chars.join("")}<span class="h${h}c">${g}</span><b class="end">${end}</b>` };
+  };
+  const say = am => `<button class="say-mini" data-say="${am}" title="play sound">🔊</button>`;
+  const table = (id, roots, rules, note) => {
+    $(id).innerHTML = `<tr><th>who</th>${roots.map(r => `<th>${r[2]}</th>`).join("")}<th>what happens</th></tr>` +
+      rules.map((rule, i) => `<tr class="${i === 3 ? "he" : ""}"><td>${P[i]}</td>${roots.map(([am, stem]) => {
+        const f = form(am, rule);
+        return `<td><span class="eth" style="font-size:1.45rem">${f.html}</span>${say(f.am)}<br><span class="ro">${stem}<b>${rule[2]}</b></span></td>`;
+      }).join("")}<td class="small">${note(rule, i)}</td></tr>`).join("");
+  };
+  const hn = h => `<span class="h${h}c">${["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th"][h]} house</span>`;
+  table("vt-a", [["ሰበረ", "seber", "broke"], ["ጻፈ", "ts'af", "wrote"]], A,
+    ([h, end], i) => i === 3 ? "the starting form (1st house)" : (h ? `last character → ${hn(h)}` : "stays 1st house") + (end ? ` + <span class="eth">${end}</span>` : ""));
+  table("vt-b", [["በላ", "bel", "ate"], ["ገዛ", "gez", "bought"]], B,
+    ([h, end], i) => i === 3 ? "the starting form (4th house)" : h ? `last character → ${hn(h)}` : `stays 4th house + <span class="eth">${end}</span>` + (i < 2 ? " (k → h after ‑a)" : ""));
+  $("vt-sum").innerHTML = `<tr><th>who</th><th>pronoun</th><th>type 1 (ሰበረ)</th><th>type 2 (በላ)</th></tr>` +
+    P.map((p, i) => `<tr class="${i === 3 ? "he" : ""}"><td>${p}</td><td class="am">${["እኔ", "አንተ", "አንቺ", "እሱ", "እሷ", "እኛ", "እናንተ", "እነሱ"][i]}</td>` +
+      `<td>‑${A[i][2]}</td><td>‑${B[i][2]}</td></tr>`).join("");
+  const S = [["(እኔ) ዳቦ በላሁ።", "I ate bread."], ["እሷ ቡና ገዛች።", "She bought coffee."], ["(እኛ) ደብዳቤ ጻፍን።", "We wrote a letter."],
+    ["ልጆች ዳቦ በሉ።", "(The) children ate bread."], ["(አንቺ) ምን ገዛሽ?", "What did you (f.) buy?"]];
+  $("vt-sent").innerHTML = S.map(([am, en]) => `<tr><td class="am">${am}</td><td>${say(am.replace(/[()]/g, ""))}</td><td>${en}</td></tr>`).join("");
+})();
+$("poss").innerHTML = `<tr><th>noun</th><th></th><th>my …</th><th>sounds</th></tr>` + WORDS.filter(w => w.src === "poss").map(w =>
+  `<tr><td class="am">${w.from}</td><td>→</td><td class="am">${w.am}</td><td><b>${w.ro}</b> · ${w.en.split(" (")[0]}</td></tr>`).join("");
+$("dialogue").innerHTML = DIALOGUE.map(d => `<tr><td class="am">${renderAm(d[0])}</td><td><b>${d[1]}</b></td><td>${d[2]}</td></tr>`).join("");
+$("pron").innerHTML = `<tr><th></th><th>singular</th><th>plural</th></tr>` + PRONOUNS.map(r => {
+  const cell = arr => arr.map(x => `<div style="${x[3] ? "opacity:.45" : ""}"><span class="am">${renderAm(x[0])}</span> <b>${x[1]}</b> <span class="muted">${x[2]}</span>${x[3] ? ' <span class="pill preview">preview</span>' : ""}</div>`).join("");
+  return `<tr><th>${r.p}</th><td>${cell(r.sg)}</td><td>${cell(r.pl)}</td></tr>`;
+}).join("");
+
+// ============================================================
+// PRACTICE
+// ============================================================
+let score = { right: 0, total: 0 };
+function bump(ok) { score.total++; if (ok) score.right++; $("score").textContent = `Score: ${score.right} / ${score.total}`; }
+$("reset-score").onclick = () => { score = { right: 0, total: 0 }; $("score").textContent = "Score: 0 / 0"; };
+
+// ---------- vocabulary size: only the N most useful words (that fit the settings) ----------
+const isWordDeck = w => w.src === "class" || w.src === "new";
+const ALL_WORD_COUNT = Object.keys(USEFUL_RANK).length;
+const VSIZE_KEY = "amh-vsize";
+let vocabSize = 50;
+try { vocabSize = Math.min(ALL_WORD_COUNT, +localStorage.getItem(VSIZE_KEY) || 50); } catch (e) {}
+function setVocabSize(n) {
+  vocabSize = Math.max(5, Math.min(ALL_WORD_COUNT, Math.round(n) || 5));
+  try { localStorage.setItem(VSIZE_KEY, vocabSize); } catch (e) {}
+  markDirty("s:vsize");
+  $("vsize").value = vocabSize; $("vsize-range").value = vocabSize;
+  updateDeckCount(); if (currentP !== "char" && currentP !== "num") nextQ();
+}
+function deckList() {
+  const groups = levelGroups($("level").value);
+  const decks = [...document.querySelectorAll("#decks input:checked")].map(i => i.value);
+  const all = WORDS.filter(w => decks.includes(w.src) && wordKnown(w, groups) && wordFocused(w, $("level").value));
+  const words = all.filter(isWordDeck).sort((a, b) => USEFUL_RANK[a.am].r - USEFUL_RANK[b.am].r).slice(0, vocabSize);
+  return [...words, ...all.filter(w => !isWordDeck(w))];
+}
+function updateDeckCount() {
+  const list = deckList(), n = list.length, nw = list.filter(isWordDeck).length, other = n - nw;
+  $("deck-count").textContent = `${n} words/sentences available with these settings` +
+    (other ? ` (${nw} words + ${other} from the other decks)` : "") + (n === 0 ? ". Turn on more decks or characters." : ".");
+  const tiers = TIER_NAMES.map(() => [0, 0]);
+  Object.values(USEFUL_RANK).forEach(x => tiers[x.tier][1]++);
+  list.filter(isWordDeck).forEach(w => tiers[USEFUL_RANK[w.am].tier][0]++);
+  const cover = tiers.map((c, i) => c[0] ? `${TIER_NAMES[i]} ${c[0]}/${c[1]}` : "").filter(Boolean).join(" · ");
+  $("vsize-info").textContent = (nw < vocabSize && vocabSize < ALL_WORD_COUNT
+    ? `Only ${nw} words fit the current focus / decks. ` : "") +
+    (cover ? `Includes: ${cover}. ` : "") +
+    `The limit applies to “words from class” and “extra words”; sentences, verb endings and “my …” are added in full when turned on.`;
+}
+$("vsize").max = $("vsize-range").max = ALL_WORD_COUNT;
+$("vsize").value = $("vsize-range").value = vocabSize;
+$("vsize").onchange = e => setVocabSize(+e.target.value);
+$("vsize-range").oninput = e => { $("vsize").value = e.target.value; };
+$("vsize-range").onchange = e => setVocabSize(+e.target.value);
+$("vsize-more").onclick = () => setVocabSize(vocabSize + 25);
+$("vsize-all").onclick = () => setVocabSize(ALL_WORD_COUNT);
+
+let currentP = "char";
+document.querySelectorAll("#ptabs button").forEach(b => b.onclick = () => {
+  currentP = b.dataset.p;
+  document.querySelectorAll("#ptabs button").forEach(x => x.classList.toggle("active", x === b));
+  ["char", "read", "write", "vocab", "num"].forEach(p => $("p-" + p).style.display = p === currentP ? "" : "none");
+  nextQ();
+});
+$("level").onchange = () => { updateDeckCount(); nextQ(); };
+document.querySelectorAll("#decks input").forEach(i => i.onchange = () => { updateDeckCount(); if (currentP !== "char") nextQ(); });
+
+function nextQ() { ({ char: charQ, read: readQ, write: writeQ, vocab: vocabQ, num: numQ })[currentP](); }
+
+function breakdownHTML(am) {
+  return `<div class="breakdown">` + [...am].map(ch => {
+    if (ch === " ") return `<div class="gap"></div>`;
+    const f = FIDEL[ch]; if (!f) return "";
+    const h = HOUSES[f.h - 1];
+    return `<div class="syl"><div class="g h${f.h}c">${ch}</div><div class="c">${codeOf(f.c.k, f.h)}</div><div class="v h${f.h}c">${romanize(ch)}</div></div>`;
+  }).join("") + `</div>`;
+}
+function sylLabel(k, h) { return `${romanize(glyph(consByKey[k], h))} (${codeOf(k, h)})`; }
+
+// ---------- A: character drill ----------
+// Each character keeps a record: how often you saw it, how often you got it right, a "strength" that
+// leans on recent answers, and when you last saw it. The next character is picked at random, weighted so that
+//  - characters you get wrong come up more often (weight grows as strength falls),
+//  - characters you haven't seen for a while come back (weight grows with questions and days since),
+//  - the character you just saw doesn't come straight back,
+//  - characters you haven't seen yet get a high weight, so they come up often (a bit less while you
+//    have many weak ones, but never throttled away).
+// The record is kept in this browser only.
+const CHAR_KEY = "amharic-char-stats";
+let charStats = { q: 0, c: {} };
+try { charStats = JSON.parse(localStorage.getItem(CHAR_KEY)) || charStats; } catch (e) {}
+const saveChar = () => { try { localStorage.setItem(CHAR_KEY, JSON.stringify(charStats)); } catch (e) {} };
+const WEAK = 0.7; // strength below this counts as "still learning"
+function recordChar(ch, ok) {
+  const r = charStats.c[ch] || { n: 0, ok: 0, s: 0.5 };
+  r.n++; if (ok) r.ok++;
+  r.s = 0.6 * r.s + 0.4 * (ok ? 1 : 0);   // recent answers count most
+  r.q = ++charStats.q; r.t = Date.now();
+  charStats.c[ch] = r; saveChar(); markDirty("c:" + ch);
+}
+function charWeight(ch, nWeak) {
+  const r = charStats.c[ch];
+  if (!r) return nWeak < 6 ? 8 : nWeak < 12 ? 5 : 3;       // not seen yet: favoured
+  const gap = charStats.q - r.q, days = (Date.now() - r.t) / 864e5;
+  if (gap < 2) return 0;                                      // just seen
+  const due = Math.min(1, gap / 15) + Math.min(1, days);      // time since last seen
+  return (0.1 + 3 * (1 - r.s)) * due;                         // weaker → more often
+}
+function charPool() {
+  const cons = activeCons(), irrOnly = $("level").value === "irr";
+  return cons.flatMap(c => [1, 2, 3, 4, 5, 6, 7].filter(h => !irrOnly || IRREGULAR.has(glyph(c, h))).map(h => glyph(c, h)));
+}
+function pickChar(pool) {
+  const nWeak = pool.filter(ch => charStats.c[ch] && charStats.c[ch].s < WEAK).length;
+  const w = pool.map(ch => charWeight(ch, nWeak));
+  const total = w.reduce((a, b) => a + b, 0);
+  if (!total) return pick(pool);
+  let r = Math.random() * total;
+  for (let i = 0; i < pool.length; i++) { r -= w[i]; if (r <= 0) return pool[i]; }
+  return pool[pool.length - 1];
+}
+function charStatsHTML(pool, cur) {
+  const lvl = ch => { const r = charStats.c[ch]; return !r ? "" : "s" + Math.min(4, Math.floor(r.s * 5)); };
+  const seen = pool.filter(ch => charStats.c[ch]), weak = seen.filter(ch => charStats.c[ch].s < WEAK);
+  const tip = ch => { const r = charStats.c[ch], f = FIDEL[ch]; const lab = `${codeOf(f.c.k, f.h)} ${romanize(ch)}`;
+    if (!r) return `${lab}: not seen yet`;
+    const ago = charStats.q - r.q;
+    return `${lab}: ${r.ok}/${r.n} right · last seen ${ago === 0 ? "just now" : ago + " questions ago"}`; };
+  return `<div class="cstats">
+    <p class="small muted"><b>${pool.length - seen.length}</b> not seen yet · <b>${weak.length}</b> still learning · <b>${seen.length - weak.length}</b> known well</p>
+    <div class="cgrid">${pool.map(ch => `<span class="${lvl(ch)}${ch === cur ? " cur" : ""}" title="${tip(ch)}">${ch}</span>`).join("")}</div>
+    <p class="small muted">Grey = not seen yet; red → green = how well you know it lately (hover for details).
+      Characters you haven't seen yet, characters you miss, and characters you haven't seen for a while come up more often.
+      <button class="btn ghost small" id="creset">reset character progress</button></p>
+  </div>`;
+}
+
+function resetChar() { if (confirm("Reset character progress for all characters?")) { Object.keys(charStats.c).forEach(ch => markDirty("c:" + ch, true)); charStats = { q: 0, c: {} }; saveChar(); charQ(); } }
+let charMode = "f2s";
+function charQ() {
+  const box = $("p-char"), cons = activeCons(), pool = charPool();
+  if (!pool.length) { box.innerHTML = `<p>No characters match this setting.</p>`; return; }
+  const target = pickChar(pool), { c, h } = FIDEL[target];
+  const modeBtns = `<div class="subtabs" style="justify-content:center">
+      <button class="${charMode === "f2s" ? "active" : ""}" data-m="f2s">character → sound</button>
+      <button class="${charMode === "s2f" ? "active" : ""}" data-m="s2f">sound → character</button></div>`;
+  // distractor syllables: same consonant other houses + similar consonant same house
+  const cand = new Map();
+  const add = (k, hh) => { const cc = consByKey[k]; if (cc && cons.includes(cc) && !(k === c.k && hh === h)) cand.set(k + hh, { k, h: hh }); };
+  shuffle([1, 2, 3, 4, 5, 6, 7]).forEach(hh => add(c.k, hh));
+  (SIMILAR[c.k] || []).forEach(k => { add(k, h); add(k, 1 + Math.floor(Math.random() * 7)); });
+  const cpool = [...cand.values()];
+  const sim = shuffle(cpool.filter(p => p.k !== c.k)), same = shuffle(cpool.filter(p => p.k === c.k));
+  const nOpts = charMode === "f2s" ? 3 : 5;
+  let distract = [...sim.slice(0, Math.ceil(nOpts / 2)), ...same].slice(0, nOpts);
+  while (distract.length < nOpts) { const k = pick(cons).k, hh = 1 + Math.floor(Math.random() * 7); if (!(k === c.k && hh === h) && !distract.some(d => d.k === k && d.h === hh)) distract.push({ k, h: hh }); }
+  const opts = shuffle([{ k: c.k, h, ok: true }, ...distract]);
+
+  if (charMode === "f2s") {
+    box.innerHTML = modeBtns + `<p class="muted">Which sound is this?</p><div class="prompt-big">${target}</div>
+      <div class="options">${opts.map((o, i) => `<button class="opt" data-i="${i}">${sylLabel(o.k, o.h)}</button>`).join("")}</div>
+      <div class="feedback" id="fb"></div><div id="after"></div>`;
+  } else {
+    box.innerHTML = modeBtns + `<p class="muted">Which character is this?</p><div class="prompt-ro">${romanize(target)}</div>
+      <div class="prompt-en">${codeOf(c.k, h)} · consonant “${dispK(c.k)}”, ${h}${["st","nd","rd","th","th","th","th"][h-1]} house</div>
+      <div class="options fidels">${opts.map((o, i) => `<button class="opt eth" data-i="${i}">${glyph(consByKey[o.k], o.h)}</button>`).join("")}</div>
+      <div class="feedback" id="fb"></div><div id="after"></div>`;
+  }
+  box.insertAdjacentHTML("beforeend", charStatsHTML(pool, target));
+  $("creset").onclick = resetChar;
+  box.querySelectorAll(".subtabs button").forEach(b => b.onclick = () => { charMode = b.dataset.m; charQ(); });
+  box.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    const o = opts[+b.dataset.i];
+    box.querySelectorAll(".opt").forEach((x, i) => { x.disabled = true; if (opts[i].ok) x.classList.add("right"); });
+    if (!o.ok) b.classList.add("wrong");
+    bump(!!o.ok);
+    recordChar(target, !!o.ok);
+    box.querySelector(".cstats").outerHTML = charStatsHTML(pool, target);
+    $("creset").onclick = resetChar;
+    $("fb").className = "feedback " + (o.ok ? "ok" : "no");
+    $("fb").textContent = o.ok ? "Correct!" : `Not quite. ${target} = ${sylLabel(c.k, h)}`;
+    $("after").innerHTML = `<p class="small muted">Whole row: <span class="eth" style="font-size:1.6rem">${[1,2,3,4,5,6,7].map(n => `<span class="h${n}c">${glyph(c, n)}</span>`).join(" ")}</span></p>
+      <button class="btn" id="nx">Next →</button>`;
+    $("nx").onclick = charQ; $("nx").focus();
+  });
+}
+
+// ---------- B: read (Amharic → code/sounds) ----------
+function mutate(ss, cons) {
+  const out = ss.map(s => ({ ...s })); const idx = out.map((s, i) => s.gap ? -1 : i).filter(i => i >= 0);
+  const n = idx.length > 3 && Math.random() < 0.4 ? 2 : 1;
+  shuffle(idx).slice(0, n).forEach(i => {
+    const s = out[i]; const sim = (SIMILAR[s.k] || []).filter(k => cons.some(c => c.k === k));
+    if (sim.length && Math.random() < 0.4) s.k = pick(sim);
+    else { let hh; do { hh = 1 + Math.floor(Math.random() * 7); } while (hh === s.h); s.h = hh; }
+  });
+  return out;
+}
+let readStyle = "code";
+function readQ() {
+  const box = $("p-read"), list = deckList();
+  if (!list.length) { box.innerHTML = `<p>No words match these settings.</p>`; return; }
+  const w = pick(list), ss = sylls(w.am), cons = knownCons();
+  const right = codeStr(ss), seen = new Set([right]), opts = [{ t: right, ok: true }];
+  for (let tries = 0; opts.length < 4 && tries < 60; tries++) { const t = codeStr(mutate(ss, cons)); if (!seen.has(t)) { seen.add(t); opts.push({ t }); } }
+  const sh = shuffle(opts);
+  box.innerHTML = `<p class="muted">Decode it: pick the consonant + house code for each character.</p>
+    <div class="prompt-big">${w.am}</div>
+    <div class="options">${sh.map((o, i) => `<button class="opt" data-i="${i}">${o.t}</button>`).join("")}</div>
+    <div class="feedback" id="rfb"></div><div id="rafter"></div>
+    <p class="small muted">Tip: say it out loud before you look at the answer.</p>`;
+  box.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    const o = sh[+b.dataset.i];
+    box.querySelectorAll(".opt").forEach((x, i) => { x.disabled = true; if (sh[i].ok) x.classList.add("right"); });
+    if (!o.ok) b.classList.add("wrong");
+    bump(!!o.ok);
+    $("rfb").className = "feedback " + (o.ok ? "ok" : "no");
+    $("rfb").textContent = o.ok ? "Correct!" : "Not quite. Here's the breakdown:";
+    $("rafter").innerHTML = breakdownHTML(w.am) +
+      `<div class="prompt-ro">${w.ro}</div><div class="prompt-en">“${w.en}”</div><button class="btn" id="rnx">Next →</button>`;
+    $("rnx").onclick = readQ; $("rnx").focus();
+  });
+}
+
+// ---------- C: write (sounds → Amharic) ----------
+// letters that sound the same are accepted for each other: ሐ/ኀ → ሀ, ሠ → ሰ, ዐ → አ, ፀ → ጸ, and the 4th-house ኣ/ሃ → 1st
+const SAME = {};
+CONS.filter(c => c.same).forEach(c => { for (let h = 1; h <= 7; h++) SAME[glyph(c, h)] = glyph(consByKey[c.same], h); });
+const norm = s => [...s].filter(ch => !PUNCT.has(ch)).map(ch => SAME[ch] || ch).map(ch => ({ "ኣ": "አ", "ሃ": "ሀ" })[ch] || ch).join("");
+function writeQ() {
+  const box = $("p-write"), list = deckList();
+  if (!list.length) { box.innerHTML = `<p>No words match these settings.</p>`; return; }
+  const w = pick(list), ss = sylls(w.am), cons = knownCons();
+  const promptExtra = w.src === "poss" ? `<p class="small muted">Start from <span class="eth" style="font-size:1.4rem">${w.from}</span> and change the last 6th-house character to the 5th house.</p>` : "";
+  box.innerHTML = `<p class="muted">Write this in Amharic. Use the keyboard below, your own Amharic keyboard, or paper.</p>
+    <div class="prompt-ro">${w.ro}</div><div class="prompt-en">“${w.en}”</div>${promptExtra}
+    <div>
+      <button class="btn ghost small" id="h1">hint: tally (${"|"}/${"\\"})</button>
+      <button class="btn ghost small" id="h2">hint: codes</button>
+    </div>
+    <div class="hintline" id="hint"></div>
+    <p><input type="text" class="answer-box" id="ans" lang="am" autocomplete="off" placeholder="…"></p>
+    <div>
+      <button class="btn" id="check">Check</button>
+      <button class="btn ghost" id="paper">I wrote it on paper: show answer</button>
+    </div>
+    <div class="feedback" id="wfb"></div><div id="wafter"></div>
+    <div class="kbd-wrap"><table class="kbd" id="kbd"></table></div>
+    <div class="kbd-extra">
+      <button class="btn ghost small" data-x=" ">space</button>
+      <button class="btn ghost small" data-x="።">። (period)</button>
+      <button class="btn ghost small" data-x="BS">⌫ backspace</button>
+      <button class="btn ghost small" data-x="CLR">clear</button>
+    </div>`;
+  // keyboard
+  $("kbd").innerHTML = `<tr><th></th>${HOUSES.map(h => `<th class="h${h.n}c">${h.n}·${h.say}</th>`).join("")}</tr>` +
+    cons.map(c => `<tr><th>${dispK(c.k)}</th>${HOUSES.map(h => `<td><button class="h${h.n}c" data-x="${glyph(c, h.n)}" title="${codeOf(c.k, h.n)}">${glyph(c, h.n)}</button></td>`).join("")}</tr>`).join("");
+  const ans = $("ans");
+  box.querySelectorAll("[data-x]").forEach(b => b.onclick = () => {
+    const x = b.dataset.x;
+    if (x === "BS") ans.value = [...ans.value].slice(0, -1).join("");
+    else if (x === "CLR") ans.value = "";
+    else ans.value += x;
+  });
+  $("h1").onclick = () => $("hint").textContent = "tally: " + tallyStr(ss);
+  $("h2").onclick = () => $("hint").textContent = "code: " + codeStr(ss);
+  let done = false;
+  const finish = (graded) => {
+    if (done) return; done = true;
+    const a = [...norm(ans.value)], t = [...norm(w.am)];
+    if (graded) {
+      const ok = a.join("") === t.join("");
+      bump(ok);
+      $("wfb").className = "feedback " + (ok ? "ok" : "no");
+      $("wfb").textContent = ok ? "Correct!" : "Not quite. Compare:";
+      if (!ok && a.length) {
+        $("wafter").innerHTML = `<div class="diff">your answer: ${a.map((ch, i) => `<span class="${ch === t[i] ? "ok" : "no"}">${ch}</span>`).join("")}</div>`;
+      }
+    } else {
+      $("wfb").className = "feedback"; $("wfb").innerHTML = `Did you get it? <button class="btn small" id="sg-y">yes ✓</button> <button class="btn ghost small" id="sg-n">no ✗</button>`;
+      const sg = ok => { bump(ok); $("wfb").textContent = ok ? "Nice!" : "Keep practicing!"; };
+      $("sg-y").onclick = () => sg(true); $("sg-n").onclick = () => sg(false);
+    }
+    $("wafter").innerHTML += `<div class="prompt-big" style="font-size:3rem">${w.am}</div>` + breakdownHTML(w.am) + `<br><button class="btn" id="wnx">Next →</button>`;
+    $("wnx").onclick = writeQ;
+  };
+  $("check").onclick = () => finish(true);
+  $("paper").onclick = () => finish(false);
+  ans.onkeydown = e => { if (e.key === "Enter") { done ? writeQ() : finish(true); } };
+}
+
+// ---------- D: vocabulary (meaning) ----------
+// Leitner boxes 0–4 per word: a right answer moves the word up a box, a wrong one sends it back to 0.
+// Low boxes come up much more often. Progress is kept in this browser only.
+const VOCAB_KEY = "amharic-vocab-boxes";
+let vocabBox = {};
+try { vocabBox = JSON.parse(localStorage.getItem(VOCAB_KEY)) || {}; } catch (e) { vocabBox = {}; }
+const saveVocab = () => { try { localStorage.setItem(VOCAB_KEY, JSON.stringify(vocabBox)); } catch (e) {} };
+const boxOf = w => vocabBox[w.am] || 0;
+// meaning without the "(ልብ → ልቤ)" note from the “my …” deck
+const meaning = w => w.en.replace(/\s*\([^)]*→[^)]*\)/, "");
+let vocabMode = "am2en", vocabSounds = false, lastVocab = null;
+function pickVocab(list) {
+  const pool = list.length > 1 ? list.filter(w => w !== lastVocab) : list;
+  const weights = pool.map(w => [16, 8, 4, 2, 1][boxOf(w)]);
+  let r = Math.random() * weights.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) return pool[i]; }
+  return pool[pool.length - 1];
+}
+function vocabDistractors(w, list, n) {
+  const seen = new Set([meaning(w)]), out = [];
+  // prefer words from the same deck so sentences compete with sentences, words with words
+  for (const c of [...shuffle(list.filter(x => x.src === w.src)), ...shuffle(WORDS.filter(x => x.src === w.src)), ...shuffle(list)]) {
+    if (out.length >= n) break;
+    if (c === w || seen.has(meaning(c))) continue;
+    seen.add(meaning(c)); out.push(c);
+  }
+  return out;
+}
+function vocabProgress(list) {
+  const counts = [0, 0, 0, 0, 0]; list.forEach(w => counts[boxOf(w)]++);
+  const labels = ["new / missed", "seen once", "twice", "3 in a row", "learned"];
+  return `<div class="vocab-bar">${counts.map((c, i) => `<div class="b${i}"><b>${c}</b>${labels[i]}</div>`).join("")}</div>`;
+}
+// ---------- sound via Google Translate ----------
+const gtTTS = text => `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=am&q=${encodeURIComponent(text)}`;
+const gtPage = text => `https://translate.google.com/?sl=am&tl=en&op=translate&text=${encodeURIComponent(text)}`;
+let ttsAudio = null;
+function playAm(text, btn) {
+  if (ttsAudio) ttsAudio.pause();
+  ttsAudio = new Audio(gtTTS(text));
+  if (btn) btn.disabled = true;
+  const done = () => { if (btn) btn.disabled = false; };
+  ttsAudio.onended = done;
+  ttsAudio.onerror = () => { done(); alert("Couldn't play the sound directly. Use the “open in Google Translate” link and press the speaker there."); };
+  ttsAudio.play().catch(() => ttsAudio.onerror());
+}
+function soundHTML(text) {
+  return `<div class="sound-row"><button class="btn ghost small" data-say="${text.replace(/"/g, "&quot;")}" title="Play sound (S)">🔊 play sound</button>
+    <a class="small muted" href="${gtPage(text)}" target="_blank" rel="noopener">open in Google Translate ↗</a></div>`;
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) playAm(b.dataset.say, b); });
+
+function vocabQ() {
+  const box = $("p-vocab"), list = deckList();
+  if (!list.length) { box.innerHTML = `<p>No words match these settings.</p>`; return; }
+  const w = pickVocab(list); lastVocab = w;
+  const modeBtns = `<div class="subtabs" style="justify-content:center">
+      <button class="${vocabMode === "am2en" ? "active" : ""}" data-m="am2en">Amharic → meaning</button>
+      <button class="${vocabMode === "en2am" ? "active" : ""}" data-m="en2am">meaning → Amharic</button>
+      <button class="${vocabMode === "flash" ? "active" : ""}" data-m="flash">flashcards</button></div>`;
+  const soundsLine = `<div class="prompt-ro" id="vro" style="${vocabSounds ? "" : "visibility:hidden"}">${w.ro}</div>`;
+  const footer = `<p class="small muted" style="margin-top:16px">
+      <label><input type="checkbox" id="vsounds" ${vocabSounds ? "checked" : ""}> show sounds before answering</label> ·
+      <button class="btn ghost small" id="vreset">reset vocabulary progress</button></p>
+      ${vocabProgress(list)}
+      <p class="small muted">Words you miss come back often. Words you get right several times in a row come back less.</p>`;
+  const after = ok => {
+    vocabBox[w.am] = ok ? Math.min(4, boxOf(w) + 1) : 0; saveVocab(); markDirty("v:" + w.am);
+    bump(ok);
+    $("vfb").className = "feedback " + (ok ? "ok" : "no");
+    $("vfb").textContent = ok ? "Correct!" : "Not yet. This one will come back soon.";
+    $("vafter").innerHTML = `<div class="prompt-big" style="font-size:3rem">${w.am}</div>
+      <div class="prompt-ro">${w.ro}</div><div class="prompt-en">“${w.en}”</div>` + soundHTML(w.am) + breakdownHTML(w.am) +
+      `<br><button class="btn" id="vnx">Next →</button>`;
+    $("vnx").onclick = vocabQ; $("vnx").focus();
+    box.querySelector(".vocab-bar").outerHTML = vocabProgress(list);
+  };
+
+  if (vocabMode === "flash") {
+    box.innerHTML = modeBtns + `<p class="muted">Do you know what this means? Say it out loud, then turn the card over.</p>
+      <div class="prompt-big">${w.am}</div>${soundsLine}${soundHTML(w.am)}
+      <p class="small muted">Tip: press S to play the sound.</p>
+      <div class="flash-answer" id="vflip"><button class="btn" id="vshow">Show meaning</button></div>
+      <div class="feedback" id="vfb"></div><div id="vafter"></div>` + footer;
+    $("vshow").onclick = () => {
+      $("vflip").innerHTML = `<div class="prompt-ro">${w.ro}</div><div class="prompt-en">“${w.en}”</div>
+        <button class="btn" id="vyes">I knew it</button> <button class="btn ghost" id="vno">Not yet</button>`;
+      $("vyes").onclick = () => { $("vflip").innerHTML = ""; after(true); };
+      $("vno").onclick = () => { $("vflip").innerHTML = ""; after(false); };
+      $("vyes").focus();
+    };
+    $("vshow").focus();
+  } else {
+    const opts = shuffle([{ w, ok: true }, ...vocabDistractors(w, list, 3).map(x => ({ w: x }))]);
+    const am2en = vocabMode === "am2en";
+    box.innerHTML = modeBtns + (am2en
+      ? `<p class="muted">What does this mean?</p><div class="prompt-big">${w.am}</div>${soundsLine}${soundHTML(w.am)}`
+      : `<p class="muted">Which one means this?</p><div class="prompt-ro">“${meaning(w)}”</div>`) +
+      `<div class="options">${opts.map((o, i) => am2en
+        ? `<button class="opt en" data-i="${i}">${i + 1}. ${meaning(o.w)}</button>`
+        : `<button class="opt eth" data-i="${i}">${o.w.am}</button>`).join("")}</div>
+      <p class="small muted">Tip: press 1–4 to answer${am2en ? ", S to play the sound" : ""}.</p>
+      <div class="feedback" id="vfb"></div><div id="vafter"></div>` + footer;
+    const choose = i => {
+      const btns = box.querySelectorAll(".opt"); if (btns[i].disabled) return;
+      btns.forEach((x, j) => { x.disabled = true; if (opts[j].ok) x.classList.add("right"); });
+      if (!opts[i].ok) btns[i].classList.add("wrong");
+      after(!!opts[i].ok);
+    };
+    box.querySelectorAll(".opt").forEach(b => b.onclick = () => choose(+b.dataset.i));
+    vocabKeys = e => { if (currentP === "vocab" && /^[1-4]$/.test(e.key) && document.activeElement.tagName !== "INPUT") { const i = +e.key - 1; if (i < opts.length) choose(i); } };
+  }
+  if (vocabMode === "flash") vocabKeys = null;
+  box.querySelectorAll(".subtabs button").forEach(b => b.onclick = () => { vocabMode = b.dataset.m; vocabQ(); });
+  $("vsounds").onchange = e => { vocabSounds = e.target.checked; const r = $("vro"); if (r) r.style.visibility = vocabSounds ? "" : "hidden"; };
+  $("vreset").onclick = () => { if (confirm("Reset vocabulary progress for all words?")) { Object.keys(vocabBox).forEach(am => { vocabBox[am] = 0; markDirty("v:" + am); }); saveVocab(); vocabQ(); } };
+}
+let vocabKeys = null;
+document.addEventListener("keydown", e => {
+  if (currentP === "vocab" && (vocabMode !== "en2am" || $("vnx")) && (e.key === "s" || e.key === "S") && !e.metaKey && !e.ctrlKey && document.activeElement.tagName !== "INPUT" && lastVocab && $("p-vocab").offsetParent) { playAm(lastVocab.am); return; }
+  if (vocabKeys) vocabKeys(e);
+});
+
+// ---------- E: Ge'ez numbers ----------
+const NUM_ONES = [..."፩፪፫፬፭፮፯፰፱"], NUM_TENS = [..."፲፳፴፵፶፷፸፹፺"];
+const NUM_VAL = { "፻": 100, "፼": 10000 };
+NUM_ONES.forEach((g, i) => NUM_VAL[g] = i + 1); NUM_TENS.forEach((g, i) => NUM_VAL[g] = (i + 1) * 10);
+const W1 = [null, ["አንድ", "ānidi"], ["ሁለት", "huleti"], ["ሶስት", "sositi"], ["አራት", "ārati"], ["አምስት", "āmisiti"], ["ስድስት", "sidisiti"], ["ሰባት", "sebati"], ["ስምንት", "siminiti"], ["ዘጠኝ", "zet'enyi"]];
+const W10 = [null, ["አስር", "āsiri"], ["ሃያ", "haya"], ["ሰላሳ", "selasa"], ["አርባ", "āriba"], ["ሀምሳ", "hāmisa"], ["ስልሳ", "silisa"], ["ሰባ", "seba"], ["ሰማንያ", "semaniya"], ["ዘጠና", "zet'ena"]];
+const pairGeez = n => (n >= 10 ? NUM_TENS[Math.floor(n / 10) - 1] : "") + (n % 10 ? NUM_ONES[n % 10 - 1] : "");
+// split into ፼ and ፻ groups; a group of exactly 1 is left out (100 = ፻, not ፩፻)
+function toGeez(n) {
+  if (n >= 10000) { const hi = Math.floor(n / 10000), lo = n % 10000; return (hi === 1 ? "" : toGeez(hi)) + "፼" + (lo ? toGeez(lo) : ""); }
+  const hi = Math.floor(n / 100), lo = n % 100;
+  return (hi ? (hi === 1 ? "" : pairGeez(hi)) + "፻" : "") + pairGeez(lo);
+}
+// the number in words, as [amharic, sounds] pairs: 47 → አርባ ሰባት
+function numParts(n) {
+  if (n >= 1000) { const k = Math.floor(n / 1000); return [...(k > 1 ? numParts(k) : []), ["ሺ", "shī"], ...numParts(n % 1000)]; }
+  if (n >= 100) { const h = Math.floor(n / 100); return [...(h > 1 ? [W1[h]] : []), ["መቶ", "meto"], ...numParts(n % 100)]; }
+  const t = Math.floor(n / 10), o = n % 10;
+  if (t === 1 && o) return [["አስራ", "āsira"], W1[o]];
+  return [...(t ? [W10[t]] : []), ...(o ? [W1[o]] : [])];
+}
+const numWord = n => { const p = numParts(n); return { am: p.map(x => x[0]).join(" "), ro: p.map(x => x[1]).join(" ") }; };
+const fmtNum = n => n.toLocaleString("en-US");
+const numTile = (g, v) => { const w = numWord(v); return `<div class="tile"><div class="g">${g}</div><div class="s">${fmtNum(v)}</div><div class="m"><span class="eth">${w.am}</span><br>${w.ro}</div></div>`; };
+// symbol by symbol, with the value of each: ፫፻፷፭ → ፫ 3 · ፻ 100 · ፷ 60 · ፭ 5
+const numBreakdown = n => `<div class="breakdown">${[...toGeez(n)].map(g => `<div class="syl"><div class="g">${g}</div><div class="c">${fmtNum(NUM_VAL[g])}</div></div>`).join("")}</div>`;
+
+$("num-ones").innerHTML = NUM_ONES.map((g, i) => numTile(g, i + 1)).join("");
+$("num-tens").innerHTML = NUM_TENS.map((g, i) => numTile(g, (i + 1) * 10)).join("");
+$("num-big").innerHTML = numTile("፻", 100) + numTile("፼", 10000);
+$("num-examples").innerHTML = [[15], [47], [99], [100], [365], [1000], [2019, "this year in the Ethiopian calendar"], [10000]].map(([n, note]) => {
+  const w = numWord(n);
+  return `<tr><td class="am">${toGeez(n)}</td><td><b>${fmtNum(n)}</b>${note ? ` <span class="muted small">(${note})</span>` : ""}</td><td><span class="eth">${w.am}</span> <span class="muted">${w.ro}</span></td></tr>`;
+}).join("");
+
+const NUM_RANGES = [["1–10", 1, 10], ["11–20", 11, 20], ["1–20", 1, 20], ["21–50", 21, 50], ["1–50", 1, 50], ["51–100", 51, 100], ["1–100", 1, 100], ["100–1,000", 100, 1000], ["1–10,000", 1, 10000]];
+let numMode = "g2n", numRange = 6, lastNum = null;
+function pickNum() {
+  const [, lo, hi] = NUM_RANGES[numRange];
+  let n;
+  do {
+    n = lo + Math.floor(Math.random() * (hi - lo + 1));
+    // in the big ranges, also ask round numbers like 300 or 2,000
+    if (hi >= 1000 && Math.random() < 0.3) { const step = pick([10, 100, 1000].filter(s => s * 2 <= hi)); n = Math.max(lo, Math.round(n / step) * step); }
+  } while (n === lastNum && hi > lo);
+  return lastNum = n;
+}
+// wrong answers that are easy to mix up: off by one, off by ten, digits swapped, …
+function numDistractors(n) {
+  const [, lo, hi] = NUM_RANGES[numRange], t = Math.floor(n % 100 / 10), o = n % 10;
+  const cand = [n + 1, n - 1, n + 10, n - 10, n + 9, n - 9, n + 100, n - 100, t && o && t !== o ? n - t * 10 - o + o * 10 + t : 0, n * 10, Math.floor(n / 10)];
+  const ok = x => x > 0 && x !== n && x <= Math.max(hi * 1.2, hi + 10);
+  const out = shuffle([...new Set(cand.filter(ok))]).slice(0, 3);
+  while (out.length < 3) { const x = lo + Math.floor(Math.random() * (hi - lo + 1)); if (x !== n && !out.includes(x)) out.push(x); }
+  return out;
+}
+let numKeys = null;
+document.addEventListener("keydown", e => { if (numKeys) numKeys(e); });
+function numQ() {
+  const box = $("p-num"), n = pickNum(), g = toGeez(n), w = numWord(n);
+  numKeys = null;
+  const modeBtns = `<div class="subtabs" style="justify-content:center">
+      <button class="${numMode === "g2n" ? "active" : ""}" data-m="g2n">Ge'ez → number</button>
+      <button class="${numMode === "n2g" ? "active" : ""}" data-m="n2g">number → Ge'ez</button>
+      <button class="${numMode === "build" ? "active" : ""}" data-m="build">write it</button></div>
+    <p><label>Numbers: <select id="nrange">${NUM_RANGES.map((r, i) => `<option value="${i}" ${i === numRange ? "selected" : ""}>${r[0]}</option>`).join("")}</select></label></p>`;
+  const reveal = ok => {
+    bump(ok);
+    $("nfb").className = "feedback " + (ok ? "ok" : "no");
+    $("nfb").textContent = ok ? "Correct!" : `Not quite. ${g} = ${fmtNum(n)}`;
+    $("nafter").innerHTML = `<div class="prompt-big" style="font-size:3rem">${g} = ${fmtNum(n)}</div>${numBreakdown(n)}
+      <p>say it: <span class="eth" style="font-size:1.4rem">${w.am}</span> <span class="muted">(${w.ro})</span></p>
+      <button class="btn" id="nnx">Next →</button>`;
+    $("nnx").onclick = numQ; $("nnx").focus();
+  };
+
+  if (numMode === "build") {
+    box.innerHTML = modeBtns + `<p class="muted">Write this number with Ge'ez symbols.</p><div class="prompt-ro">${fmtNum(n)}</div>
+      <div class="prompt-en">“${w.ro}”</div>
+      <p><input type="text" class="answer-box" id="nans" autocomplete="off" placeholder="…"></p>
+      <div><button class="btn" id="ncheck">Check</button></div>
+      <div class="feedback" id="nfb"></div><div id="nafter"></div>
+      <table class="kbd">
+        <tr><th>ones</th>${NUM_ONES.map(x => `<td><button data-x="${x}" title="${NUM_VAL[x]}">${x}</button></td>`).join("")}</tr>
+        <tr><th>tens</th>${NUM_TENS.map(x => `<td><button data-x="${x}" title="${NUM_VAL[x]}">${x}</button></td>`).join("")}</tr>
+        <tr><th></th><td><button data-x="፻" title="100">፻</button></td><td><button data-x="፼" title="10,000">፼</button></td></tr>
+      </table>
+      <div class="kbd-extra">
+        <button class="btn ghost small" data-x="BS">⌫ backspace</button>
+        <button class="btn ghost small" data-x="CLR">clear</button>
+      </div>`;
+    const ans = $("nans");
+    let done = false;
+    const check = () => {
+      if (done) return numQ(); done = true;
+      const a = ans.value.replace(/\s/g, ""), ok = a === g;
+      reveal(ok);
+      if (!ok && a) $("nafter").insertAdjacentHTML("afterbegin", `<div class="diff">your answer: ${[...a].map((ch, i) => `<span class="${ch === [...g][i] ? "ok" : "no"}">${ch}</span>`).join("")}</div>`);
+    };
+    box.querySelectorAll("[data-x]").forEach(b => b.onclick = () => {
+      const x = b.dataset.x;
+      if (x === "BS") ans.value = [...ans.value].slice(0, -1).join("");
+      else if (x === "CLR") ans.value = "";
+      else ans.value += x;
+    });
+    $("ncheck").onclick = check;
+    ans.onkeydown = e => { if (e.key === "Enter") check(); };
+  } else {
+    const opts = shuffle([n, ...numDistractors(n)]), g2n = numMode === "g2n";
+    box.innerHTML = modeBtns + (g2n
+      ? `<p class="muted">Which number is this?</p><div class="prompt-big">${g}</div>
+         <div class="options">${opts.map((x, i) => `<button class="opt en" data-i="${i}">${fmtNum(x)}</button>`).join("")}</div>`
+      : `<p class="muted">Which is this number in Ge'ez?</p><div class="prompt-ro">${fmtNum(n)}</div>
+         <div class="options">${opts.map((x, i) => `<button class="opt eth" data-i="${i}">${toGeez(x)}</button>`).join("")}</div>`)
+      + `<p class="small muted">Tip: press 1–4 to answer.</p><div class="feedback" id="nfb"></div><div id="nafter"></div>`;
+    const choose = i => {
+      if (box.querySelector(".opt:disabled")) return;
+      const ok = opts[i] === n;
+      box.querySelectorAll(".opt").forEach((x, j) => { x.disabled = true; if (opts[j] === n) x.classList.add("right"); });
+      if (!ok) box.querySelectorAll(".opt")[i].classList.add("wrong");
+      reveal(ok);
+    };
+    box.querySelectorAll(".opt").forEach(b => b.onclick = () => choose(+b.dataset.i));
+    numKeys = e => { if (currentP === "num" && /^[1-4]$/.test(e.key) && document.activeElement.tagName !== "INPUT") choose(+e.key - 1); };
+  }
+  box.querySelectorAll(".subtabs button").forEach(b => b.onclick = () => { numMode = b.dataset.m; numQ(); });
+  $("nrange").onchange = e => { numRange = +e.target.value; numQ(); };
+}
+
+// ============================================================
+// WORKSHEET
+// ============================================================
+// How much each character still needs practice, from the character drill record (0 = known well).
+//  - characters you miss count most (0.5 … 1.2, more the weaker they are),
+//  - characters you've drilled only a few times count too (0.6 after one try, down to 0.15 after four),
+//  - characters you haven't drilled count a little (0.15: there are many of them, so more would crowd out the rest), when "also count characters I haven't drilled yet" is on.
+function charNeed(ch, unseen) {
+  const r = charStats.c[ch];
+  if (!r) return unseen ? 0.15 : 0;
+  const weak = r.s < WEAK ? 1.2 - r.s : 0;
+  const little = r.n < 5 ? 0.15 * (5 - r.n) : 0;
+  return weak + little;
+}
+function wsFocusChars() {
+  const groups = levelGroups($("level").value), unseen = $("ws-unseen").checked;
+  return CONS.filter(c => groups.includes(c.grp)).flatMap(c => [1, 2, 3, 4, 5, 6, 7].map(h => glyph(c, h)))
+    .map(ch => ({ ch, need: charNeed(ch, unseen) })).filter(x => x.need > 0).sort((a, b) => b.need - a.need);
+}
+// Pick n words that use the focus characters. Each pick is a random draw, weighted by how much "need" the
+// word's characters still have, so words with several weak characters are likelier but every worksheet is
+// different. A character's need halves each time a picked word uses it, so the picks spread over all of them.
+function pickFocusWords(list, focus, n) {
+  const need = Object.fromEntries(focus.map(x => [x.ch, x.need])), out = [];
+  const pool = list.slice();
+  const score = w => [...new Set(w.am)].reduce((a, ch) => a + (need[ch] || 0), 0);
+  while (out.length < n && pool.length) {
+    const w8 = pool.map(score), total = w8.reduce((a, b) => a + b, 0);
+    if (total <= 0) break;
+    let r = Math.random() * total, bi = w8.findIndex(x => (r -= x) < 0 && x > 0);
+    if (bi < 0) bi = w8.findLastIndex(x => x > 0);
+    const w = pool.splice(bi, 1)[0]; out.push(w);
+    new Set(w.am).forEach(ch => { if (need[ch]) need[ch] /= 2; });
+  }
+  return shuffle(out);
+}
+function updateWsInfo() {
+  const weak = $("ws-mode").value === "weak";
+  $("ws-weak-opts").style.display = weak ? "" : "none";
+  if (!weak) { $("ws-info").textContent = ""; return; }
+  const focus = wsFocusChars();
+  $("ws-info").innerHTML = focus.length
+    ? `${focus.length} focus characters from your character drill (most practice needed first): <span class="eth" style="font-size:1.2rem">${focus.slice(0, 40).map(x => x.ch).join(" ")}${focus.length > 40 ? " …" : ""}</span>`
+    : "No characters to focus on yet: use the character drill first, or tick “also count characters I haven't drilled yet”.";
+}
+["ws-mode", "ws-unseen"].forEach(id => $(id).onchange = updateWsInfo);
+document.querySelectorAll('#tab-worksheet, nav button[data-tab="worksheet"]').forEach(el => el.addEventListener("click", updateWsInfo));
+$("level").addEventListener("change", updateWsInfo);
+
+// Split picked items into the two parts, alternating so both parts get some of the best ones.
+function splitParts(picked) {
+  const a = picked.filter((_, i) => i % 2 === 0), b = picked.filter((_, i) => i % 2 === 1);
+  return [a, b.length ? b : a.slice()];
+}
+$("ws-gen").onclick = () => {
+  const n = +$("ws-n").value, weak = $("ws-mode").value === "weak", withSent = $("ws-sent").checked;
+  const level = $("level").value, groups = levelGroups(level);
+  // words come from the chosen decks; sentences come from the sentence deck whenever "include short sentences" is on
+  const words = shuffle(deckList().filter(w => w.src !== "sent" || !withSent));
+  const sents = withSent ? shuffle(WORDS.filter(w => w.src === "sent" && wordKnown(w, groups) && wordFocused(w, level))) : [];
+  const fail = msg => { $("worksheet").innerHTML = `<p>${msg}</p>`; $("worksheet").classList.add("show"); };
+  if (!words.length && !sents.length) return fail("No words match the practice settings.");
+  const nSent = !sents.length ? 0 : words.length ? Math.round(n / 3) : n, nWord = n - nSent;
+  let w1, w2, s1, s2, focus = [];
+  if (weak) {
+    focus = wsFocusChars();
+    if (!focus.length) return fail("No characters to focus on yet. Use the character drill first, or tick “also count characters I haven't drilled yet”.");
+    [w1, w2] = splitParts(pickFocusWords(words, focus, 2 * nWord));
+    [s1, s2] = splitParts(pickFocusWords(sents, focus, 2 * nSent));
+    if (!w1.length && !s1.length) return fail("None of the words in the chosen decks use your focus characters. Turn on more decks.");
+  } else {
+    [w1, w2] = splitParts(words.slice(0, 2 * nWord));
+    [s1, s2] = splitParts(sents.slice(0, 2 * nSent));
+  }
+  // words first, then sentences
+  const p1 = [...w1, ...s1], p2f = [...w2, ...s2];
+  const cls = w => w.src === "sent" ? "ws-item sent" : "ws-item";
+  const copyRow = weak && $("ws-copy").checked ? focus.slice(0, 24) : [];
+  const today = new Date().toLocaleDateString();
+  $("worksheet").innerHTML = `
+    <h2>Amharic worksheet <span class="muted small">(${today})</span></h2>
+    ${weak ? `<p class="small muted">Focus characters: <span class="eth" style="font-size:1.2rem">${focus.slice(0, 40).map(x => x.ch).join(" ")}</span></p>` : ""}
+    ${copyRow.length ? `<h3>Warm-up: copy each character three times.</h3>
+    <div class="ws-copy">${copyRow.map(x => `<div class="ws-item"><span class="q am">${x.ch}</span><span class="muted small" style="width:48px">${romanize(x.ch)}</span><span class="ws-line"></span></div>`).join("")}</div>` : ""}
+    <h3${copyRow.length ? ' style="margin-top:28px"' : ""}>Part 1: Read. Write the sounds and the meaning.</h3>
+    ${p1.map((w, i) => `<div class="${cls(w)}"><span class="n">${i + 1}.</span><span class="q am">${w.am}</span><span class="ws-line"></span></div>`).join("")}
+    <h3 style="margin-top:28px">Part 2: Write it in Amharic.</h3>
+    ${p2f.map((w, i) => `<div class="${cls(w)}"><span class="n">${i + 1}.</span><span class="q"><b>${w.ro}</b><br><span class="muted small">${w.en}</span></span><span class="ws-line"></span></div>`).join("")}
+    <div class="ws-key">
+      <h3 style="margin-top:28px">Answer key</h3>
+      <p><b>Part 1</b></p>
+      <table class="wordtable">${p1.map((w, i) => `<tr><td>${i + 1}.</td><td class="am">${w.am}</td><td><b>${w.ro}</b></td><td>${w.en}</td><td class="code">${codeStr(sylls(w.am))}</td></tr>`).join("")}</table>
+      <p><b>Part 2</b></p>
+      <table class="wordtable">${p2f.map((w, i) => `<tr><td>${i + 1}.</td><td><b>${w.ro}</b></td><td class="am">${w.am}</td><td class="code">${codeStr(sylls(w.am))}</td></tr>`).join("")}</table>
+    </div>`;
+  $("worksheet").classList.add("show");
+};
+$("ws-print").onclick = () => { if (!$("worksheet").classList.contains("show")) $("ws-gen").onclick(); window.print(); };
+
+// init
+updateDeckCount();
+updateWsInfo();
+charQ();
+
+// ============================================================
+// SYNC: progress is merged with a Google Sheet (Apps Script web app)
+// Each piece of progress is one item: "v:<word>" (vocabulary box), "c:<char>" (character stats),
+// "s:vsize" (vocabulary size). Every item carries the time it last changed; the newer one wins.
+// ============================================================
+const SYNC_CFG_KEY = "amharic-sync-config", SYNC_TS_KEY = "amharic-sync-times", SYNC_PENDING_KEY = "amharic-sync-pending";
+const loadJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+const saveJSON = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+let syncCfg = loadJSON(SYNC_CFG_KEY, null), syncTimes = loadJSON(SYNC_TS_KEY, {}), syncPending = new Set(loadJSON(SYNC_PENDING_KEY, []));
+let syncTimer = null, syncBusy = false, syncAgain = false;
+
+function markDirty(key, deleted) {
+  syncTimes[key] = Date.now(); syncPending.add(key);
+  if (deleted) syncTimes["x:" + key] = 1;  // remembered so the value is sent as null
+  saveJSON(SYNC_TS_KEY, syncTimes); saveJSON(SYNC_PENDING_KEY, [...syncPending]);
+  if (syncCfg) { clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 2500); }
+}
+function syncValue(key) {
+  if (syncTimes["x:" + key]) return null;
+  const [kind, name] = [key.slice(0, 1), key.slice(2)];
+  if (kind === "v") return vocabBox[name] ?? 0;
+  if (kind === "c") return charStats.c[name] ?? null;
+  if (kind === "s" && name === "vsize") return vocabSize;
+  return null;
+}
+function applyRemote(key, v) {
+  const [kind, name] = [key.slice(0, 1), key.slice(2)];
+  if (kind === "v") { if (v) vocabBox[name] = v; else delete vocabBox[name]; }
+  else if (kind === "c") { if (v) { charStats.c[name] = v; charStats.q = Math.max(charStats.q, v.q || 0); } else delete charStats.c[name]; }
+  else if (kind === "s" && name === "vsize" && v) { vocabSize = Math.max(5, Math.min(ALL_WORD_COUNT, +v)); try { localStorage.setItem(VSIZE_KEY, vocabSize); } catch (e) {} $("vsize").value = $("vsize-range").value = vocabSize; }
+}
+function setSyncStatus(state, text) {
+  const pill = $("sync-pill"); pill.className = "sync-pill " + state; pill.textContent = "☁ " + text;
+}
+async function syncNow() {
+  if (!syncCfg) return;
+  if (syncBusy) { syncAgain = true; return; }
+  syncBusy = true; clearTimeout(syncTimer); setSyncStatus("", "syncing…");
+  const sent = [...syncPending], sentAt = Object.fromEntries(sent.map(k => [k, syncTimes[k]]));
+  try {
+    const res = await fetch(syncCfg.url, { method: "POST", body: JSON.stringify({
+      token: syncCfg.token, items: sent.map(k => ({ k, v: syncValue(k), t: syncTimes[k] || 1 })) }) });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "the sheet refused the update");
+    sent.forEach(k => { if (syncTimes[k] === sentAt[k]) { syncPending.delete(k); delete syncTimes["x:" + k]; } });
+    let changed = 0;
+    for (const it of data.items || []) {
+      if (syncPending.has(it.k)) continue;            // changed again on this device while syncing
+      if (!syncTimes[it.k] || it.t > syncTimes[it.k]) { applyRemote(it.k, it.v); syncTimes[it.k] = it.t; changed++; }
+    }
+    saveJSON(SYNC_TS_KEY, syncTimes); saveJSON(SYNC_PENDING_KEY, [...syncPending]);
+    if (changed) { saveVocab(); saveChar(); updateDeckCount(); refreshProgressViews(); }
+    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    setSyncStatus("ok", "synced " + time); $("sync-msg").textContent = `Synced at ${time}. ${(data.items || []).length} items in the sheet.`;
+  } catch (e) {
+    setSyncStatus("err", "sync failed");
+    $("sync-msg").textContent = "Sync failed: " + (e.message || e) + ". Check the address and secret word. Your progress is still saved on this device and will be sent next time.";
+  } finally {
+    syncBusy = false;
+    if (syncAgain) { syncAgain = false; syncNow(); }
+  }
+}
+// update progress displays without changing the current question
+function refreshProgressViews() {
+  const bar = document.querySelector("#p-vocab .vocab-bar"); if (bar) bar.outerHTML = vocabProgress(deckList());
+  if (currentP === "char" && !document.querySelector("#p-char .opt:disabled")) charQ();
+}
+function startSync(cfg, firstTime) {
+  syncCfg = cfg; saveJSON(SYNC_CFG_KEY, cfg);
+  if (firstTime) {
+    // send what this device already knows; very old times so the sheet wins where it has newer progress
+    Object.keys(vocabBox).forEach(am => { const k = "v:" + am; if (!syncTimes[k]) { syncTimes[k] = 1; syncPending.add(k); } });
+    Object.entries(charStats.c).forEach(([ch, r]) => { const k = "c:" + ch; if (!syncTimes[k]) { syncTimes[k] = r.t || 1; syncPending.add(k); } });
+  }
+  syncNow();
+}
+$("sync-pill").onclick = () => {
+  document.querySelector("#nav [data-tab=practice]").click();
+  const card = $("sync-card"); card.hidden = false; card.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (syncCfg) { $("sync-url").value = syncCfg.url; $("sync-token").value = syncCfg.token; }
+};
+$("sync-save").onclick = () => {
+  const url = $("sync-url").value.trim(), token = $("sync-token").value.trim();
+  if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(url)) { $("sync-msg").textContent = "The address should start with https://script.google.com/macros/s/ and end with /exec."; return; }
+  if (!token) { $("sync-msg").textContent = "Enter the secret word you put in the script (TOKEN)."; return; }
+  startSync({ url, token }, true);
+};
+$("sync-off").onclick = () => {
+  syncCfg = null; try { localStorage.removeItem(SYNC_CFG_KEY); } catch (e) {}
+  setSyncStatus("", "sync: off"); $("sync-msg").textContent = "Sync is off on this device. Your progress stays here.";
+};
+$("sync-link").onclick = async () => {
+  const url = $("sync-url").value.trim() || syncCfg?.url, token = $("sync-token").value.trim() || syncCfg?.token;
+  if (!url || !token) { $("sync-msg").textContent = "Fill in the address and secret word first."; return; }
+  const link = location.origin + location.pathname + "#sync=" + btoa(unescape(encodeURIComponent(JSON.stringify({ url, token }))));
+  try { await navigator.clipboard.writeText(link); $("sync-msg").textContent = "Copied. Open this link once on your phone to turn sync on there."; }
+  catch (e) { $("sync-msg").textContent = "Copy this link and open it once on your phone: " + link; }
+};
+// a setup link (#sync=...) turns sync on, then the secret is removed from the address bar
+(function readSetupLink() {
+  const m = location.hash.match(/^#sync=(.+)$/); if (!m) return;
+  try {
+    const cfg = JSON.parse(decodeURIComponent(escape(atob(m[1]))));
+    history.replaceState(null, "", location.pathname);
+    if (cfg.url && cfg.token) { startSync(cfg, true); alert("Sync is on for this device. Your progress will now be shared with your other devices."); }
+  } catch (e) {}
+})();
+if (syncCfg) syncNow();
+document.addEventListener("visibilitychange", () => { if (syncCfg && (document.visibilityState === "visible" || syncPending.size)) syncNow(); });
+</script>
+</body>
+</html>
