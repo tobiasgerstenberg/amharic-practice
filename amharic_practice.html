@@ -16,6 +16,7 @@
     --eth: "Noto Sans Ethiopic", "Kefa", "Abyssinica SIL", "Nyala", sans-serif;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
   header { background: var(--accent); color: #fff; padding: 22px 28px 0; }
   header h1 { margin: 0 0 4px; font-size: 1.6rem; }
@@ -184,6 +185,18 @@
   .ws-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
   .ws-copy .ws-item { margin: 8px 0; }
   .ws-copy .q.am { min-width: 44px; }
+  /* Modules */
+  .word-choice { margin-top: 6px; }
+  .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; margin: 8px 0; }
+  .mod { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: #fff; cursor: pointer; font-size: .88rem; }
+  .mod:hover { border-color: var(--accent); }
+  .mod.on { border-color: var(--accent); background: var(--accent-soft); }
+  .mod input { grid-row: span 2; margin: 0; }
+  .mod .mn { font-weight: 600; line-height: 1.25; }
+  .mod .mm { color: var(--muted); font-size: .78rem; display: flex; align-items: center; gap: 6px; }
+  .mod .mbar { flex: 1; height: 5px; border-radius: 3px; background: #e9e4da; overflow: hidden; }
+  .mod .mbar i { display: block; height: 100%; background: var(--accent); }
+
   /* Sync */
   header { position: relative; }
   .sync-pill { position: absolute; top: 14px; right: 16px; background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 4px 12px; font-size: .8rem; cursor: pointer; }
@@ -387,7 +400,8 @@
 <section class="tab" id="tab-words">
   <div class="card">
     <h2>Vocabulary</h2>
-    <p class="small muted">All the words, from class and beyond, in the order the <b>Vocabulary size</b> setting in Practice uses: most useful first.</p>
+    <p class="small muted">All the words, from class and beyond.
+      <label>Group by <select id="words-group"><option value="modules">module (topic)</option><option value="useful">usefulness</option></select></label></p>
     <p class="small muted">The <b>code</b> column uses your notes' notation: consonant + house number (e.g. <code>K7 K4 K7 L4</code> = coca cola). The <b>tally</b> column shows <code>|</code> for a heard vowel and <code>\</code> for the 6th house.
       A <span class="unk">dotted underline</span> marks a character that isn't in the chart, like the combined forms <span class="eth">ሷ</span> or <span class="eth">ጓ</span>.</p>
     <div style="overflow-x:auto"><table class="wordtable" id="words-all"></table></div>
@@ -529,7 +543,17 @@
       <label><input type="checkbox" value="verb" checked> verb endings</label>
       <label><input type="checkbox" value="sent"> sentences</label>
     </div>
-    <div class="decks vsize-row">
+    <div class="decks word-choice" id="word-choice">
+      <b>Which words:</b>
+      <label><input type="radio" name="wchoice" value="top"> the most useful words</label>
+      <label><input type="radio" name="wchoice" value="modules"> by topic (modules)</label>
+    </div>
+    <div id="modules-box" hidden>
+      <p class="small muted">Pick one or more modules. Each module is a topic, like a chapter in a textbook. The bar shows how many of its words you have learned.</p>
+      <div class="mod-grid" id="mod-grid"></div>
+      <p class="sync-actions"><button class="btn ghost small" id="mod-none">clear selection</button></p>
+    </div>
+    <div class="decks vsize-row" id="vsize-box">
       <b>Vocabulary size:</b>
       <label>the <input type="number" id="vsize" min="5" step="5" style="width:4.5em"> most useful words</label>
       <input type="range" id="vsize-range" min="5" step="5" style="flex:1;min-width:140px;max-width:320px">
@@ -1834,6 +1858,39 @@ const USEFUL_RANK = {};
 }
 const TIER_NAMES = ["essentials", "very common", "everyday", "more words", "names, places & other spellings"];
 
+// ---- modules: the words grouped by topic, like chapters of a textbook ----
+const MODULES = [
+  { id: "greet", name: "Greetings & first words", words: `ሰላም, ጤና ይስጥልኝ, አመሰግናለሁ, አዎ, አይ, እሺ, ይቅርታ, እባክህ, እባክሽ, ደህና, ደህና ሁን, ደህና ሁኚ, ምንም አይደል, ጎበዝ, በቃ, ቆይ, ና, ኑ, ሂድ, ሂጂ, ጤና, ደስ የሚል` },
+  { id: "people", name: "Me, you & other people", words: `እኔ, አንተ, አንቺ, እሱ, እኛ, እናንተ, እነሱ, ነኝ, ነን, አለ, ሰው, ሰዎች, ስም, ወንድ, ሴት, ሴቶች, ልጅ, ልጆች, ሕፃን, ልጃገረድ, ወጣት, ሽማግሌ, ጎረቤት, እንግዳ, ሕዝብ, ጀግና, ጌታ, ጾታ, ሐበሻ, ዐረብ, ኦሮሞ` },
+  { id: "family", name: "Family", words: `ቤተሰብ, አባት, እናት, ወንድም, እህት, ባል, ሚስት, አያት, አጎት, አክስት, ዘመድ, ባለቤት, ልደት` },
+  { id: "numbers", name: "Numbers", words: `አንድ, ሁለት, ሶስት, አራት, አምስት, ስድስት, ሰባት, ስምንት, ዘጠኝ, አስር, ሃያ, ሰላሳ, አርባ, ሀምሳ, ስልሳ, ሰባ, ሰማንያ, ዘጠና, መቶ, ሺ, ሚሊዮን, ሲሶ, ቁጥር, ኪሎ, ሦስት` },
+  { id: "time", name: "Time & days", words: `ዛሬ, ነገ, ትናንት, አሁን, ቀን, ጊዜ, ጠዋት, ቀትር, ከሰዓት, ማታ, ምሽት, ሌሊት, ሳምንት, ወር, ዓመት, ሰዓት, ደቂቃ, ሰኞ, ማክሰኞ, ረቡዕ, ሐሙስ, ዓርብ, ቅዳሜ, እሁድ, ሁልጊዜ, አንዳንድ ጊዜ, ገና, ቶሎ, ቀስ በቀስ` },
+  { id: "months", name: "Ethiopian months", words: `መስከረም, ጥቅምት, ህዳር, ኅዳር, ታህሳስ, ጥር, የካቲት, መጋቢት, ሚያዝያ, ግንቦት, ሰኔ, ሐምሌ, ነሐሴ, ጳጉሜ` },
+  { id: "food", name: "Food & drink", words: `ውሃ, ምግብ, ቡና, ሻይ, ዳቦ, እንጀራ, ወተት, ስጋ, ዶሮ, ወጥ, ዶሮ ወጥ, ሽሮ, እንቁላል, ሩዝ, ቁርስ, ምሳ, እራት, ጨው, ቢራ, ጠጅ, ጠላ, ጁስ, ጥብስ, ክትፎ, ፍርፍር, ሾርባ, ጤፍ, ቂጣ, ዱቄት, ፉርኖ, ቅቤ, ዘይት, ማር, አይብ, በርበሬ, ቅመም, ዝንጅብል, ነጭ ሽንኩርት, ሽንኩርት, ቲማቲም, ድንች, ጎመን, ካሮት, ዱባ, ምስር, ባቄላ, ሽምብራ, በቆሎ, ገብስ, ስንዴ, ቃሪያ, ኦቾሎኒ, ቆሎ, ዳቦ ቆሎ, ጮማ, ከረሜላ, ቸኮሌት, ኬክ, ፒዛ, ፓስታ, ኮካ ኮላ, ፔፕሲ, ቮድካ, ዊስኪ` },
+  { id: "fruit", name: "Fruit & vegetables", words: `ፍራፍሬ, ፍሬ, ሙዝ, ሎሚ, ብርቱካን, ማንጎ, አናናስ, ፓፓያ, አቮካዶ, ወይን, ኮክ, ሸንኮራ, ሾላ` },
+  { id: "kitchen", name: "Kitchen & home", words: `ቤት, በር, መስኮት, ወንበር, ጠረጴዛ, አልጋ, ሳሎን, ኩሽና, መኝታ ቤት, ሽንት ቤት, ግድግዳ, ጣሪያ, ደረጃ, ፎቅ, ሶፋ, ቁም ሳጥን, ትራስ, ብርድ ልብስ, መብራት, ሻማ, ቁልፍ, ሣጥን, ሳሙና, ፎጣ, መስታወት, መጥረጊያ, ባልዲ, ማንኪያ, ሹካ, ቢላዋ, ሳህን, ሰሀን, ኩባያ, ብርጭቆ, ሲኒ, ጀበና, ድስት, ምድጃ, ጠርሙስ, ቪላ, ጎጆ` },
+  { id: "things", name: "Everyday things", words: `ስልክ, ሞባይል, ኮምፒዩተር, ኮምፒውተር, ቲቪ, ቴሌቪዥን, ሬዲዮ, ፎቶ, ቪዲዮ, ኢሜይል, ቦርሳ, ሻንጣ, ዣንጥላ, ገንዘብ, ብር, ዋጋ, ቼክ, ሂሳብ, ሒሳብ, መቀስ, ገመድ, ፌስታል, ቱቦ, ዕቃ, ስጦታ, ኪስ, ጌጥ, ቀለበት, መነጽር, ጊታር, ፒያኖ, ብረት, ወርቅ, እንጨት, ጨርቅ, ቆዳ, ኖራ, ቤንዚን` },
+  { id: "body", name: "Body & health", words: `ራስ, ጭንቅላት, ፊት, አይን, ጆሮ, አፍንጫ, አፍ, ምላስ, ጥርስ, ከንፈር, ጉንጭ, ጸጉር, ፀጉር, ጺም, ፂም, አንገት, ትከሻ, ጉሮሮ, እጅ, ጣት, ሌባ ጣት, እግር, ጉልበት, ጀርባ, ሆድ, ልብ, ደም, አጥንት, ጤናማ, ቫይረስ, ሆስፒታል, ሀኪም, ሐኪም, ዶክተር, ነርስ` },
+  { id: "clothes", name: "Clothes", words: `ልብስ, ቀሚስ, ሸሚዝ, ሱሪ, ጃኬት, ጂንስ, ሹራብ, ካልሲ, ጫማ, ኮፍያ, ቀበቶ, ነጠላ` },
+  { id: "town", name: "Town & places", words: `ከተማ, ሀገር, መንደር, ገጠር, ቀበሌ, መንገድ, ጎዳና, ሱቅ, ገበያ, ባንክ, ሆቴል, ሬስቶራንት, ቡና ቤት, ዳቦ ቤት, ፖስታ ቤት, ቢሮ, ፋብሪካ, ኩባንያ, ኤምባሲ, ፓርላማ, ቤተ መንግስት, ቤተ መጻሕፍት, ሲኒማ, ሲኒማ ቤት, ቲያትር, ፓርክ, መናፈሻ, ሜዳ, ቦታ, ደጅ, ኬላ, ድልድይ, ፖሊስ, ዘብ` },
+  { id: "travel", name: "Travel & transport", words: `መኪና, ታክሲ, አውቶቡስ, ባቡር, አውሮፕላን, ኤርፖርት, ጣቢያ, ብስክሌት, ጀልባ, መርከብ, ጉዞ, ቲኬት, ቪዛ, ፓስፖርት, ፖስታ, ደብዳቤ, ቱሪስት, ሾፌር, ሹፌር, ሩቅ, ቅርብ, ቀኝ, ግራ, ጎን, ዙሪያ` },
+  { id: "nature", name: "Nature & weather", words: `ፀሐይ, ጨረቃ, ኮከብ, ሰማይ, ደመና, ዝናብ, ነፋስ, በረዶ, ጭጋግ, መብረቅ, ቀስተ ደመና, ሙቀት, ብርድ, ጨለማ, ብርሃን, መሬት, ተራራ, ኮረብታ, ገደል, ወንዝ, ሀይቅ, ሐይቅ, ባህር, ደሴት, ምንጭ, ሞገድ, በረሃ, ጫካ, ዱር, ዛፍ, ቅጠል, አበባ, ሳር, ዘር, ድንጋይ, እሳት, ጢስ, ጥላ, ዓለም` },
+  { id: "animals", name: "Animals", words: `ውሻ, ድመት, ላም, በሬ, በግ, ፍየል, ፈረስ, አህያ, ግመል, ወፍ, ንስር, አሳ, አንበሳ, ነብር, ዝሆን, ቀጭኔ, ጉማሬ, አዞ, ጅብ, ዝንጀሮ, ጦጣ, ኤሊ, እባብ, ንብ, ዝንብ, ጉንዳን, ሸረሪት, ቢራቢሮ, አይጥ` },
+  { id: "describe", name: "Describing words", words: `ጥሩ, መጥፎ, ትልቅ, ትንሽ, ብዙ, አዲስ, አሮጌ, ቆንጆ, ረጅም, አጭር, ሰፊ, ጠባብ, ወፍራም, ቀጭን, ከባድ, ቀላል, ፈጣን, ሙቅ, ሞቃት, ቀዝቃዛ, ትኩስ, ጣፋጭ, መራራ, ጨዋማ, ጎምዛዛ, ውድ, ርካሽ, ንጹህ, ንፁህ, ቆሻሻ, ደረቅ, ሙሉ, ባዶ, ክፍት, ዝግ, ጥልቅ, ደግ, ብልህ, ሞኝ, ሰነፍ, ታታሪ, ጠንካራ, ደካማ, ደስተኛ, ሀብታም, ደሀ, ድሀ, ጸጥ ያለ, በቂ` },
+  { id: "colors", name: "Colors", words: `ቀይ, ነጭ, ጥቁር, ቢጫ, ሰማያዊ, ቡኒ, ግራጫ` },
+  { id: "little", name: "Questions & little words", words: `ማን, ምን, የት, መቼ, ስንት, እንዴት, ለምን, እና, ግን, ወይም, በጣም, ደግሞ, ብቻ, ሁሉ, ሌላ, እዚህ, እዚያ, ምናልባት, ወደ` },
+  { id: "school", name: "School, work & jobs", words: `ትምህርት, ትምህርት ቤት, ዩኒቨርሲቲ, ኮሌጅ, ተማሪ, መምህር, አስተማሪ, ፕሮፌሰር, ፈተና, ጥያቄ, መልስ, ክፍል, ሰሌዳ, ደብተር, እርሳስ, እስክሪብቶ, ወረቀት, መጽሐፍ, መጽሔት, ጋዜጣ, ገጽ, ቃል, ፊደል, ጽሑፍ, ታሪክ, ካርታ, ቤተ ሙከራ, ሠንጠረዥ, አማርኛ, እንግሊዝኛ, ሥራ, ሰራተኛ, አለቃ, ኃላፊ, ሹም, ገበሬ, ነጋዴ, ዳኛ, ሼፍ, አናጺ, ዘፋኝ, ሰዓሊ, ወታደር, ጄኔራል, አብራሪ, ተዋናይ, ጸሐፊ, ፖለቲከኛ, ጡረታ, ሌባ, አዛዥ, ጦር, ጦርነት, ሕግ, ኅብረት, ቡድን` },
+  { id: "fun", name: "Free time & feelings", words: `ሙዚቃ, ዘፈን, ዜማ, ዳንስ, ሩጫ, ዋና, ጨዋታ, ፊልም, ሥዕል, ዜና, ፍቅር, ደስታ, ፍርሃት, ቁጣ, ተስፋ, ኩራት, ሐዘን, ሐሳብ, ሕልም, ሕይወት, ኑሮ, ዕድሜ, ዕድል, ኃይል, ጩኸት, ፉጨት, ዑደት` },
+  { id: "culture", name: "Faith, festivals & culture", words: `ቤተ ክርስቲያን, መስጊድ, ጸሎት, ሃይማኖት, ቄስ, ዲያቆን, ጳጳስ, ሼህ, ኃጢአት, ጾም, ፆም, በዓል, ፋሲካ, ጥምቀት, መስቀል, ጰንጠቆስጤ, ሠርግ, ንጉስ, ንግስት, ዓፄ, ዙፋን, ጩቤ, ኢየሱስ, ሔዋን, ጳውሎስ, ጴጥሮስ, ሉቃስ, ጲላጦስ, ዮሐንስ` },
+  { id: "verbs1", name: "Verbs 1: everyday actions", words: `በላ, በሉ, በላሽ, መጣ, ወጣ, ሰጠ, አየ, አወቀ, ወደደ, ተናገረ, ጠየቀ, መለሰ, ተቀመጠ, ተነሳ, ጻፈ, አነበበ, አገኘ, አመጣ, ከፈለ, ከፈተ, ጠበቀ, ቆየ, ረዳ, ኖረ, ሆነ, ቻለ, አሰበ, ጨረሰ, ሞከረ, ጠራ, ደወለ, ሸጠ, አስተማረ, አጠና, ነቃ, ሮጠ, ተጫወተ` },
+  { id: "verbs2", name: "Verbs 2: more actions", words: `ዘፈነ, ጨፈረ, ዋኘ, አበሰለ, አጸዳ, ጠረገ, አጠበ, ታጠበ, ለበሰ, አወለቀ, ወሰነ, ቀጠለ, ተሳሳተ, ፈቀደ, ከለከለ, ታመመ, ዳነ, ደከመ, ላከ, ተቀበለ, ጎበኘ, ወረደ, ገነባ, ሰበረ, ቆጠረ, ቆረጠ, ጠበሰ, ያዘ, ጣለ, ወደቀ, ዘለለ, ፈራ, ተቆጣ, አለቀሰ, ጮኸ, ሳመ, ሸሸ, ሰረቀ, ሞተ, ተወለደ, በረረ, ዞረ, ቸኮለ, ጸለየ, ሳለ, ቀባ, ሰፋ, ተከለ, አረሰ, አጨደ, ጋለበ, ጎዳ, ሸተተ` },
+  { id: "places", name: "Countries, cities & names", words: `ኢትዮጵያ, አዲስ አበባ, አሜሪካ, ካናዳ, ቻይና, ጃፓን, ኬንያ, ጋና, ግብጽ, ግብፅ, ስፔን, ጀርመን, እንግሊዝ, ፈረንሳይ, ጣሊያን, ህንድ, ሱዳን, ሶማሊያ, ኤርትራ, ጅቡቲ, ብራዚል, ኡጋንዳ, ናይጄሪያ, ሜክሲኮ, ቬትናም, ቱርክ, ኖርዌይ, ስዊድን, ዚምባብዌ, ሮም, ሀረር, ሐረር, ጎንደር, ባህር ዳር, ላሊበላ, አክሱም, ደሴ, ጅማ, ሀዋሳ, አሰላ, ኦሮሚያ, ፒያሳ, ዮርዳኖስ, አበበ, ቶቢ, ኃይለ ሥላሴ` },
+].map(m => ({ ...m, words: m.words.split(",").map(x => x.trim()).filter(Boolean) }));
+const MODULE_OF = {};
+MODULES.forEach((m, i) => m.words.forEach(am => { if (!(am in MODULE_OF)) MODULE_OF[am] = i; }));
+// inside a module, the most useful words come first
+MODULES.forEach(m => m.words.sort((a, b) => (USEFUL_RANK[a]?.r ?? 1e9) - (USEFUL_RANK[b]?.r ?? 1e9)));
+
 const PRONOUNS = [
   { p: "1st", sg: [["እኔ", "enē", "I"], ["ነኝ", "negn", "am"]], pl: [["እኛ", "egna", "we"], ["ነን", "nen", "are"]] },
   { p: "2nd", sg: [["አንተ", "ante", "you (m.)"], ["ነህ", "neh", "are"], ["አንቺ", "anchi", "you (f.)"], ["ነሽ", "nesh", "are"], ["እርስዎ", "erswo", "you (polite)", 1]],
@@ -2005,18 +2062,26 @@ function wordRows(list, opts = {}) {
       `<td class="code">${codeStr(ss)}</td><td class="tally">${tallyStr(ss)}</td>`}</tr>`;
   }).join("");
 }
-{
-  // one table of all words, most useful first, with a heading row per group
+function renderWordTable() {
+  // one table of all words with a heading row per group: by module, or most useful first
   const words = WORDS.filter(w => w.src === "word").sort((a, b) => USEFUL_RANK[a.am].r - USEFUL_RANK[b.am].r);
-  const html = wordRows([]), parts = [html];
-  TIER_NAMES.forEach((name, t) => {
-    const group = words.filter(w => USEFUL_RANK[w.am].tier === t); if (!group.length) return;
-    const first = USEFUL_RANK[group[0].am].r + 1;
-    parts.push(`<tr class="grp"><td colspan="5">${name} <span class="muted">· words ${first}–${first + group.length - 1}</span></td></tr>`,
-      wordRows(group).replace(/^<tr>.*?<\/tr>/, ""));
-  });
+  const parts = [wordRows([])], body = list => wordRows(list).replace(/^<tr>.*?<\/tr>/, "");
+  if ($("words-group").value === "modules") {
+    MODULES.forEach((m, i) => {
+      const group = words.filter(w => MODULE_OF[w.am] === i);
+      parts.push(`<tr class="grp"><td colspan="5">${i + 1} · ${m.name} <span class="muted">· ${group.length} words</span></td></tr>`, body(group));
+    });
+  } else {
+    TIER_NAMES.forEach((name, t) => {
+      const group = words.filter(w => USEFUL_RANK[w.am].tier === t); if (!group.length) return;
+      const first = USEFUL_RANK[group[0].am].r + 1;
+      parts.push(`<tr class="grp"><td colspan="5">${name} <span class="muted">· words ${first}–${first + group.length - 1}</span></td></tr>`, body(group));
+    });
+  }
   $("words-all").innerHTML = parts.join("");
 }
+$("words-group").onchange = renderWordTable;
+renderWordTable();
 $("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
 (function verbTable() {
   const roots = [["በላ", "eat"], ["ገዛ", "buy"], ["ገባ", "enter"], ["ሰማ", "hear"]];
@@ -2093,17 +2158,59 @@ function setVocabSize(n) {
   $("vsize").value = vocabSize; $("vsize-range").value = vocabSize;
   updateDeckCount(); if (currentP !== "char" && currentP !== "num") nextQ();
 }
+// "top" = the N most useful words; "modules" = every word in the chosen modules
+let wordChoice = "top", chosenModules = new Set(["greet"]);
+try {
+  wordChoice = localStorage.getItem("amh-wchoice") === "modules" ? "modules" : "top";
+  const m = JSON.parse(localStorage.getItem("amh-modules")); if (Array.isArray(m)) chosenModules = new Set(m);
+} catch (e) {}
+function saveWordChoice(markSync = true) {
+  try { localStorage.setItem("amh-wchoice", wordChoice); localStorage.setItem("amh-modules", JSON.stringify([...chosenModules])); } catch (e) {}
+  if (markSync) { markDirty("s:wchoice"); markDirty("s:modules"); }
+}
 function deckList() {
   const groups = levelGroups($("level").value);
   const decks = [...document.querySelectorAll("#decks input:checked")].map(i => i.value);
   const all = WORDS.filter(w => decks.includes(w.src) && wordKnown(w, groups) && wordFocused(w, $("level").value));
-  const words = all.filter(isWordDeck).sort((a, b) => USEFUL_RANK[a.am].r - USEFUL_RANK[b.am].r).slice(0, vocabSize);
+  let words = all.filter(isWordDeck).sort((a, b) => USEFUL_RANK[a.am].r - USEFUL_RANK[b.am].r);
+  if (wordChoice === "modules") words = words.filter(w => chosenModules.has(MODULES[MODULE_OF[w.am]]?.id));
+  else words = words.slice(0, vocabSize);
   return [...words, ...all.filter(w => !isWordDeck(w))];
 }
+function renderModules() {
+  $("modules-box").hidden = wordChoice !== "modules";
+  $("vsize-box").hidden = wordChoice === "modules";
+  document.querySelectorAll('#word-choice input').forEach(i => i.checked = i.value === wordChoice);
+  if (wordChoice !== "modules") return;
+  const byAm = {}; WORDS.forEach(w => { if (isWordDeck(w)) byAm[w.am] = w; });
+  $("mod-grid").innerHTML = MODULES.map((m, i) => {
+    const n = m.words.length, learned = m.words.filter(am => byAm[am] && boxOf(byAm[am]) >= 4).length;
+    const on = chosenModules.has(m.id);
+    return `<label class="mod ${on ? "on" : ""}"><input type="checkbox" data-mod="${m.id}" ${on ? "checked" : ""}>
+      <span class="mn">${i + 1} · ${m.name}</span>
+      <span class="mm">${n} words · ${learned} learned <span class="mbar"><i style="width:${Math.round(100 * learned / n)}%"></i></span></span></label>`;
+  }).join("");
+  $("mod-grid").querySelectorAll("input").forEach(inp => inp.onchange = () => {
+    if (inp.checked) chosenModules.add(inp.dataset.mod); else chosenModules.delete(inp.dataset.mod);
+    saveWordChoice(); updateDeckCount(); if (currentP !== "char" && currentP !== "num") nextQ();
+  });
+}
+document.querySelectorAll('#word-choice input').forEach(inp => inp.onchange = () => {
+  wordChoice = inp.value; saveWordChoice(); updateDeckCount(); if (currentP !== "char" && currentP !== "num") nextQ();
+});
+$("mod-none").onclick = () => { chosenModules.clear(); saveWordChoice(); updateDeckCount(); if (currentP !== "char" && currentP !== "num") nextQ(); };
 function updateDeckCount() {
   const list = deckList(), n = list.length, nw = list.filter(isWordDeck).length, other = n - nw;
   $("deck-count").textContent = `${n} words/sentences available with these settings` +
     (other ? ` (${nw} words + ${other} from the other decks)` : "") + (n === 0 ? ". Turn on more decks or characters." : ".");
+  renderModules();
+  if (wordChoice === "modules") {
+    const names = MODULES.filter(m => chosenModules.has(m.id)).map(m => m.name);
+    $("vsize-info").textContent = names.length
+      ? `Practising ${nw} words from: ${names.join(", ")}. Sentences and verb endings are added in full when turned on.`
+      : "Pick at least one module above.";
+    return;
+  }
   const tiers = TIER_NAMES.map(() => [0, 0]);
   Object.values(USEFUL_RANK).forEach(x => tiers[x.tier][1]++);
   list.filter(isWordDeck).forEach(w => tiers[USEFUL_RANK[w.am].tier][0]++);
@@ -2431,6 +2538,7 @@ function vocabQ() {
       `<br><button class="btn" id="vnx">Next →</button>`;
     $("vnx").onclick = vocabQ; $("vnx").focus();
     box.querySelector(".vocab-bar").outerHTML = vocabProgress(list);
+    renderModules();
   };
 
   if (vocabMode === "flash") {
@@ -2714,7 +2822,7 @@ charQ();
 // ============================================================
 // SYNC: progress is merged with a Google Sheet (Apps Script web app)
 // Each piece of progress is one item: "v:<word>" (vocabulary box), "c:<char>" (character stats),
-// "s:vsize" (vocabulary size). Every item carries the time it last changed; the newer one wins.
+// "s:vsize" (vocabulary size), "s:wchoice" / "s:modules" (which words to practise). Every item carries the time it last changed; the newer one wins.
 // ============================================================
 const SYNC_CFG_KEY = "amharic-sync-config", SYNC_TS_KEY = "amharic-sync-times", SYNC_PENDING_KEY = "amharic-sync-pending";
 const loadJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
@@ -2734,12 +2842,16 @@ function syncValue(key) {
   if (kind === "v") return vocabBox[name] ?? 0;
   if (kind === "c") return charStats.c[name] ?? null;
   if (kind === "s" && name === "vsize") return vocabSize;
+  if (kind === "s" && name === "wchoice") return wordChoice;
+  if (kind === "s" && name === "modules") return [...chosenModules];
   return null;
 }
 function applyRemote(key, v) {
   const [kind, name] = [key.slice(0, 1), key.slice(2)];
   if (kind === "v") { if (v) vocabBox[name] = v; else delete vocabBox[name]; }
   else if (kind === "c") { if (v) { charStats.c[name] = v; charStats.q = Math.max(charStats.q, v.q || 0); } else delete charStats.c[name]; }
+  else if (kind === "s" && name === "wchoice" && v) { wordChoice = v === "modules" ? "modules" : "top"; saveWordChoice(false); }
+  else if (kind === "s" && name === "modules" && Array.isArray(v)) { chosenModules = new Set(v); saveWordChoice(false); }
   else if (kind === "s" && name === "vsize" && v) { vocabSize = Math.max(5, Math.min(ALL_WORD_COUNT, +v)); try { localStorage.setItem(VSIZE_KEY, vocabSize); } catch (e) {} $("vsize").value = $("vsize-range").value = vocabSize; }
 }
 function setSyncStatus(state, text) {
