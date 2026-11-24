@@ -157,6 +157,8 @@
   .pron-cell .ro { font-family: ui-monospace, Menlo, monospace; font-size: .85rem; }
   .vt tr.he td { background: #f6f3ee; }
   .rule-list li { margin: 6px 0; }
+  kbd.key { display: inline-block; font: 600 .72rem ui-monospace, Menlo, monospace; border: 1px solid currentColor; border-radius: 4px; padding: 0 5px; margin-left: 4px; opacity: .7; }
+  @media (hover: none) { kbd.key { display: none; } }
   .sound-row { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 6px 0; flex-wrap: wrap; }
   .cstats { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
   .cgrid { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 760px; margin: 8px auto; }
@@ -2509,7 +2511,7 @@ function playAm(text, btn) {
   ttsAudio.play().catch(() => ttsAudio.onerror());
 }
 function soundHTML(text) {
-  return `<div class="sound-row"><button class="btn ghost small" data-say="${text.replace(/"/g, "&quot;")}" title="Play sound (S)">🔊 play sound</button>
+  return `<div class="sound-row"><button class="btn ghost small" data-say="${text.replace(/"/g, "&quot;")}" title="Play sound (keyboard: S)">🔊 play sound <kbd class="key">S</kbd></button>
     <a class="small muted" href="${gtPage(text)}" target="_blank" rel="noopener">open in Google Translate ↗</a></div>`;
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) playAm(b.dataset.say, b); });
