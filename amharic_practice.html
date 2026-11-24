@@ -340,7 +340,7 @@
       <div>
         <h3>Forms you circled in your notes, plus the exceptions</h3>
         <p class="eth" style="font-size:1.7rem; margin:4px 0" id="irr-list"></p>
-        <p class="small muted">These don't follow the usual pattern, so learn them on their own. They have a pink ring in the chart. You can drill only these with <b>“Tricky one-legged forms”</b> on the Practice tab.</p>
+        <p class="small muted">These don't follow the usual pattern, so learn them on their own. They have a pink ring in the chart.</p>
       </div>
     </div>
   </div>
@@ -524,18 +524,7 @@
 <section class="tab" id="tab-practice">
   <div class="card">
     <div class="controls">
-      <label>Characters to use:
-        <select id="level">
-          <option value="all" selected>All Amharic letters</option>
-          <option value="class">Only letters from class so far (two-legged + one-legged + ሀ ረ መ)</option>
-          <option value="rest">Focus on the rest of the alphabet (ሐ ሠ ኀ ኸ ወ ዐ ጠ ጨ ፀ ፈ)</option>
-          <option value="more">Focus on ሀ ረ መ</option>
-          <option value="one">Focus on one-legged (ነ ኘ ተ ቸ ገ ፐ የ ቀ)</option>
-          <option value="irr">Tricky one-legged forms (exceptions)</option>
-          <option value="two">Two-legged only</option>
-          <option value="rare">Focus on the rare letters (ቐ ዸ ጘ, character drill only)</option>
-        </select>
-      </label>
+      <input type="hidden" id="level" value="all"><!-- all Amharic letters; the old focus settings were removed -->
       <span class="score" id="score">Score: 0 / 0</span>
       <button class="btn ghost small" id="reset-score">reset score</button>
     </div>
@@ -563,7 +552,6 @@
       <button class="btn ghost small" id="vsize-all">all</button>
     </div>
     <p class="small muted" id="vsize-info"></p>
-    <p class="small muted">In the “focus” settings, the character drill uses only those characters, and the word decks only show words that contain at least one of them.</p>
     <p class="small muted" id="deck-count"></p>
   </div>
 
@@ -603,7 +591,7 @@
 <section class="tab" id="tab-worksheet">
   <div class="card noprint">
     <h2>Handwriting worksheet</h2>
-    <p>This builds a worksheet from the current practice settings (characters and decks). In the “focus” mode it picks words and sentences that use the characters you miss in the character drill or haven't drilled much. Part 1 asks you to read Amharic and write the sounds and meaning. Part 2 asks you to write the Amharic by hand. The answer key prints on a separate page.</p>
+    <p>This builds a worksheet from the current practice settings (decks and vocabulary). In the “focus” mode it picks words and sentences that use the characters you miss in the character drill or haven't drilled much. Part 1 asks you to read Amharic and write the sounds and meaning. Part 2 asks you to write the Amharic by hand. The answer key prints on a separate page.</p>
     <p>
       <label>Words: <select id="ws-mode">
         <option value="weak" selected>focus on characters I miss or haven't practiced much</option>
@@ -2218,7 +2206,7 @@ function updateDeckCount() {
   list.filter(isWordDeck).forEach(w => tiers[USEFUL_RANK[w.am].tier][0]++);
   const cover = tiers.map((c, i) => c[0] ? `${TIER_NAMES[i]} ${c[0]}/${c[1]}` : "").filter(Boolean).join(" · ");
   $("vsize-info").textContent = (nw < vocabSize && vocabSize < ALL_WORD_COUNT
-    ? `Only ${nw} words fit the current focus / decks. ` : "") +
+    ? `Only ${nw} words fit the chosen decks. ` : "") +
     (cover ? `Includes: ${cover}. ` : "") +
     `The limit applies to the “words” deck; sentences and verb endings are added in full when turned on.`;
 }
