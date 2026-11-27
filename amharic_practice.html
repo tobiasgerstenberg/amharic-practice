@@ -187,6 +187,12 @@
   .ws-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
   .ws-copy .ws-item { margin: 8px 0; }
   .ws-copy .q.am { min-width: 44px; }
+  /* Verb explorer */
+  .vx-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .vx-controls select { font-family: var(--eth), sans-serif; min-width: 220px; }
+  .vpre { color: var(--h2); font-weight: 600; }
+  #vx-table td.ro { font-family: ui-monospace, Menlo, monospace; font-size: .9rem; }
+
   /* Modules */
   .word-choice { margin-top: 6px; }
   .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; margin: 8px 0; }
@@ -257,8 +263,9 @@
     <button data-tab="chart">2 · Fidel chart</button>
     <button data-tab="words">3 · Words & grammar</button>
     <button data-tab="grammar">4 · Grammar: verb endings</button>
-    <button data-tab="practice">5 · Practice</button>
-    <button data-tab="worksheet">6 · Printable worksheet</button>
+    <button data-tab="verbs">5 · Verbs</button>
+    <button data-tab="practice">6 · Practice</button>
+    <button data-tab="worksheet">7 · Printable worksheet</button>
   </nav>
 </header>
 
@@ -516,7 +523,25 @@
       <li><b>Doubled consonants aren't written.</b> <span class="eth">በላ</span> is said <i>bella</i>, with a long l, but it's written with a single <span class="eth">ላ</span>. That's why the word list shows “bela” and the sentence diagram shows “bella”.</li>
       <li><b>This covers only the simple past tense.</b> The present / future form (for example <span class="eth">ይበላል</span>, “he eats / will eat”) puts <b>prefixes</b> in front of the verb as well. It follows a separate pattern, which is a good next step once these endings feel natural.</li>
     </ul>
-    <p class="small">To practise: on <b>5 · Practice</b>, turn on the <b>verb endings</b> deck (and untick the others to drill only verbs).</p>
+    <p class="small">To see any verb in every person and tense, open <b>5 · Verbs</b>. To practise: on <b>6 · Practice</b>, turn on the <b>verb endings</b> deck (and untick the others to drill only verbs).</p>
+  </div>
+</section>
+
+<!-- ======================= VERBS ======================= -->
+<section class="tab" id="tab-verbs">
+  <div class="card">
+    <h2>Verb explorer</h2>
+    <p class="small muted">Pick a verb and a tense to see every form. The <span class="vpre">prefix</span> is blue, the letter that changes is colored by its house, and the ending is <b>bold</b>. Press 🔊 to hear a form.</p>
+    <div class="vx-controls">
+      <label>Verb <select id="vx-verb"></select></label>
+      <button class="btn ghost small" id="vx-random">another verb</button>
+    </div>
+    <div class="subtabs" id="vx-tenses" style="margin-top:12px"></div>
+    <h3 id="vx-head"></h3>
+    <p class="small" id="vx-rule"></p>
+    <div style="overflow-x:auto"><table class="wordtable vt" id="vx-table"></table></div>
+    <p class="small muted" style="margin-top:12px"><b>said like</b> uses the sixth-house rules (a short ɨ, like the <i>i</i> in “bit”, only where it is needed). Doubled consonants aren't written in Amharic, so they aren't shown: በላ is said <i>bella</i>. Use 🔊 to check.
+      “They” forms are also used politely for one person: እርስዎ (you, polite) and እሳቸው (he / she, polite).</p>
   </div>
 </section>
 
@@ -2119,6 +2144,158 @@ $("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
   const S = [["(እኔ) ዳቦ በላሁ።", "I ate bread."], ["እሷ ቡና ገዛች።", "She bought coffee."], ["(እኛ) ደብዳቤ ጻፍን።", "We wrote a letter."],
     ["ልጆች ዳቦ በሉ።", "(The) children ate bread."], ["(አንቺ) ምን ገዛሽ?", "What did you (f.) buy?"]];
   $("vt-sent").innerHTML = S.map(([am, en]) => `<tr><td class="am">${am}</td><td>${say(am.replace(/[()]/g, ""))}</td><td>${en}</td></tr>`).join("");
+})();
+// ---------- verb explorer: build every form of a verb from its "he did it" form ----------
+// type "A": ends in ‑e, command like ስበር (first letter → 6th house)
+// type "B": ends in ‑e, command like ፈልግ (first letter stays 1st house)
+// type "a": ends in ‑a (two letters), like በላ
+// irr: forms that don't follow the pattern, per tense: 8 entries (I … they), null = not used
+const VERBS = [
+  { am: "ሰበረ", type: "A", en: ["break", "broke", "breaks"] },
+  { am: "ከፈተ", type: "A", en: ["open", "opened", "opens"] },
+  { am: "ከፈለ", type: "A", en: ["pay", "paid", "pays"] },
+  { am: "ሰረቀ", type: "A", en: ["steal", "stole", "steals"] },
+  { am: "ለበሰ", type: "A", en: ["wear", "wore", "wears"] },
+  { am: "ወሰደ", type: "A", en: ["take", "took", "takes"] },
+  { am: "ደረሰ", type: "A", en: ["arrive", "arrived", "arrives"] },
+  { am: "ዘፈነ", type: "A", en: ["sing", "sang", "sings"] },
+  { am: "ወደቀ", type: "A", en: ["fall", "fell", "falls"] },
+  { am: "ፈቀደ", type: "A", en: ["allow", "allowed", "allows"] },
+  { am: "ፈለገ", type: "B", en: ["want", "wanted", "wants"] },
+  { am: "ጨረሰ", type: "B", en: ["finish", "finished", "finishes"] },
+  { am: "ጠየቀ", type: "B", en: ["ask", "asked", "asks"] },
+  { am: "ደወለ", type: "B", en: ["call (phone)", "called", "calls"] },
+  { am: "በላ", type: "a", en: ["eat", "ate", "eats"] },
+  { am: "ገዛ", type: "a", en: ["buy", "bought", "buys"] },
+  { am: "ሰማ", type: "a", en: ["hear", "heard", "hears"] },
+  { am: "ሰራ", type: "a", en: ["work", "worked", "works"] },
+  { am: "ፈራ", type: "a", en: ["fear", "feared", "fears"] },
+  { am: "ዘጋ", type: "a", en: ["close", "closed", "closes"] },
+  { am: "ገባ", type: "a", en: ["go in", "went in", "goes in"] },
+  { am: "ጠጣ", type: "a", en: ["drink", "drank", "drinks"],
+    irr: { cmd: [null, "ጠጣ", "ጠጪ", null, null, null, "ጠጡ", null] } },
+  { am: "መጣ", type: "a", en: ["come", "came", "comes"],
+    irr: { cmd: [null, "ና", "ነይ", null, null, null, "ኑ", null] } },
+  { am: "ሄደ", type: "A", en: ["go", "went", "goes"],
+    irr: { pres: ["እሄዳለሁ", "ትሄዳለህ", "ትሄጃለሽ", "ይሄዳል", "ትሄዳለች", "እንሄዳለን", "ትሄዳላችሁ", "ይሄዳሉ"],
+           negpres: ["አልሄድም", "አትሄድም", "አትሄጂም", "አይሄድም", "አትሄድም", "አንሄድም", "አትሄዱም", "አይሄዱም"],
+           cmd: [null, "ሂድ", "ሂጂ", null, null, null, "ሂዱ", null] } },
+];
+const VTENSES = [
+  { id: "past", name: "Past", rule: "Start from the “he” form and change the ending (see 4 · Grammar). This is the form you already know." },
+  { id: "pres", name: "Present / future", rule: "Add a <b>prefix</b> for the person (እ‑ I, ት‑ you / she, ይ‑ he / they, እን‑ we), squeeze the middle letter into the 6th house, and end in ‑a + ‑ለሁ, ‑ለህ, ‑ል …. The same form means “I do it” and “I will do it”." },
+  { id: "cmd", name: "Command", rule: "Telling someone to do it. There is one form each for a man, a woman and a group: ‑u (2nd house) for the group, ‑i (3rd house) for a woman. Some sounds change before ‑i: t → ch, d → j, s → sh, z → zh, l → y, n → ny." },
+  { id: "negpast", name: "Not (past)", rule: "Put <b>አል‑</b> in front of the past form and <b>‑ም</b> at the end: ሰበረ → <b>አል</b>ሰበረ<b>ም</b> “he didn't break”." },
+  { id: "negpres", name: "Not (present / future)", rule: "Use the present prefixes, but start them with <b>አ</b> (አል‑ I, አት‑ you / she, አይ‑ he / they, አን‑ we), drop the ‑ለሁ / ‑ል ending and add <b>‑ም</b>." },
+];
+const VWHO = ["I", "you (m.)", "you (f.)", "he", "she", "we", "you (all)", "they"];
+const VPRON = [["እኔ", "inē"], ["አንተ", "ānite"], ["አንቺ", "ānichī"], ["እሱ", "isu"], ["እሷ", "iswa"], ["እኛ", "inya"], ["እናንተ", "inanite"], ["እነሱ", "inesu"]];
+const PALATAL = { t: "ch", d: "j", s: "sh", "ś": "sh", z: "zh", n: "gn", l: "y", "t'": "ch'", "ts'": "ch'", "ṣ'": "ch'" };
+
+// one piece of a form: text, plus the house colour of the changed letter (if any)
+const vp = (t, cls = "") => ({ t, cls });
+function verbForm(v, tense, i) {
+  const irr = v.irr && v.irr[tense];
+  if (irr) return irr[i] ? { parts: [vp(irr[i])], irr: true } : null;
+  const L = [...v.am].map(ch => FIDEL[ch]);
+  const g = (f, h) => glyph(f.c, h);
+  const pal = (f, h) => { const p = consByKey[PALATAL[f.c.k]]; return p ? glyph(p, h) : null; };
+  const last = L[L.length - 1], col = h => "h" + h + "c";
+  const two = v.type === "a";
+  if (tense === "past" || tense === "negpast") {
+    const stem = L.slice(0, -1).map(f => g(f, f.h)).join("");
+    const rules = two
+      ? [[0, "ሁ"], [0, "ህ"], [0, "ሽ"], [0, ""], [0, "ች"], [0, "ን"], [0, "ችሁ"], [2, ""]]
+      : [[6, "ኩ"], [6, "ክ"], [6, "ሽ"], [0, ""], [0, "ች"], [6, "ን"], [4, "ችሁ"], [2, ""]];
+    const [h, end] = rules[i], hh = h || last.h;
+    const parts = [vp(stem), vp(g(last, hh), h ? col(hh) : ""), vp(end, "end")];
+    if (tense === "negpast") { parts.unshift(vp("አል", "pre")); parts.push(vp("ም", "end")); }
+    return { parts };
+  }
+  if (tense === "cmd" && ![1, 2, 6].includes(i)) return null;
+  // stem before the last letter
+  const first = L[0];
+  let stem;
+  if (tense === "cmd") stem = two ? g(first, 6) : v.type === "A" ? g(first, 6) + g(L[1], 1) : g(first, 1) + g(L[1], 6);
+  else stem = two ? g(first, 1) : g(first, 1) + g(L[1], 6);
+  // the last letter: house for each person
+  const f = i === 2; // you (f.)
+  const pl = i === 6 || i === 7;
+  if (tense === "pres") {
+    const pre = ["እ", "ት", "ት", "ይ", "ት", "እን", "ት", "ይ"][i];
+    if (f) {
+      const p = pal(last, 4);
+      return { parts: p ? [vp(pre, "pre"), vp(stem), vp(p, col(4)), vp("ለሽ", "end")]
+                        : [vp(pre, "pre"), vp(stem), vp(g(last, 3), col(3)), vp("ያለሽ", "end")] };
+    }
+    const end = ["ለሁ", "ለህ", "", "ል", "ለች", "ለን", "ላችሁ", "ሉ"][i];
+    return { parts: [vp(pre, "pre"), vp(stem), vp(g(last, 4), col(4)), vp(end, "end")] };
+  }
+  const restH = two ? 4 : 6;      // sg. house of the last letter: ‑a verbs keep their ‑a (ብላ, አይበላም)
+  const lastGlyph = f ? (pal(last, 3) || g(last, 3)) : pl ? g(last, 2) : g(last, restH);
+  const lastH = f ? 3 : pl ? 2 : restH;
+  if (tense === "cmd") return { parts: [vp(stem), vp(lastGlyph, col(lastH))] };
+  // negpres
+  const pre = ["አል", "አት", "አት", "አይ", "አት", "አን", "አት", "አይ"][i];
+  return { parts: [vp(pre, "pre"), vp(stem), vp(lastGlyph, col(lastH)), vp("ም", "end")] };
+}
+// rough pronunciation: decide where a 6th-house letter gets a short ɨ (see the rules on 4 · Grammar)
+const SONORANT = new Set(["l", "r", "n", "m", "gn", "w", "y"]);
+function saidLike(am) {
+  return am.split(" ").map(word => {
+    const u = [...word].filter(ch => FIDEL[ch]).map(ch => {
+      const f = FIDEL[ch], ro = romanize(ch);
+      if (f.h !== 6) return { c: ro, v: true };
+      if (f.c.k === "a" || f.c.k === "o") return { c: "ɨ", v: true, glottal: true };   // እ is just the vowel
+      return { c: ro.replace(/i$/, ""), v: false, son: SONORANT.has(f.c.k) };
+    });
+    const out = u.map(x => x.c);
+    let i = u.length - 1, atEnd = true;
+    while (i >= 0) {
+      // codas: up to 2 bare consonants at the end of the word (1 if the last is l, r, n, m …), 1 in the middle
+      let max = atEnd ? (u[i] && !u[i].v && u[i].son ? 1 : 2) : 1;
+      while (max > 0 && i > 0 && !u[i].v) { i--; max--; }
+      if (!u[i].v) out[i] += "ɨ";   // this letter carries the syllable, so it gets the short vowel
+      i--; atEnd = false;
+    }
+    return out.join("");
+  }).join(" ");
+}
+function verbEnglish(v, tense, i) {
+  const s = VWHO[i], third = i === 3 || i === 4;
+  if (tense === "past") return `${s} ${v.en[1]}`;
+  if (tense === "negpast") return `${s} didn't ${v.en[0]}`;
+  if (tense === "pres") return `${s} ${third ? v.en[2] : v.en[0]} / will ${v.en[0]}`;
+  if (tense === "negpres") return `${s} ${third ? "doesn't" : "don't"} / won't ${v.en[0]}`;
+  return `${v.en[0][0].toUpperCase() + v.en[0].slice(1)}! (to ${i === 1 ? "a man" : i === 2 ? "a woman" : "several people"})`;
+}
+let verbIdx = 0, verbTense = "past";
+function renderVerbs() {
+  const v = VERBS[verbIdx], t = VTENSES.find(x => x.id === verbTense);
+  $("vx-tenses").innerHTML = VTENSES.map(x => `<button class="${x.id === verbTense ? "active" : ""}" data-t="${x.id}">${x.name}</button>`).join("");
+  $("vx-tenses").querySelectorAll("button").forEach(b => b.onclick = () => { verbTense = b.dataset.t; renderVerbs(); });
+  $("vx-rule").innerHTML = t.rule;
+  const say = am => `<button class="say-mini" data-say="${am}" title="play sound">🔊</button>`;
+  const rows = VWHO.map((who, i) => {
+    const form = verbForm(v, verbTense, i); if (!form) return "";
+    const am = form.parts.map(p => p.t).join("");
+    const html = form.parts.map(p => p.cls === "end" ? `<b class="end">${p.t}</b>` : p.cls ? `<span class="${p.cls === "pre" ? "vpre" : p.cls}">${p.t}</span>` : p.t).join("");
+    const built = form.irr ? `<span class="pill new">irregular</span>` :
+      form.parts.filter(p => p.t).map(p => `<span class="eth ${p.cls === "end" ? "" : p.cls === "pre" ? "vpre" : p.cls}">${p.cls === "pre" ? p.t + "‑" : p.cls === "end" ? "‑" + p.t : p.t}</span>`).join(" + ");
+    const pron = `<div class="pron-cell"><span class="eth pron-am">${VPRON[i][0]}</span><br><span class="muted small">${i === 7 ? "they / polite" : who}</span></div>`;
+    return `<tr class="${i === 3 ? "he" : ""}"><td>${pron}</td><td><span class="eth" style="font-size:1.5rem">${html}</span>${say(am)}</td>
+      <td class="ro">${saidLike(am)}</td><td>${verbEnglish(v, verbTense, i)}</td><td class="small">${built}</td></tr>`;
+  }).join("");
+  $("vx-table").innerHTML = `<tr><th>who</th><th>Amharic</th><th>said like</th><th>meaning</th><th>how it's built</th></tr>` + rows;
+  $("vx-head").innerHTML = `<span class="eth">${v.am}</span> “${v.en[0]}” · ${t.name}`;
+}
+(function initVerbs() {
+  const groups = [["A", "Ending in ‑e (command like ስበር)"], ["B", "Ending in ‑e (command like ፈልግ)"], ["a", "Ending in ‑a (like በላ)"]];
+  $("vx-verb").innerHTML = groups.map(([type, label]) => `<optgroup label="${label}">` +
+    VERBS.map((v, i) => v.type === type ? `<option value="${i}">${v.am} · ${v.en[0]}${v.irr ? " (partly irregular)" : ""}</option>` : "").join("") + `</optgroup>`).join("");
+  $("vx-verb").onchange = e => { verbIdx = +e.target.value; renderVerbs(); };
+  $("vx-random").onclick = () => { let j; do { j = Math.floor(Math.random() * VERBS.length); } while (j === verbIdx && VERBS.length > 1); verbIdx = j; $("vx-verb").value = j; renderVerbs(); };
+  renderVerbs();
 })();
 $("poss").innerHTML = `<tr><th>noun</th><th></th><th>my …</th><th>sounds</th></tr>` + WORDS.filter(w => w.src === "poss").map(w =>
   `<tr><td class="am">${w.from}</td><td>→</td><td class="am">${w.am}</td><td><b>${w.ro}</b> · ${w.en.split(" (")[0]}</td></tr>`).join("");
