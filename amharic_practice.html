@@ -261,144 +261,22 @@
 
 <header>
   <h1>Amharic Practice <span class="eth">— አማርኛ</span></h1>
-  <p>Stanford Beginning Amharic · summary of class notes (9/23 – 10/5/2026) + writing & reading exercises</p>
+  <p>Stanford Beginning Amharic · alphabet, words, verbs and practice</p>
   <button class="sync-pill" id="sync-pill" title="Sync progress between devices">☁ sync: off</button>
   <nav id="nav">
-    <button data-tab="summary" class="active">1 · Summary</button>
-    <button data-tab="chart">2 · Fidel chart</button>
-    <button data-tab="words">3 · Words & grammar</button>
-    <button data-tab="grammar">4 · Grammar: verb endings</button>
-    <button data-tab="verbs">5 · Verbs</button>
-    <button data-tab="practice">6 · Practice</button>
-    <button data-tab="worksheet">7 · Printable worksheet</button>
+    <button data-tab="chart" class="active">1 · Fidel chart</button>
+    <button data-tab="words">2 · Words & grammar</button>
+    <button data-tab="grammar">3 · Grammar: verb endings</button>
+    <button data-tab="verbs">4 · Verbs</button>
+    <button data-tab="practice">5 · Practice</button>
+    <button data-tab="worksheet">6 · Printable worksheet</button>
   </nav>
 </header>
 
 <main>
 
-<!-- ======================= SUMMARY ======================= -->
-<section class="tab active" id="tab-summary">
-  <div class="card">
-    <h2>The big ideas so far</h2>
-    <div class="grid2">
-      <div>
-        <ul>
-          <li><b>Consonants and vowels go together.</b> Each character (<i>fidel</i>) is a whole syllable: one consonant + one vowel.</li>
-          <li>Each consonant has <b>7 forms, called “houses”</b> (orders). The 1st house is the <i>Ge'ez</i> (base) form, and the other six change it in a regular way.</li>
-          <li>The alphabet has about <b>200+ characters</b>. Your class groups them by their <b>“legs”</b> (see the pyramid).</li>
-          <li><b>There is no upper or lower case.</b></li>
-          <li><b>“If you can't hear the vowel, it's the 6th house.”</b> In your notes: <code>|</code> = a syllable with a vowel you hear, <code>\</code> = 6th house (little or no vowel).</li>
-          <li>Word order is <b>Subject – Object – Verb</b> (SOV), so the verb comes last.</li>
-          <li>Sentences end with <span class="eth" style="font-size:1.3rem">።</span> (four dots, a full stop). Questions use <span class="eth" style="font-size:1.3rem">?</span> (also written <span class="eth" style="font-size:1.3rem">፧</span>) and a rising voice.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>How the alphabet is grouped (from 9/23)</h3>
-        <svg class="pyr" viewBox="0 0 420 250" width="100%" style="max-width:420px">
-          <polygon points="10,10 410,10 210,240" fill="#e3f2ec" stroke="#1f7a5a" stroke-width="2"/>
-          <g id="pyr-rows"></g>
-        </svg>
-        <p class="small muted">The 2-legged family is the biggest, so the class starts there. As of 10/5 you've done <b>all the 2-legged</b> and <b>all the 1-legged</b> families.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Characters you know (1st house / base form)</h2>
-    <h3>Two-legged <span class="pill">9/23 – 9/30</span></h3>
-    <p class="small muted">Your memory sentence for the first seven: <i>“<b>B</b>ald <b>V</b>eil <b>S</b>ky <b>Sh</b>ield <b>C</b>urled <b>L</b>ike <b>A</b>mazing”</i></p>
-    <div class="lineup" id="lineup-two"></div>
-    <h3>One-legged <span class="pill">9/30 – 10/5</span></h3>
-    <p class="small muted">Memory words from your notes: <i><b>n</b>ose · <b>gn</b>occhi · lower-case <b>t</b> · dancing <b>ch</b>aracter · <b>g</b>un · <b>p</b>opsicle / teleport · <b>y</b>o-yo · <b>Q</b>ebele</i></p>
-    <div class="lineup" id="lineup-one"></div>
-    <h3>New letters <span class="pill new">10/8</span></h3>
-    <p class="small muted">Memory words: <i><b>h</b>alf pipe</i> (from you) · <i><b>r</b>amp</i> and <i><b>m</b>oustache</i> (suggested: <span class="eth">ረ</span> slants like a ramp, and <span class="eth">መ</span> has two curls on top like a moustache).</p>
-    <div class="lineup" id="lineup-more"></div>
-    <div class="callout small">
-      <b>Watch out:</b> <span class="eth">ሀ</span> (1st) and <span class="eth">ሃ</span> (4th) both sound like “ha”, just like <span class="eth">አ</span> and <span class="eth">ኣ</span>.
-      In these rows the 2nd house puts the mark at the <b>bottom</b> instead of the hip: <span class="eth" style="font-size:1.3rem">ሁ ሩ ሙ</span>.
-      The 6th and 7th houses change shape too: <span class="eth" style="font-size:1.3rem">ህ ሆ · ር ሮ · ም ሞ</span>.
-    </div>
-    <h3>The rest of the alphabet <span class="pill preview">not in class yet</span></h3>
-    <p class="small muted">These complete the alphabet sheet. The memory hooks are suggestions, not from class.</p>
-    <div class="lineup" id="lineup-rest"></div>
-    <div class="callout small">
-      <b>Same sound, different letter:</b> in modern Amharic
-      <span class="eth" style="font-size:1.3rem">ሀ ሐ ኀ</span> all sound like “h”,
-      <span class="eth" style="font-size:1.3rem">ሰ ሠ</span> both sound like “s”,
-      <span class="eth" style="font-size:1.3rem">አ ዐ</span> both sound like “a”, and
-      <span class="eth" style="font-size:1.3rem">ጸ ፀ</span> both sound like “ts'”.
-      Some words are always spelled with one of them (e.g. <span class="eth">ሐሙስ</span>, <span class="eth">ዓመት</span>), and others can be spelled either way.
-      The writing exercise accepts either letter.
-      <br><b>Popped sounds:</b> <span class="eth" style="font-size:1.3rem">ጠ</span> (t') and <span class="eth" style="font-size:1.3rem">ጨ</span> (ch') are the popped versions of <span class="eth" style="font-size:1.3rem">ተ</span> and <span class="eth" style="font-size:1.3rem">ቸ</span>.
-      <br><b>Shapes to watch:</b> the 6th houses <span class="eth" style="font-size:1.3rem">ው ፍ ዕ</span> and the 4th house <span class="eth" style="font-size:1.3rem">ፋ</span> look different from their 1st house.
-    </div>
-    <h3>Rare letters <span class="pill preview">not used in Amharic</span></h3>
-    <p class="small muted">These are on your alphabet sheet, but they are used for Tigrinya, Oromo and other languages. You don't need them for Amharic.</p>
-    <div class="lineup" id="lineup-rare"></div>
-  </div>
-
-  <div class="card">
-    <h2>One-legged rules and exceptions <span class="pill new">10/5</span></h2>
-    <div class="grid2">
-      <div>
-        <ul>
-          <li><b>4th house (a):</b> the left side gets shorter, as with the two-legged ones: <span class="eth" style="font-size:1.4rem">ታ ቻ ቃ ያ ጋ</span>.<br>
-            <b>Exceptions:</b> <span class="eth" style="font-size:1.4rem">ና</span> (na) and <span class="eth" style="font-size:1.4rem">ኛ</span> (nya) change shape instead.</li>
-          <li><b>3rd house (ī):</b> the y row is the exception: <span class="eth" style="font-size:1.4rem">ዪ</span> (yī).</li>
-          <li><b>5th house (ē):</b> the y row is the exception again: <span class="eth" style="font-size:1.4rem">ዬ</span> (yē).</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Forms you circled in your notes, plus the exceptions</h3>
-        <p class="eth" style="font-size:1.7rem; margin:4px 0" id="irr-list"></p>
-        <p class="small muted">These don't follow the usual pattern, so learn them on their own. They have a pink ring in the chart.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>The 7 houses: how the shape changes with the vowel</h2>
-    <p class="small muted">The examples are the <span class="eth">በ</span> (b), <span class="eth">ሰ</span> (s) and <span class="eth">ለ</span> (l) rows. Each color is used for the same house everywhere on this page.</p>
-    <div class="houses" id="houses"></div>
-    <div class="callout small">
-      <b>Watch out:</b> <span class="eth">አ</span> (1st) and <span class="eth">ኣ</span> (4th) sound the <b>same</b> (“a”); Google Translate writes them ā and a. The 1st-house vowel (written e) sounds like a short “uh”, and the 6th house (written i) is often silent or a short “ih”.
-    </div>
-    <h3>6th-house families <span class="muted small">(groups from your 9/30 notes that change the same way)</span></h3>
-    <div class="families" id="families"></div>
-    <p class="small muted">The 6th house is the irregular one, so learn it family by family. For the one-legged irregular forms, see the rules card above.</p>
-  </div>
-
-  <div class="card">
-    <h2>Ge'ez numbers <span class="pill new">10/30</span></h2>
-    <p class="small muted">These are on the short assessment (week 7), both written and spoken. Each symbol has a fixed value. There is <b>no zero</b> and no place value, so you add the symbols together. The bars above and below are part of each symbol.</p>
-    <h3>Ones</h3>
-    <div class="lineup" id="num-ones"></div>
-    <h3>Tens</h3>
-    <div class="lineup" id="num-tens"></div>
-    <h3>Hundred and ten thousand</h3>
-    <div class="lineup" id="num-big"></div>
-    <div class="grid2" style="margin-top:12px">
-      <div>
-        <h3>How to build a number</h3>
-        <ul class="small">
-          <li><b>Tens, then ones:</b> 47 = <span class="eth">፵</span> + <span class="eth">፯</span> = <span class="eth">፵፯</span>.</li>
-          <li><b>Hundreds:</b> put the count in front of <span class="eth">፻</span>: 300 = <span class="eth">፫፻</span>, 365 = <span class="eth">፫፻፷፭</span>. 100 alone is just <span class="eth">፻</span>, without <span class="eth">፩</span>.</li>
-          <li><b>Thousands are counted in hundreds:</b> 1,000 = <span class="eth">፲፻</span> (10 × 100), and 2,500 = <span class="eth">፳፭፻</span> (25 × 100).</li>
-          <li><b>Ten thousand</b> has its own symbol <span class="eth">፼</span>, and it works like <span class="eth">፻</span>: 20,000 = <span class="eth">፪፼</span>.</li>
-          <li>Ethiopians use these symbols mostly for <b>dates, years, and chapter or page numbers</b>. Prices and phone numbers use 1 2 3.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Examples</h3>
-        <table class="wordtable" id="num-examples"></table>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ======================= CHART ======================= -->
-<section class="tab" id="tab-chart">
+<section class="tab active" id="tab-chart">
   <div class="card">
     <h2>Fidel chart: every character you've learned</h2>
     <div class="chart-controls noprint">
@@ -492,7 +370,7 @@
       <li><b>Doubled consonants aren't written.</b> <span class="eth">በላ</span> is said <i>bella</i>, with a long l, but it's written with a single <span class="eth">ላ</span>. That's why the word list shows “bela” and the sentence diagram shows “bella”.</li>
       <li><b>This covers only the simple past tense.</b> The present / future form (for example <span class="eth">ይበላል</span>, “he eats / will eat”) puts <b>prefixes</b> in front of the verb as well. It follows a separate pattern, which is a good next step once these endings feel natural.</li>
     </ul>
-    <p class="small">To see any verb in every person and tense, open <b>5 · Verbs</b>. To practise: on <b>6 · Practice</b>, turn on the <b>verb endings</b> deck (and untick the others to drill only verbs).</p>
+    <p class="small">To see any verb in every person and tense, open <b>4 · Verbs</b>. To practise: on <b>5 · Practice</b>, turn on the <b>verb endings</b> deck (and untick the others to drill only verbs).</p>
   </div>
 </section>
 
@@ -1979,38 +1857,6 @@ document.querySelectorAll("#nav button").forEach(b => b.onclick = () => {
 });
 
 // ============================================================
-// SUMMARY
-// ============================================================
-(function pyramid() {
-  const rows = [["14", "two-legged", true], ["9", "one-legged", true], ["5", "no legs"], ["3", "three-legged"], ["2", "“L”"]];
-  const g = $("pyr-rows"); let html = "";
-  rows.forEach((r, i) => {
-    const y = 36 + i * 36;
-    const fill = r[2] === true ? "#1f7a5a" : r[2] ? "#6bb596" : "none";
-    const halfW = 200 * (1 - (y - 10) / 230);
-    if (r[2]) html += `<rect x="${210 - halfW + 6}" y="${y - 20}" width="${2 * halfW - 12}" height="28" rx="6" fill="${fill}" opacity=".25"/>`;
-    html += `<text x="210" y="${y}" text-anchor="middle" font-weight="700">${r[0]} · ${r[1]}${r[2] === true ? " ✓" : r[2] ? " (started)" : ""}</text>`;
-  });
-  g.innerHTML = html;
-})();
-
-function lineup(id, grp) {
-  $(id).innerHTML = CONS.filter(c => c.grp === grp).map(c =>
-    `<div class="tile"><div class="g">${glyph(c, 1)}</div><div class="s">${dispK(c.k)}</div><div class="m">${c.mn}</div></div>`).join("");
-}
-lineup("lineup-two", "two"); lineup("lineup-one", "one"); lineup("lineup-more", "more"); lineup("lineup-rest", "rest"); lineup("lineup-rare", "rare");
-$("irr-list").innerHTML = CONS.filter(c => c.grp === "one").map(c => [1, 2, 3, 4, 5, 6, 7].map(h => glyph(c, h)).filter(g => IRREGULAR.has(g)).join(" ")).filter(Boolean).join(" · ");
-
-$("houses").innerHTML = HOUSES.map(h => `
-  <div class="house" style="border-color: var(--h${h.n})">
-    <div class="num h${h.n}c">${h.n}${["st","nd","rd","th","th","th","th"][h.n-1]}</div>
-    <div class="snd h${h.n}c">${h.say}</div>
-    <div class="ex">${glyph(consByKey.b, h.n)}${glyph(consByKey.s, h.n)}${glyph(consByKey.l, h.n)}</div>
-    <div class="rule">${h.rule}</div>
-  </div>`).join("");
-$("families").innerHTML = FAMILIES6.map(f => `<span class="family">${f}</span>`).join("");
-
-// ============================================================
 // CHART
 // ============================================================
 function renderChart() {
@@ -2133,7 +1979,7 @@ const VERBS = [
            cmd: [null, "ሂድ", "ሂጂ", null, null, null, "ሂዱ", null] } },
 ];
 const VTENSES = [
-  { id: "past", name: "Past", rule: "Start from the “he” form and change the ending (see 4 · Grammar). This is the form you already know." },
+  { id: "past", name: "Past", rule: "Start from the “he” form and change the ending (see 3 · Grammar). This is the form you already know." },
   { id: "pres", name: "Present / future", rule: "Add a <b>prefix</b> for the person (እ‑ I, ት‑ you / she, ይ‑ he / they, እን‑ we), squeeze the middle letter into the 6th house, and end in ‑a + ‑ለሁ, ‑ለህ, ‑ል …. The same form means “I do it” and “I will do it”." },
   { id: "cmd", name: "Command", rule: "Telling someone to do it. There is one form each for a man, a woman and a group: ‑u (2nd house) for the group, ‑i (3rd house) for a woman. Some sounds change before ‑i: t → ch, d → j, s → sh, z → zh, l → y, n → ny." },
   { id: "negpast", name: "Not (past)", rule: "Put <b>አል‑</b> in front of the past form and <b>‑ም</b> at the end: ሰበረ → <b>አል</b>ሰበረ<b>ም</b> “he didn't break”." },
@@ -2190,7 +2036,7 @@ function verbForm(v, tense, i) {
   const pre = ["አል", "አት", "አት", "አይ", "አት", "አን", "አት", "አይ"][i];
   return { parts: [vp(pre, "pre"), vp(stem), vp(lastGlyph, col(lastH)), vp("ም", "end")] };
 }
-// rough pronunciation: decide where a 6th-house letter gets a short ɨ (see the rules on 4 · Grammar)
+// rough pronunciation: decide where a 6th-house letter gets a short ɨ (see the rules on 3 · Grammar)
 const SONORANT = new Set(["l", "r", "n", "m", "gn", "w", "y"]);
 function saidLike(am) {
   return am.split(" ").map(word => {
@@ -2748,13 +2594,6 @@ const numTile = (g, v) => { const w = numWord(v); return `<div class="tile"><div
 // symbol by symbol, with the value of each: ፫፻፷፭ → ፫ 3 · ፻ 100 · ፷ 60 · ፭ 5
 const numBreakdown = n => `<div class="breakdown">${[...toGeez(n)].map(g => `<div class="syl"><div class="g">${g}</div><div class="c">${fmtNum(NUM_VAL[g])}</div></div>`).join("")}</div>`;
 
-$("num-ones").innerHTML = NUM_ONES.map((g, i) => numTile(g, i + 1)).join("");
-$("num-tens").innerHTML = NUM_TENS.map((g, i) => numTile(g, (i + 1) * 10)).join("");
-$("num-big").innerHTML = numTile("፻", 100) + numTile("፼", 10000);
-$("num-examples").innerHTML = [[15], [47], [99], [100], [365], [1000], [2019, "this year in the Ethiopian calendar"], [10000]].map(([n, note]) => {
-  const w = numWord(n);
-  return `<tr><td class="am">${toGeez(n)}</td><td><b>${fmtNum(n)}</b>${note ? ` <span class="muted small">(${note})</span>` : ""}</td><td><span class="eth">${w.am}</span> <span class="muted">${w.ro}</span></td></tr>`;
-}).join("");
 
 const NUM_RANGES = [["1–10", 1, 10], ["11–20", 11, 20], ["1–20", 1, 20], ["21–50", 21, 50], ["1–50", 1, 50], ["51–100", 51, 100], ["1–100", 1, 100], ["100–1,000", 100, 1000], ["1–10,000", 1, 10000]];
 let numMode = "g2n", numRange = 6, lastNum = null;
