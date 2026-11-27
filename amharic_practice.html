@@ -2151,6 +2151,21 @@ $("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
 // type "a": ends in ‑a (two letters), like በላ
 // irr: forms that don't follow the pattern, per tense: 8 entries (I … they), null = not used
 const VERBS = [
+  { am: "ነው", group: "be", type: "A", en: ["be", "was", "is"], stems: { past: "ነበረ", negpast: "ነበረ" },
+    note: "“To be” is irregular. Its past (ነበረ “he was”) follows the normal past endings. For “will be”, Amharic uses <b>ሆነ</b> (become): ይሆናል “he will be”. Polite “you are” is <b>ኖት</b>.",
+    irr: { pres: ["ነኝ", "ነህ", "ነሽ", "ነው", "ናት", "ነን", "ናችሁ", "ናቸው"],
+           negpres: ["አይደለሁም", "አይደለህም", "አይደለሽም", "አይደለም", "አይደለችም", "አይደለንም", "አይደላችሁም", "አይደሉም"],
+           cmd: [null, "ሁን", "ሁኚ", null, null, null, "ሁኑ", null] },
+    enx: { past: ["I was", "you (m.) were", "you (f.) were", "he was", "she was", "we were", "you (all) were", "they were"],
+           pres: ["I am", "you (m.) are", "you (f.) are", "he is", "she is", "we are", "you (all) are", "they are"],
+           negpast: ["I wasn't", "you (m.) weren't", "you (f.) weren't", "he wasn't", "she wasn't", "we weren't", "you (all) weren't", "they weren't"],
+           negpres: ["I am not", "you (m.) aren't", "you (f.) aren't", "he isn't", "she isn't", "we aren't", "you (all) aren't", "they aren't"] } },
+  { am: "ሆነ", group: "be", type: "A", en: ["become", "became", "becomes"],
+    note: "ሆነ also gives the future of “to be”: እሆናለሁ “I will be”. Its command ሁን is the one in ደህና ሁን (“goodbye”, literally “be well”).",
+    irr: { pres: ["እሆናለሁ", "ትሆናለህ", "ትሆኛለሽ", "ይሆናል", "ትሆናለች", "እንሆናለን", "ትሆናላችሁ", "ይሆናሉ"],
+           negpres: ["አልሆንም", "አትሆንም", "አትሆኚም", "አይሆንም", "አትሆንም", "አንሆንም", "አትሆኑም", "አይሆኑም"],
+           cmd: [null, "ሁን", "ሁኚ", null, null, null, "ሁኑ", null] },
+    enx: { cmd: [null, "Be! / Become! (to a man)", "Be! / Become! (to a woman)", null, null, null, "Be! / Become! (to several people)", null] } },
   { am: "ሰበረ", type: "A", en: ["break", "broke", "breaks"] },
   { am: "ከፈተ", type: "A", en: ["open", "opened", "opens"] },
   { am: "ከፈለ", type: "A", en: ["pay", "paid", "pays"] },
@@ -2197,7 +2212,7 @@ const vp = (t, cls = "") => ({ t, cls });
 function verbForm(v, tense, i) {
   const irr = v.irr && v.irr[tense];
   if (irr) return irr[i] ? { parts: [vp(irr[i])], irr: true } : null;
-  const L = [...v.am].map(ch => FIDEL[ch]);
+  const L = [...(v.stems?.[tense] || v.am)].map(ch => FIDEL[ch]);
   const g = (f, h) => glyph(f.c, h);
   const pal = (f, h) => { const p = consByKey[PALATAL[f.c.k]]; return p ? glyph(p, h) : null; };
   const last = L[L.length - 1], col = h => "h" + h + "c";
@@ -2262,6 +2277,7 @@ function saidLike(am) {
   }).join(" ");
 }
 function verbEnglish(v, tense, i) {
+  if (v.enx?.[tense]) return v.enx[tense][i];
   const s = VWHO[i], third = i === 3 || i === 4;
   if (tense === "past") return `${s} ${v.en[1]}`;
   if (tense === "negpast") return `${s} didn't ${v.en[0]}`;
@@ -2274,7 +2290,7 @@ function renderVerbs() {
   const v = VERBS[verbIdx], t = VTENSES.find(x => x.id === verbTense);
   $("vx-tenses").innerHTML = VTENSES.map(x => `<button class="${x.id === verbTense ? "active" : ""}" data-t="${x.id}">${x.name}</button>`).join("");
   $("vx-tenses").querySelectorAll("button").forEach(b => b.onclick = () => { verbTense = b.dataset.t; renderVerbs(); });
-  $("vx-rule").innerHTML = t.rule;
+  $("vx-rule").innerHTML = t.rule + (v.note ? `<span class="callout" style="display:block">${v.note}</span>` : "");
   const say = am => `<button class="say-mini" data-say="${am}" title="play sound">🔊</button>`;
   const rows = VWHO.map((who, i) => {
     const form = verbForm(v, verbTense, i); if (!form) return "";
@@ -2290,9 +2306,9 @@ function renderVerbs() {
   $("vx-head").innerHTML = `<span class="eth">${v.am}</span> “${v.en[0]}” · ${t.name}`;
 }
 (function initVerbs() {
-  const groups = [["A", "Ending in ‑e (command like ስበር)"], ["B", "Ending in ‑e (command like ፈልግ)"], ["a", "Ending in ‑a (like በላ)"]];
+  const groups = [["be", "“To be” and “become”"], ["A", "Ending in ‑e (command like ስበር)"], ["B", "Ending in ‑e (command like ፈልግ)"], ["a", "Ending in ‑a (like በላ)"]];
   $("vx-verb").innerHTML = groups.map(([type, label]) => `<optgroup label="${label}">` +
-    VERBS.map((v, i) => v.type === type ? `<option value="${i}">${v.am} · ${v.en[0]}${v.irr ? " (partly irregular)" : ""}</option>` : "").join("") + `</optgroup>`).join("");
+    VERBS.map((v, i) => (v.group || v.type) === type ? `<option value="${i}">${v.am} · ${v.group === "be" && v.en[0] === "be" ? "to be (am / is / are)" : v.en[0]}${v.irr ? " (partly irregular)" : ""}</option>` : "").join("") + `</optgroup>`).join("");
   $("vx-verb").onchange = e => { verbIdx = +e.target.value; renderVerbs(); };
   $("vx-random").onclick = () => { let j; do { j = Math.floor(Math.random() * VERBS.length); } while (j === verbIdx && VERBS.length > 1); verbIdx = j; $("vx-verb").value = j; renderVerbs(); };
   renderVerbs();
