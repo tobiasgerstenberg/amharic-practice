@@ -187,9 +187,14 @@
   .ws-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
   .ws-copy .ws-item { margin: 8px 0; }
   .ws-copy .q.am { min-width: 44px; }
+  /* Reference tables */
+  .wordtable.cal td.geez { font-family: var(--eth); font-size: 1.3rem; color: var(--muted); width: 3.5em; }
+  .wordtable.cal td.ro { font-family: ui-monospace, Menlo, monospace; font-size: .9rem; }
+
   /* Verb explorer */
   .vx-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .vx-controls select { font-family: var(--eth), sans-serif; min-width: 220px; }
+  .vx-controls label { display: flex; gap: 6px; align-items: center; max-width: 100%; }
+  .vx-controls select { font-family: var(--eth), sans-serif; min-width: 0; max-width: 100%; flex: 1; }
   .vpre { color: var(--h2); font-weight: 600; }
   #vx-table td.ro { font-family: ui-monospace, Menlo, monospace; font-size: .9rem; }
 
@@ -408,55 +413,19 @@
 <!-- ======================= WORDS & GRAMMAR ======================= -->
 <section class="tab" id="tab-words">
   <div class="card">
-    <h2>Vocabulary</h2>
-    <p class="small muted">All the words, from class and beyond.
-      <label>Group by <select id="words-group"><option value="modules">module (topic)</option><option value="useful">usefulness</option></select></label></p>
-    <p class="small muted">The <b>code</b> column uses your notes' notation: consonant + house number (e.g. <code>K7 K4 K7 L4</code> = coca cola). The <b>tally</b> column shows <code>|</code> for a heard vowel and <code>\</code> for the 6th house.
-      A <span class="unk">dotted underline</span> marks a character that isn't in the chart, like the combined forms <span class="eth">ሷ</span> or <span class="eth">ጓ</span>.</p>
-    <div style="overflow-x:auto"><table class="wordtable" id="words-all"></table></div>
+    <h2>Numbers</h2>
+    <p class="small muted">11 to 19 are <span class="eth">አስራ</span> (“ten and”) + the number: <span class="eth">አስራ አንድ</span> = 11. The Ge'ez numerals are used for dates and page numbers. Press 🔊 to hear a word.</p>
+    <div style="overflow-x:auto"><table class="wordtable cal" id="ref-numbers"></table></div>
   </div>
-
   <div class="card">
-    <h2>Sentences from class</h2>
-    <div class="sov">
-      <div class="blk S"><div class="lbl">Subject</div><div class="am">እሱ</div><div>esu · he</div></div>
-      <div class="blk O"><div class="lbl">Object</div><div class="am">ዳቦ</div><div>dabo · bread</div></div>
-      <div class="blk V"><div class="lbl">Verb</div><div class="am">በላ።</div><div>bella · ate</div></div>
-    </div>
-    <p class="small muted">English is S-V-O (“He ate bread”). Amharic is S-O-V (“He bread ate”).</p>
-    <div style="overflow-x:auto"><table class="wordtable" id="sent-class"></table></div>
+    <h2>Days of the week</h2>
+    <div style="overflow-x:auto"><table class="wordtable cal" id="ref-days"></table></div>
   </div>
-
   <div class="card">
-    <h2>Pronouns and “to be”</h2>
-    <p class="small muted">Amharic verbs and pronouns mark <b>person</b> (1st = speaking, 2nd = listening, 3rd = “gossiping”), <b>number</b> and <b>gender</b>, and in the 2nd and 3rd person also <b>formality</b>. Grey rows weren't written out in class yet.</p>
-    <table class="pron" id="pron"></table>
+    <h2>The twelve months</h2>
+    <p class="small muted">The Ethiopian calendar starts its year in September. Each month has 30 days. A short 13th month, <span class="eth">ጳጉሜ</span> (Pagume, 5 or 6 days), comes at the end of the year. The Gregorian dates are approximate: they move by a day around leap years.</p>
+    <div style="overflow-x:auto"><table class="wordtable cal" id="ref-months"></table></div>
   </div>
-
-  <div class="card">
-    <h2>Mini-grammar</h2>
-    <div class="grid2">
-      <div>
-        <h3>Past-tense endings <span class="pill new">10/5</span></h3>
-        <p class="small muted">The verb root is the “he, past tense” form. To change the person, add an ending or change the last character's house.</p>
-        <table class="wordtable" id="verb-eat"></table>
-        <p class="small">All the endings, with the house changes explained: see <a href="#" onclick="document.querySelector('#nav [data-tab=grammar]').click(); return false;">4 · Grammar: verb endings</a>.</p>
-        <p class="small muted">Match the ending to the pronoun. For example, <span class="eth">አንቺ</span> … <span class="eth">ገዛ<b>ሽ</b></span> (you f. bought) and <span class="eth">እኛ</span> … <span class="eth">ገዛ<b>ን</b></span> (we bought).</p>
-      </div>
-      <div>
-        <h3>“my …”: change the 6th house to the 5th</h3>
-        <p class="small muted">From your notes: <i>any noun that ends in the 6th house, change it to the 5th house to make it “mine”.</i></p>
-        <table class="wordtable" id="poss"></table>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Dialogue: “Are you a student?”</h2>
-    <p class="small muted">From your class notes. With the whole alphabet you can now read all of it, including <span class="eth">ዎ</span> (the 7th house of <span class="eth">ወ</span>) in <span class="eth">አዎ</span>.</p>
-    <table class="wordtable" id="dialogue"></table>
-  </div>
-
 </section>
 
 <!-- ======================= GRAMMAR ======================= -->
@@ -2077,39 +2046,6 @@ function wordRows(list, opts = {}) {
       `<td class="code">${codeStr(ss)}</td><td class="tally">${tallyStr(ss)}</td>`}</tr>`;
   }).join("");
 }
-function renderWordTable() {
-  // one table of all words with a heading row per group: by module, or most useful first
-  const words = WORDS.filter(w => w.src === "word").sort((a, b) => USEFUL_RANK[a.am].r - USEFUL_RANK[b.am].r);
-  const parts = [wordRows([])], body = list => wordRows(list).replace(/^<tr>.*?<\/tr>/, "");
-  if ($("words-group").value === "modules") {
-    MODULES.forEach((m, i) => {
-      const group = words.filter(w => MODULE_OF[w.am] === i);
-      parts.push(`<tr class="grp"><td colspan="5">${i + 1} · ${m.name} <span class="muted">· ${group.length} words</span></td></tr>`, body(group));
-    });
-  } else {
-    TIER_NAMES.forEach((name, t) => {
-      const group = words.filter(w => USEFUL_RANK[w.am].tier === t); if (!group.length) return;
-      const first = USEFUL_RANK[group[0].am].r + 1;
-      parts.push(`<tr class="grp"><td colspan="5">${name} <span class="muted">· words ${first}–${first + group.length - 1}</span></td></tr>`, body(group));
-    });
-  }
-  $("words-all").innerHTML = parts.join("");
-}
-$("words-group").onchange = renderWordTable;
-renderWordTable();
-$("sent-class").innerHTML = wordRows(WORDS.filter(w => w.src === "sent"));
-(function verbTable() {
-  const roots = [["በላ", "eat"], ["ገዛ", "buy"], ["ገባ", "enter"], ["ሰማ", "hear"]];
-  const forms = [["he", "", 0], ["she", "ች", 0], ["they / polite", "", 2], ["we", "ን", 0], ["you (f.)", "ሽ", 0]];
-  // the "they / polite" form moves the last character from the 4th house to the 2nd (ላ → ሉ)
-  const make = (root, [, end, house]) => {
-    if (!house) return root + end;
-    const chars = [...root], f = FIDEL[chars.at(-1)];
-    chars[chars.length - 1] = glyph(f.c, house); return chars.join("");
-  };
-  $("verb-eat").innerHTML = `<tr><th></th>${roots.map(r => `<th>${r[1]}</th>`).join("")}<th>ending</th></tr>` +
-    forms.map(f => `<tr><td>${f[0]}</td>${roots.map(r => `<td class="am">${make(r[0], f)}</td>`).join("")}<td class="small">${f[2] ? "last character → 2nd house (oo)" : f[1] ? `+ <span class="eth">${f[1]}</span>` : "root"}</td></tr>`).join("");
-})();
 // ---------- grammar tab: past-tense endings ----------
 (function grammarTables() {
   const P = ["I", "you (m.)", "you (f.)", "he", "she", "we", "you (all)", "they / polite"];
@@ -2258,10 +2194,10 @@ function verbForm(v, tense, i) {
 const SONORANT = new Set(["l", "r", "n", "m", "gn", "w", "y"]);
 function saidLike(am) {
   return am.split(" ").map(word => {
-    const u = [...word].filter(ch => FIDEL[ch]).map(ch => {
+    const u = [...word].filter(ch => FIDEL[ch]).map((ch, idx) => {
       const f = FIDEL[ch], ro = romanize(ch);
       if (f.h !== 6) return { c: ro, v: true };
-      if (f.c.k === "a" || f.c.k === "o") return { c: "ɨ", v: true, glottal: true };   // እ is just the vowel
+      if (f.c.k === "a" || f.c.k === "o") return idx === 0 ? { c: "ɨ", v: true } : { c: "'", v: false };   // እ: a vowel at the start, a catch in the throat later (ረቡዕ)
       return { c: ro.replace(/i$/, ""), v: false, son: SONORANT.has(f.c.k) };
     });
     const out = u.map(x => x.c);
@@ -2313,13 +2249,29 @@ function renderVerbs() {
   $("vx-random").onclick = () => { let j; do { j = Math.floor(Math.random() * VERBS.length); } while (j === verbIdx && VERBS.length > 1); verbIdx = j; $("vx-verb").value = j; renderVerbs(); };
   renderVerbs();
 })();
-$("poss").innerHTML = `<tr><th>noun</th><th></th><th>my …</th><th>sounds</th></tr>` + WORDS.filter(w => w.src === "poss").map(w =>
-  `<tr><td class="am">${w.from}</td><td>→</td><td class="am">${w.am}</td><td><b>${w.ro}</b> · ${w.en.split(" (")[0]}</td></tr>`).join("");
-$("dialogue").innerHTML = DIALOGUE.map(d => `<tr><td class="am">${renderAm(d[0])}</td><td><b>${d[1]}</b></td><td>${d[2]}</td></tr>`).join("");
-$("pron").innerHTML = `<tr><th></th><th>singular</th><th>plural</th></tr>` + PRONOUNS.map(r => {
-  const cell = arr => arr.map(x => `<div style="${x[3] ? "opacity:.45" : ""}"><span class="am">${renderAm(x[0])}</span> <b>${x[1]}</b> <span class="muted">${x[2]}</span>${x[3] ? ' <span class="pill preview">preview</span>' : ""}</div>`).join("");
-  return `<tr><th>${r.p}</th><td>${cell(r.sg)}</td><td>${cell(r.pl)}</td></tr>`;
-}).join("");
+// ---------- Words & grammar tab: numbers, days, months ----------
+// (called at the end of the script: it needs the Ge'ez number helpers defined further down)
+function referenceTables() {
+  const say = am => `<button class="say-mini" data-say="${am}" title="play sound">🔊</button>`;
+  const row = (cells, am) => `<tr>${cells.map((c, i) => i === 0 ? `<td class="geez">${c}</td>` : c).join("")}</tr>`;
+  const amCell = am => `<td class="am">${am}${say(am)}</td>`, ro = am => `<td class="ro">${saidLike(am)}</td>`;
+  const ONES = ["አንድ", "ሁለት", "ሶስት", "አራት", "አምስት", "ስድስት", "ሰባት", "ስምንት", "ዘጠኝ"];
+  const EN = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+  const nums = [...ONES.map((w, i) => [i + 1, w, EN[i]]), [10, "አስር", "ten"],
+    ...ONES.map((w, i) => [11 + i, "አስራ " + w, ["eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"][i]]),
+    [20, "ሃያ", "twenty"], [100, "መቶ", "one hundred"], [1000, "ሺ", "one thousand (also አንድ ሺ)"]];
+  $("ref-numbers").innerHTML = `<tr><th>Ge'ez</th><th>Amharic</th><th>said like</th><th>number</th></tr>` +
+    nums.map(([n, am, en]) => row([n === 1000 ? "፲፻" : toGeez(n), amCell(am), ro(am), `<td><b>${n}</b> · ${en}</td>`])).join("");
+  const DAYS = [["ሰኞ", "Monday"], ["ማክሰኞ", "Tuesday"], ["ረቡዕ", "Wednesday"], ["ሐሙስ", "Thursday"], ["ዓርብ", "Friday"], ["ቅዳሜ", "Saturday"], ["እሁድ", "Sunday"]];
+  $("ref-days").innerHTML = `<tr><th></th><th>Amharic</th><th>said like</th><th>day</th></tr>` +
+    DAYS.map(([am, en], i) => row([i + 1, amCell(am), ro(am), `<td>${en}</td>`])).join("");
+  const MONTHS = [["መስከረም", "Meskerem", "Sep 11 – Oct 10"], ["ጥቅምት", "Tikimt", "Oct 11 – Nov 9"], ["ህዳር", "Hidar", "Nov 10 – Dec 9"],
+    ["ታህሳስ", "Tahsas", "Dec 10 – Jan 8"], ["ጥር", "Tir", "Jan 9 – Feb 7"], ["የካቲት", "Yekatit", "Feb 8 – Mar 9"],
+    ["መጋቢት", "Megabit", "Mar 10 – Apr 8"], ["ሚያዝያ", "Miyazya", "Apr 9 – May 8"], ["ግንቦት", "Ginbot", "May 9 – Jun 7"],
+    ["ሰኔ", "Sene", "Jun 8 – Jul 7"], ["ሐምሌ", "Hamle", "Jul 8 – Aug 6"], ["ነሐሴ", "Nehase", "Aug 7 – Sep 5"]];
+  $("ref-months").innerHTML = `<tr><th></th><th>Amharic</th><th>said like</th><th>name</th><th>about</th></tr>` +
+    MONTHS.map(([am, name, when], i) => row([i + 1, amCell(am), ro(am), `<td>${name}</td>`, `<td class="small muted">${when}</td>`])).join("");
+}
 
 // ============================================================
 // PRACTICE
@@ -3001,6 +2953,7 @@ $("ws-print").onclick = () => { if (!$("worksheet").classList.contains("show")) 
 updateDeckCount();
 updateWsInfo();
 charQ();
+referenceTables();
 
 // ============================================================
 // SYNC: progress is merged with a Google Sheet (Apps Script web app)
